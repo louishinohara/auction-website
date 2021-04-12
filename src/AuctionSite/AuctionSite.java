@@ -1,7 +1,5 @@
 package AuctionSite;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class AuctionSite {
 
@@ -86,12 +84,12 @@ public class AuctionSite {
         int auctionID = auctionSite.getAuctionID();     // Returns a unique auction ID
         int initialPrice = 100;
         int sellersID = customer.getSellerID();
-        boolean isOpen = true;
         String closeTime = "9:00";
         int incrementVal = 10;
+        int reservePrice = 500;
 
         // Create the auction item and place it on the auction. This will also add it to the SQL table
-        Auction auction = new Auction(auctionID, initialPrice, sellersID, itemID, isOpen, closeTime, incrementVal);
+        Auction auction = new Auction(auctionID, initialPrice, reservePrice, sellersID, itemID, closeTime, incrementVal);
         auctionSite.addToAuction(auction);
 
 

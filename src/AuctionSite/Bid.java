@@ -11,6 +11,7 @@ public class Bid {
     private boolean allowAutomaticBidding;
     private boolean isActive;
 
+    // Constructor For Bid
     public Bid(int BUYER_ID, int itemID, int BID_ID, double BID_PRICE, double UPPER_BID_LIMIT, String date, String time, boolean allowAutomaticBidding){
         this.BID_ID = BID_ID;
         this.BID_PRICE = BID_PRICE;
@@ -22,7 +23,7 @@ public class Bid {
         this.isActive = true;
     }
 
-    // Copy constructor to create new bid using old fields with some changes
+    // Copy constructor to create new bid using old fields with changes in BID_ID, BID_PRICE, Date and Time
     public Bid( Bid bid, int BID_ID, double BID_PRICE, String date, String time){
         this.BID_ID = BID_ID;
         this.BID_PRICE = BID_PRICE;
