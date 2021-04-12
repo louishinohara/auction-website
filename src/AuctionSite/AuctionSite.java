@@ -13,7 +13,7 @@ public class AuctionSite {
         // Create a new bidding system and hold a list of all items
         // Auction holds all the auctions
         // ItemList holds the items that the user can choose from
-
+        super();
         this.auctionList = new AuctionList();
         this.itemList = new ItemList();
     }
@@ -113,14 +113,17 @@ public class AuctionSite {
         String date = "10/11/2021";
         String time = "9:00 AM";
         double CURR_PRICE = 200;
+        boolean allowAutomaticBidding = true;
 
-        Bid bid = new Bid(  itemID,  BID_ID,  CURR_PRICE,  MAX_BID,  BUYER_ID,  UPPER_BID_LIMIT,  date,  time);
+
+        Bid bid = new Bid(  BUYER_ID, itemID,  BID_ID,  CURR_PRICE,  UPPER_BID_LIMIT,  date,  time, allowAutomaticBidding);
 
         // Now that the bid has been created, let's find the auction using the itemID in the auction list
         Auction auctionInstance = auctionSite.getAuction(itemIDForBid);
+        System.out.println("Test");
 
         // We have found the auction associated with the itemID. Let's add the bid to that auction
-        auctionInstance.addBid(bid);
+        // auctionInstance.addBid(bid);
 
         // Now that the bid has been placed, the user must wait for an alert from the automatic bidding system
 
