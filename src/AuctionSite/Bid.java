@@ -7,13 +7,13 @@ public class Bid {
     private double UPPER_BID_LIMIT;
     private String date;
     private String time;
-    private double CURR_PRICE;
+    private double BID_PRICE;
     private boolean allowAutomaticBidding;
     private boolean isActive;
 
-    public Bid(int BUYER_ID, int itemID, int BID_ID, double CURR_PRICE, double UPPER_BID_LIMIT, String date, String time, boolean allowAutomaticBidding){
+    public Bid(int BUYER_ID, int itemID, int BID_ID, double BID_PRICE, double UPPER_BID_LIMIT, String date, String time, boolean allowAutomaticBidding){
         this.BID_ID = BID_ID;
-        this.CURR_PRICE = CURR_PRICE;
+        this.BID_PRICE = BID_PRICE;
         this.BUYER_ID = BUYER_ID;
         this.UPPER_BID_LIMIT = UPPER_BID_LIMIT;
         this.date = date;
@@ -23,9 +23,9 @@ public class Bid {
     }
 
     // Copy constructor to create new bid using old fields with some changes
-    public Bid( Bid bid, int BID_ID, double CURR_PRICE, String date, String time){
+    public Bid( Bid bid, int BID_ID, double BID_PRICE, String date, String time){
         this.BID_ID = BID_ID;
-        this.CURR_PRICE = CURR_PRICE;
+        this.BID_PRICE = BID_PRICE;
         this.BUYER_ID = bid.BUYER_ID;
         this.UPPER_BID_LIMIT = bid.UPPER_BID_LIMIT;
         this.date = date;
@@ -41,11 +41,11 @@ public class Bid {
     }
 
     public double getCurrPrice(){
-        return this.CURR_PRICE;
+        return this.BID_PRICE;
     }
 
     public double setCurrPrice(double price){
-       return this.CURR_PRICE = price;
+       return this.BID_PRICE = price;
     }
 
     public double getUpperBidLimit(){

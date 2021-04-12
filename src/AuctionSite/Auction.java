@@ -14,7 +14,7 @@ public class Auction {
     private double currentBidPrice;
     private int buyerInLeadID;
 
-    public Auction(int auctionID, double initialPrice, int sellerID, int itemID, boolean isOpen, String closeTime, int incrementVal){
+    public Auction(int auctionID, double initialPrice, int sellerID, int itemID, boolean isOpen, String closeTime, double incrementVal){
         this.auctionID = auctionID;
         this.initialPrice = initialPrice; 
         this.sellerID = sellerID;
@@ -26,11 +26,17 @@ public class Auction {
 
     public void addBid(Bid bid){
         // Check if this is a valid bid to place
-        this.bidSystem.addBidToList(bid);
-        List<Integer> customerToAlert = this.bidSystem.calculateCurrentPrice(); // The customer that lost due to automatic bidding 
-        System.out.println("These customers have lost and we must send them an alert " + customerToAlert);
-        this.currentBidPrice = this.bidSystem.getCurrItemPrice();
-        this.buyerInLeadID = this.bidSystem.getBuyerInLeadID();
+        if (bid.getCurrPrice() < this.currentBidPrice){
+            System.out.println("Bid price is less than current bid price");
+        } else {
+            System.out.println("Bid has succesfully been placed for buyer ID " + bid.getBuyerID());
+            this.bidSystem.addBidToList(bid);
+            List<Integer> customerToAlert = this.bidSystem.calculateCurrentPrice(); // The customer that lost due to automatic bidding 
+            System.out.println("These customers have lost and we must send them an alert " + customerToAlert);
+            this.currentBidPrice = this.bidSystem.getCurrItemPrice();
+            this.buyerInLeadID = this.bidSystem.getBuyerInLeadID();
+        }
+        System.out.println("");
     }
 
     public int createBidID(){
@@ -43,6 +49,10 @@ public class Auction {
         return buyerInLead;
     }
 
+    public double getCurrentBidPrice(){
+        System.out.println("This is the current bid price " + this.currentBidPrice );
+        return this.currentBidPrice;
+    }
     private void setAuctionWinner(){
         // Notify Customer
     }
@@ -74,7 +84,7 @@ public class Auction {
         String closeTime = "9:00";
 
         // Create the auction item and place it on the auction. This will also add it to the SQL table
-        Auction auction = new Auction(1, 100, 1, 666, true, closeTime, 10);
+        Auction auction = new Auction(1, 100, 1, 666, true, closeTime, 50);
 
         // Let's say the buyer has found an item that they like. itemID # 666
 
@@ -83,11 +93,11 @@ public class Auction {
         double UPPER_BID_LIMIT = 1000;
         String date = "10/11/2021";
         String time = "9:00 AM";
-        double CURR_PRICE = 200;
+        double BID_PRICE = 400;
         boolean automaticBid = true;
 
 
-        Bid joshBid = new Bid(  2, itemIDForBid,  BID_ID,  CURR_PRICE,  UPPER_BID_LIMIT,  date,  time, automaticBid); // Buyer is Josh 
+        Bid joshBid = new Bid(  2, itemIDForBid,  BID_ID,  BID_PRICE,  UPPER_BID_LIMIT,  date,  time, automaticBid); // Buyer is Josh 
         Bid shaBid = new Bid(  3, itemIDForBid,  auction.createBidID(),  100, 2000, date,  time, true); // Buyer is Sha. Since Sha's upper bid limit is biggest, he should win
         Bid benBid = new Bid(  4, itemIDForBid,  auction.createBidID(),  300,  900,  date,  time, false); // Buyer is Ben 
         Bid evanBid = new Bid(  5, itemIDForBid,  auction.createBidID(),  300,  1000,  date,  time, true); // Buyer is Ben 
@@ -99,7 +109,7 @@ public class Auction {
         auction.addBid(benBid);
         auction.addBid(joshBid);
         auction.getBuyerInLeadID();
-
+        auction.getCurrentBidPrice();
         // ================================================================================
 
         // auction.addBid(shaBid);

@@ -13,10 +13,10 @@ public class BidSystem {
     private double currItemPrice;
     private int buyerInLeadID;
     private int bidID = 0;
-    private int incrementVal;
+    private double incrementVal;
 
 
-    public BidSystem(double initialPrice, int incrementVal){
+    public BidSystem(double initialPrice, double incrementVal){
         this.BidList = new ArrayList<Bid>();
         this.currItemPrice =  initialPrice;
         this.incrementVal = incrementVal;
@@ -28,13 +28,6 @@ public class BidSystem {
     }
 
     public void addBidToList(Bid bid){
-        double wagerPrice = bid.getCurrPrice();
-        // If the wager is greater than the current price, change it 
-        if (wagerPrice > currItemPrice){
-            this.currItemPrice = wagerPrice;
-            this.buyerInLeadID = bid.getBuyerID();
-        }
-        // Add bid to list
         BidList.add(bid);
         // Add bid to SQL 
     }
@@ -46,13 +39,23 @@ public class BidSystem {
         while (keepGoing){
             for (int i = 0; i < this.BidList.size(); i++){
                 Bid bid = this.BidList.get(i);
-                if (bid.getIsActive()){                             // Ignore bids that have already been closed
+                if (bid.getIsActive() & bid.getBuyerID() != this.buyerInLeadID){                             // Ignore bids that have already been closed
                     double priceToBeat = this.currItemPrice + this.incrementVal;
-                    if ( bid.getCurrPrice() > priceToBeat ) {       // Bid is greater than current price. 
-                        this.currItemPrice = priceToBeat;
-                        this.buyerInLeadID = bid.getBidID();
+                    
+                    System.out.println("This is the price to beat " + priceToBeat);
+                    System.out.println("This is " + bid.getBuyerID() + "'s Bid price " + bid.getCurrPrice());
+                    
+                    double bidPrice = bid.getCurrPrice();
+                    if ( bidPrice > priceToBeat ) {                 // Bid is greater than current price. 
+                        System.out.println("Bid is greater than current price. Setting as new bid price");
+                        double newBidPrice = Math.max(bidPrice , priceToBeat);
+                        this.currItemPrice = newBidPrice;
+                        this.buyerInLeadID = bid.getBuyerID();
+                        
                     } else {                                        // Bid is less than current price
                         if (bid.getAllowAutomaticBidding() & bid.getUpperBidLimit() < priceToBeat ){        // If bidder wants to automatic bid and curr price is less than price to beat
+                            System.out.println("Bid is less than current price. Automatic bidding is set. Setting this bid inactive and creating new bid...");
+                            
                             // Generate New Bid 
                             this.currItemPrice = priceToBeat;
                             this.buyerInLeadID = bid.getBidID();
@@ -63,8 +66,11 @@ public class BidSystem {
                             // Use copy constructor to create new bid with buyer credentials but different price
                             Bid newBid = new Bid(bid, createBidID(), priceToBeat, date, time );
                             addBidToList(newBid);
-                        } else {                                    // Bid is dead. Close it and contact customer                     
+
+                        } else {                                    // Bid is dead. Close it and contact customer        
+                            System.out.println("Bid is less than current price. Automatic bidding is not set. Setting bid inactive and adding customer to list to contact");
                             customerToContact.add(bid.getBuyerID());
+
                         }
                         bid.setInActive();                          // If new bid is created or bidder lost, close that bid
                     }
@@ -77,12 +83,15 @@ public class BidSystem {
                     numActiveBids += 1;
                 }
             }
-            
+
+            System.out.println("Checking for num active bids. Num active bids is " + numActiveBids);
             if (numActiveBids <= 1){                        // There should only be one active bid (buyerInLeadID)
+                System.out.println("Ending calculations. There is only one active bid left for the buyerID: " + this.buyerInLeadID);
                 keepGoing = false;                          // Break loop if that is the case. Otherwise keep going (Automatic Bidding)
             }
 
             }
+            System.out.println("");
         }
 
 
