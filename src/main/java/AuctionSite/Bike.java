@@ -11,6 +11,10 @@ public class Bike extends Item {
         return super.getItemID();
     }
 
+    public String getItemType() {
+    	return super.getItemType();
+    }
+    
     @Override
     public void addToSQL(){
         super.addToSQL();

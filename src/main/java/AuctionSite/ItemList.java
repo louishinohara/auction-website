@@ -12,11 +12,11 @@ public class ItemList {
 
     public void addItemToList(Object obj, String itemType){
         Item item = null;
-        if (itemType.equals("Bike")){
+        if (itemType.equals("bike")){
             item = (Bike) obj;
-        } else if (itemType.equals("Truck")){
+        } else if (itemType.equals("truck")){
             item = (Truck) obj;
-        } else if (itemType.equals("Car")){
+        } else if (itemType.equals("car")){
             item = (Car) obj;
         }
         this.itemList.add(item);

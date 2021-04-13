@@ -54,23 +54,23 @@
 	<% // Add items to list as test
 		try {
 			AuctionSite auctionSite = new AuctionSite();
-	        Bike item1 = new Bike(111, "Haro", true, 1994, "Black", "Bike" );
+	        Bike item1 = new Bike(111, "Haro", true, 1994, "Black" );
 	        auctionSite.addToItemList(item1, item1.getItemType());
-	        Bike item2 = new Bike(222, "Haro", true, 1994, "Black", "Bike" );
+	        Bike item2 = new Bike(222, "Haro", true, 1994, "Black");
 	        auctionSite.addToItemList(item2, item2.getItemType());
-	        Bike item3 = new Bike(333, "Haro", true, 1994, "Black", "Bike" );
+	        Bike item3 = new Bike(333, "Haro", true, 1994, "Black" );
 	        auctionSite.addToItemList(item3, item3.getItemType());
-	        Bike item4 = new Bike(444, "Haro", true, 1994, "Black", "Bike" );
+	        Bike item4 = new Bike(444, "Haro", true, 1994, "Black");
 	        auctionSite.addToItemList(item4, item4.getItemType());
-	        Bike item5 = new Bike(555, "Haro", true, 1994, "Black", "Bike" );
+	        Bike item5 = new Bike(555, "Haro", true, 1994, "Black");
 	        auctionSite.addToItemList(item5, item5.getItemType());
-	        Truck item6 = new Truck(666, "Haro", true, 1994, "Black", 999, "Truck" );
+	        Truck item6 = new Truck(666, "Haro", true, 1994, "Black", 999 );
 	        auctionSite.addToItemList(item6, item6.getItemType());
-	        Car item7 = new Car(777, "Haro", true, 1994, "Black", 999, "Car");
+	        Car item7 = new Car(777, "Haro", true, 1994, "Black", 999);
 	        auctionSite.addToItemList(item7, item7.getItemType());
-	        Truck item8 = new Truck(888, "Haro", true, 1994, "Black", 999, "Truck" );
+	        Truck item8 = new Truck(888, "Haro", true, 1994, "Black", 999 );
 	        auctionSite.addToItemList(item8, item8.getItemType());
-	        Car item9 = new Car(999, "Haro", true, 1994, "Black", 999, "Car" );
+	        Car item9 = new Car(999, "Haro", true, 1994, "Black", 999);
 	        auctionSite.addToItemList(item9, item9.getItemType());
 	        List<Item> itemList = auctionSite.getItemList();
 	        String itemTypeToFind = request.getParameter("All");

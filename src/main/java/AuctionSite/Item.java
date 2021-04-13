@@ -58,6 +58,26 @@ public class Item {
         // Code to remove item from SQL
     }
     
+    public String getItemType() {
+    	return this.itemType;
+    }
+    
+    public String getModelNumber() {
+    	return this.modelNumber;
+    }
+    
+    public int getYear() {
+    	return this.year;
+    }
+    
+    public String getColor() {
+    	return this.color;
+    }
+    
+    public boolean getInAuction() {
+    	return this.inAuction;
+    }
+    
     public static int generateItemID() {
     	ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();

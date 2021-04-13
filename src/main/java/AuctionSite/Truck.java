@@ -15,4 +15,9 @@ public class Truck extends Item {
         return super.getItemID();
     }
     
+
+    public String getItemType() {
+    	return super.getItemType();
+    }
+    
 }

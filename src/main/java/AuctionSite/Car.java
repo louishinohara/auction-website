@@ -15,4 +15,9 @@ public class Car extends Item {
         return super.getItemID();
     }
     
+
+    public String getItemType() {
+    	return super.getItemType();
+    }
+    
 }
