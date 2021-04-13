@@ -29,7 +29,29 @@ public class Item {
     }
 
     public void addToSQL(){
-        // Add Itself To SQL 
+    	ApplicationDB db = new ApplicationDB();	
+		Connection con = db.getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			//String query = "INSERT INTO items VALUES(\"" + this.itemType + "\", " + this.modelNumber + ", " + this.itemID + ", false, " + this.year + ", \"" + this.color + "\");";
+			String insert = "INSERT INTO items(item_type, model_number, item_id, in_auction, item_year, color)"
+					+ "VALUES (?, ?, ?, ?,?,?)";
+			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
+			PreparedStatement ps = con.prepareStatement(insert);
+
+			//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
+			ps.setString(1, this.itemType);
+			ps.setInt(2, Integer.parseInt(this.modelNumber));
+			ps.setInt(3, this.itemID);
+			ps.setBoolean(4, false);
+			ps.setInt(5, this.year);
+			ps.setString(6, this.color);
+			//Run the query against the DB
+			ps.executeUpdate();
+		
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
     }
 
     public void removeFromSQL(){
@@ -39,18 +61,18 @@ public class Item {
     public static int generateItemID() {
     	ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
-	try {
-		Statement stmt = con.createStatement();
-		String query = "SELECT MAX(item_id) as latest FROM items;";
-		
-		ResultSet result = stmt.executeQuery(query);
-		
-		result.next();
-		
-		int id = result.getInt("latest");
-		return id+1;
-	}catch(Exception E) {
-		E.printStackTrace();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT MAX(item_id) as latest FROM items;";
+			
+			ResultSet result = stmt.executeQuery(query);
+			
+			result.next();
+			
+			int id = result.getInt("latest");
+			return id+1;
+		}catch(Exception E) {
+			E.printStackTrace();
 		return -1;
 	}
 		
