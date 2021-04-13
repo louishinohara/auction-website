@@ -27,13 +27,13 @@ public class Customer extends Person {
     public Item createItem(int itemID, String modelNumber, boolean inAuction, int year, String color, int miles, String itemType ){
         Item item;
         if (itemType.equals("Bike")){
-            item = new Bike(itemID,modelNumber, inAuction, year, color, itemType);
+            item = new Bike(itemID,modelNumber, inAuction, year, color);
             return item;
         } else if (itemType.equals("Truck")){
-            item = new Truck(itemID,modelNumber, inAuction, year, color, miles, itemType);
+            item = new Truck(itemID,modelNumber, inAuction, year, color, miles);
             return item;
         } else if (itemType.equals("Car")){
-            item = new Car(itemID,modelNumber, inAuction, year, color, miles, itemType);
+            item = new Car(itemID,modelNumber, inAuction, year, color, miles);
             return item;
         }
         return null;

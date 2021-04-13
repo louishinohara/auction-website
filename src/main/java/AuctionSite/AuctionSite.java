@@ -10,7 +10,7 @@ public class AuctionSite {
 
     public AuctionSite(){
         // Create a new bidding system and hold a list of all items
-        // Auction holds all the auctions
+        // Auction holds all the auction 
         // ItemList holds the items that the user can choose from
         super();
         this.auctionList = new AuctionList();
@@ -26,6 +26,7 @@ public class AuctionSite {
     }
 
     public List<Item> getItemList() {
+    	System.out.println("AAA");
     	return this.itemList.getItemList();
     }
     
@@ -83,7 +84,7 @@ public class AuctionSite {
         String color = "Black";
 
         // Create the item and store it in the auction site
-        Bike item = new Bike(itemID, modelNumber, inAuction, year, color, "Bike" );
+        Bike item = new Bike(itemID, modelNumber, inAuction, year, color );
         auctionSite.addToItemList(item, itemType);
         
         int auctionID = auctionSite.getAuctionID();     // Returns a unique auction ID
