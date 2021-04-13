@@ -22,6 +22,10 @@ public class ItemList {
         this.itemList.add(item);
     }
 
+    public List<Item> getItemList(){
+    	return this.itemList;
+    }
+    
     public void removeItemFromList(Item item){
         // Code to remove item to list
     }

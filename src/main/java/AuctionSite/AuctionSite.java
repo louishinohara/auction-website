@@ -1,5 +1,6 @@
 package AuctionSite;
 
+import java.util.List;
 
 public class AuctionSite {
 
@@ -21,9 +22,13 @@ public class AuctionSite {
     }
 
     public void addToItemList(Object obj, String itemType){
-        this.itemList.addItemToList(obj,itemType);
+        this.itemList.addItemToList(obj, itemType);
     }
 
+    public List<Item> getItemList() {
+    	return this.itemList.getItemList();
+    }
+    
     public int getAuctionID(){
         this.auctionID += 1;
         return this.auctionID;
@@ -78,7 +83,7 @@ public class AuctionSite {
         String color = "Black";
 
         // Create the item and store it in the auction site
-        Bike item = new Bike(itemID, modelNumber, inAuction, year, color );
+        Bike item = new Bike(itemID, modelNumber, inAuction, year, color, "Bike" );
         auctionSite.addToItemList(item, itemType);
         
         int auctionID = auctionSite.getAuctionID();     // Returns a unique auction ID

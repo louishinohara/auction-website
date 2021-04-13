@@ -24,16 +24,16 @@ public class Customer extends Person {
     //     return new Bid();
     // }
 
-    public Item createItem(String itemType, int itemID, String modelNumber, boolean inAuction, int year, String color, int miles ){
+    public Item createItem(int itemID, String modelNumber, boolean inAuction, int year, String color, int miles, String itemType ){
         Item item;
         if (itemType.equals("Bike")){
-            item = new Bike(itemID,modelNumber, inAuction, year, color);
+            item = new Bike(itemID,modelNumber, inAuction, year, color, itemType);
             return item;
         } else if (itemType.equals("Truck")){
-            item = new Truck(itemID,modelNumber, inAuction, year, color, miles);
+            item = new Truck(itemID,modelNumber, inAuction, year, color, miles, itemType);
             return item;
         } else if (itemType.equals("Car")){
-            item = new Car(itemID,modelNumber, inAuction, year, color, miles);
+            item = new Car(itemID,modelNumber, inAuction, year, color, miles, itemType);
             return item;
         }
         return null;
