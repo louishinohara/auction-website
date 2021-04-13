@@ -14,7 +14,7 @@
 		<form method="get" action="Login.jsp">
 			<table>
 				<tr>    
-					<td>Username</td><td><input type="text" name="username"></td>
+					<td>User name</td><td><input type="text" name="username"></td>
 				</tr>
 				<tr>
 					<td>Password</td><td><input type="text" name="pass"></td>
