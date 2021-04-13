@@ -22,11 +22,12 @@ public class AuctionSite {
     }
 
     public void addToItemList(Object obj, String itemType){
+    	System.out.println("Added");
         this.itemList.addItemToList(obj, itemType);
     }
 
     public List<Item> getItemList() {
-    	System.out.println("AAA");
+    	out.println("dasda.java");
     	return this.itemList.getItemList();
     }
     
@@ -39,7 +40,7 @@ public class AuctionSite {
         // Code To Find Auction
         return null;
     }
-
+/*
 	public static void main(String[] args) {
         // When the auction site starts, collect data from SQL and populate BidSystem and ItemList
         // Get a list of all the items that are active from the item table in SQL and place them into the itemList in JAVA
@@ -141,5 +142,6 @@ public class AuctionSite {
 
 	}
 
-
+*/
+    
 }

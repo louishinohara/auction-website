@@ -17,6 +17,7 @@ public class ItemList {
     }
 
     public void addItemToList(Object obj, String itemType){
+    	System.out.println("Added To Lost");
         Item item = null;
         if (itemType.equals("bike")){
             item = (Bike) obj;
@@ -29,14 +30,15 @@ public class ItemList {
     }
 
     public List<Item> getItemList(){
+    	System.out.println("ItemList GetItemList");
     	getItemsFromSQL();
-    	System.out.println("Temp");
     	return this.itemList;
     }
     
     public void getItemsFromSQL(){
     	ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
+		System.out.println("AAA");
 		try {
 			
 			String query = "SELECT * FROM items";
@@ -44,16 +46,25 @@ public class ItemList {
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
-
+			
 			while (rs.next()) {
 				String item_type = rs.getString("item_type");
-				int model_number = rs.getInt("model_number");
+				String model_number = String.valueOf(rs.getInt("model_number"));
 				int item_id = rs.getInt("item_id");
 				boolean inAuction = rs.getBoolean("in_auction");
 				int item_year = rs.getInt("item_year");
 				String color = rs.getString("color");
 				
-				// Put Into Items List To Render On Page
+		        if (item_type.equals("bike")){
+		            Bike bike = new Bike(item_id, model_number, inAuction, item_year, color);
+		            addItemToList(bike,"bike");
+		        } else if (item_type.equals("truck")){
+		            Truck truck = new Truck(item_id, model_number, inAuction, item_year, color, 0);
+		            addItemToList(truck,"truck");
+		        } else if (item_type.equals("car")){
+		            Car car = new Car(item_id ,model_number, inAuction, item_year, color, 0);
+		            addItemToList(car,"car");
+		        }
 				
 			}
 

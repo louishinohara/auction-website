@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="AuctionSite.*"%>
+    
+<%@ page language="java" import="com.dbproj.pkg.*"%>
+    
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
@@ -54,35 +57,45 @@
 	<% // Add items to list as test
 		try {
 			AuctionSite auctionSite = new AuctionSite();
-	//        Bike item1 = new Bike(111, "111", true, 1994, "Black" );
-	  //      item1.addToSQL();
-	   //     auctionSite.addToItemList(item1, item1.getItemType());
-	    //    Bike item2 = new Bike(222, "222", true, 1994, "Black");
-	     //   auctionSite.addToItemList(item2, item2.getItemType());
-	      //  item2.addToSQL();
-	        //Bike item3 = new Bike(333, "333", true, 1994, "Black" );
-	        //auctionSite.addToItemList(item3, item3.getItemType());
-	        //item3.addToSQL();
-	        //Bike item4 = new Bike(444, "444", true, 1994, "Black");
-	        //auctionSite.addToItemList(item4, item4.getItemType());
-	        //item4.addToSQL();
-	        //Bike item5 = new Bike(555, "555", true, 1994, "Black");
-	        //auctionSite.addToItemList(item5, item5.getItemType());
-	        //item5.addToSQL();
-	        //Truck item6 = new Truck(666, "666", true, 1994, "Black", 999 );
-	        //auctionSite.addToItemList(item6, item6.getItemType());
-	        //item6.addToSQL();
-	        //Car item7 = new Car(777, "777", true, 1994, "Black", 999);
-	        //auctionSite.addToItemList(item7, item7.getItemType());
-	        //item7.addToSQL();
-	        //Truck item8 = new Truck(888, "888", true, 1994, "Black", 999 );
-	        //auctionSite.addToItemList(item8, item8.getItemType());
-	        //item8.addToSQL();
-	        //Car item9 = new Car(999, "999", true, 1994, "Black", 999);
-	        //auctionSite.addToItemList(item9, item9.getItemType());
-	        //item9.addToSQL();
-	        List<Item> itemList = auctionSite.getItemList();
-	        String itemTypeToFind = request.getParameter("All");
+
+		    ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			System.out.println("AAA");
+			try {
+			
+			String query = "SELECT * FROM items";
+			
+			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			while (rs.next()) {
+				String item_type = rs.getString("item_type");
+				String model_number = String.valueOf(rs.getInt("model_number"));
+				int item_id = rs.getInt("item_id");
+				boolean inAuction = rs.getBoolean("in_auction");
+				int item_year = rs.getInt("item_year");
+				String color = rs.getString("color");
+				
+		        if (item_type.equals("bike")){
+		            Bike bike = new Bike(item_id, model_number, inAuction, item_year, color);
+		            auctionSite.addToItemList(bike, "bike");
+		        } else if (item_type.equals("truck")){
+		            Truck truck = new Truck(item_id, model_number, inAuction, item_year, color, 0);
+		            auctionSite.addToItemList(truck, "truck");
+		        } else if (item_type.equals("car")){
+		            Car car = new Car(item_id ,model_number, inAuction, item_year, color, 0);
+		            auctionSite.addToItemList(car, "car");
+		        }
+			}
+
+		
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
+		
+        List<Item> itemList = auctionSite.getItemList();
+        String itemTypeToFind = request.getParameter("All");
 	%>
 		
 	
