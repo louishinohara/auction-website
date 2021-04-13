@@ -56,7 +56,7 @@
 				<br>
 				
 				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Logout" onclick=location.href="InfoPage.jsp">
+					<input type="button" value="Continue" onclick=location.href="CreateAuctionPage.jsp">
 				
 				</form>
 				
