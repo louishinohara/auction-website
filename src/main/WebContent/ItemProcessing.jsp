@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%@ page import="AuctionSite.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -23,7 +24,9 @@
 			itemType = itemType.toLowerCase();
 			
 			if(itemType.equals("bike") || itemType.equals("bicycle")){
-			
+				int id = Item.generateItemID();
+				Item newItem = new Item(id, "bike", "2", false, 1999, "red");
+				%> Bike created with id: "<%=id %>" <%
 			}else if(itemType.equals("car")){
 			
 			}else if(itemType.equals("truck")){

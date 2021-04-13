@@ -32,7 +32,7 @@
 					<td>Color</td><td><input type="text" name="color"></td>
 				</tr>
 			</table>
-			<input type="reset" value="Enter">
+			<input type="submit" value="Enter">
 		</form>
 		
 </body>

@@ -3,7 +3,7 @@ package AuctionSite;
 public class Bike extends Item {
     
     public Bike(int itemID, String modelNumber, boolean inAuction, int year, String color){
-        super(itemID, modelNumber, inAuction, year, color);
+        super(itemID, "bike", modelNumber, inAuction, year, color);
     }
 
     @Override
