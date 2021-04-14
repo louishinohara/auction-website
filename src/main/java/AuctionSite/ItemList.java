@@ -28,6 +28,13 @@ public class ItemList {
         }
         this.itemList.add(item);
     }
+    
+    //Proposed alternate version
+    public void addItemToTheList(Item item) {
+    	Item theItem = (Item) item;
+    	this.itemList.add(theItem);
+    	
+    }
 
     public List<Item> getItemList(){
     	System.out.println("ItemList GetItemList");

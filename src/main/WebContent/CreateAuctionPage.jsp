@@ -55,9 +55,10 @@
 					
 					if(itemType.equals("bike") || itemType.equals("bicycle")){
 						int id = Item.generateItemID();
-						Item newItem = new Item(id, "bike", model, false, Integer.parseInt(year), color);
+						Bike newItem = new Bike(id, model, false, Integer.parseInt(year), color);
 						%> Bike created with id: "<%=id %>" <%
-					   //itemList.addItemToList(newItem, "Bike");
+					   itemList.addItemToTheList(newItem);
+						
 					   newItem.addToSQL();
 					}else if(itemType.equals("car")){
 					
