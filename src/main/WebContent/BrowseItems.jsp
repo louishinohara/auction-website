@@ -99,10 +99,10 @@
 					
 					<div class='align-right'>	
 						<H3>Sort By Criteria</H3>    
-							<select name="Any" >  
-								<option> Any </option>         
-								<option> Lowest Bid Price </option> 
-								<option> Highest Bid Price </option>          
+							<select name="sortBy" >  
+								<option value="null"> Any </option>         
+								<option value="lowest"> Lowest Bid Price </option> 
+								<option value="highest"> Highest Bid Price </option>          
 							</select>    
 						<input type="submit" value="Submit"/> 
 					</div>
@@ -121,17 +121,17 @@
 
 			// Get All Items From Database
 			if ( request.getParameter("itemType") != null ){
-				String query = null;
+				String query = " select i.item_type, i.model_number, i.item_id, i.in_auction, i.item_year, i.color, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
 				String itemType = request.getParameter("itemType");
 												
 				if ( itemType.equals("All") ) {					// Get requested item
-					query = "SELECT * FROM items ";
+					// Do Nothing? 
 				} else if ( itemType.equals("Bike") ){
-					query = " SELECT * FROM items WHERE item_type = 'bike' ";
+					query = query + " WHERE i.item_type = 'bike' ";
 				} else if ( itemType.equals("Truck") ) {
-					query = " SELECT * FROM items WHERE item_type = 'truck' ";
+					query = query + " WHERE i.item_type = 'truck' ";
 				} else if ( itemType.equals("Car") ){
-					query = " SELECT * FROM items WHERE item_type = 'car' ";
+					query = query + " WHERE i.item_type = 'car' ";
 				} 
 					
 				String auctionCriteria = request.getParameter("availability");
@@ -143,13 +143,25 @@
 					}
 					
 					if ( auctionCriteria.equals("true") ){
-						query = query + "in_auction = true";
+						query = query + "i.in_auction = true";
 					} 	else if ( auctionCriteria.equals("false") ){
-						query = query + "in_auction = false";
+						query = query + "i.in_auction = false";
 					}
 					
 				}
 
+				String sortBy = request.getParameter("sortBy");
+				
+				if ( !sortBy.equals("null" )){			// If there is a scenario where we want to filter by availability
+					query = query + " order by ";
+					
+					if ( sortBy.equals("lowest") ){
+						query = query + "a.currentBidPrice ASC ";
+					} 	else if ( sortBy.equals("highest") ){
+						query = query + "a.currentBidPrice DESC ";
+					}
+					
+				}
 				
 				System.out.println(query);
 				
@@ -163,6 +175,7 @@
 					String item_type = rs.getString("item_type");
 					String model_number = String.valueOf(rs.getInt("model_number"));
 					String color = rs.getString("color");
+					String currBid = "$" + String.valueOf(rs.getInt("currentBidPrice"));
 					int item_id = rs.getInt("item_id");
 					int item_year = rs.getInt("item_year");
 					boolean inAuction = rs.getBoolean("in_auction");
@@ -214,7 +227,7 @@
 									
 										<div class='sub-container'>
 											<div class='description-container'>
-												Bid: ??? 
+												Bid:  <%= currBid %> 
 											</div>
 										</div>
 										
