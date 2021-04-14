@@ -1,5 +1,11 @@
 package AuctionSite;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
+import com.dbproj.pkg.ApplicationDB;
+
 public class Bid {
     private int itemID;
     private int BID_ID;
@@ -36,6 +42,35 @@ public class Bid {
     }
 
 
+    public void addToSQL(){
+    	ApplicationDB db = new ApplicationDB();	
+		Connection con = db.getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			//String query = "INSERT INTO items VALUES(\"" + this.itemType + "\", " + this.modelNumber + ", " + this.itemID + ", false, " + this.year + ", \"" + this.color + "\");";
+			String insert = "INSERT INTO bid(BUYER_ID, itemID, BID_ID, BID_PRICE, UPPER_BID_LIMIT, date, time, allowAutomaticBidding, isActive)"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
+			PreparedStatement ps = con.prepareStatement(insert);
+
+			//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
+			ps.setInt(1, this.BUYER_ID);
+			ps.setInt(2, this.itemID);
+			ps.setInt(3, this.BID_ID);
+			ps.setDouble(4, this.BID_PRICE);
+			ps.setDouble(5, this.UPPER_BID_LIMIT);
+			ps.setString(6, this.date);
+			ps.setString(7, this.time);
+			ps.setBoolean(8, this.allowAutomaticBidding);
+			ps.setBoolean(9, this.isActive);
+			//Run the query against the DB
+			ps.executeUpdate();
+		
+		}catch(Exception E) {
+			E.printStackTrace();
+		}
+    }
+    
 
     public int getBidID() {
         return this.BID_ID;

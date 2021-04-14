@@ -34,7 +34,7 @@ public class Item {
 		try {
 			Statement stmt = con.createStatement();
 			//String query = "INSERT INTO items VALUES(\"" + this.itemType + "\", " + this.modelNumber + ", " + this.itemID + ", false, " + this.year + ", \"" + this.color + "\");";
-			String insert = "INSERT INTO items(item_type, model_number, item_id, in_auction, item_year, color)"
+			String insert = "INSERT INTO bid(buyerID, itemID, bidID, bidPrice, upperBidLimit, date, time, automaticBid, isActive)"
 					+ "VALUES (?, ?, ?, ?,?,?)";
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 			PreparedStatement ps = con.prepareStatement(insert);
