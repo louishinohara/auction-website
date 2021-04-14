@@ -25,35 +25,69 @@
 				  padding: 8;
 				}
 			</style>
+			
+			<style type="text/css">	 
+				.container { 
+								width:100% ; 
+								margin-bottom: 200px;
+								 background-color: lightblue;
+							}
+					
+				.align-left { 	float: left ; 
+								width:50% ; 
+							}
+							
+				.align-right { 
+								float: right ;
+								width:50% ; 
+							 }
+			</style> 
+
 		</head>
 
 	<body BGCOLOR="#ffffcc">
 		<CENTER>     
-			<H2>Browse Items</H2>     
-			<form method="POST"> 
-					<select id="ItemTypeOptions" name="All" >       
-						<option value="All" >All</option>       
-						<option value="Bike" >Bike</option>       
-						<option value="Car" >Car</option>   
-						<option value="Truck" >Truck </option> 
-					</select>    
-				<input type="submit" value="Select" /> 
-			</form> 
-			<H2>Sort By Criteria</H2>    
-			<form action="select" method="POST"> 
-					<select name="In Auction" >       
-						<option> In Auction </option>     
-						<option> Lowest Bid Price </option> 
-						<option> Highest Bid Price </option>          
-					</select>    
-				<input type="submit"/> 
-			</form> 
+			<H2>Browse Items</H2>
+			
+			<div class='container'>
+			
+			<div  class='align-left' >		
+				<form action="">
+				  <p>Select Item Type:</p>
+				<input type="radio" id="all" name="itemType" value="all" checked >
+				  	<label for="male">All</label><br>
+				<input type="radio" id="bike" name="itemType" value="bike">
+				  	<label for="bike">Bike</label><br>
+				<input type="radio" id="truck" name="itemType" value="truck">
+				  	<label for="truck">Truck</label>
+			  	<input type="radio" id="car" name="itemType" value="car">
+				  	<label for="car">Car</label>				
+				</form>
+			</div>
+
+			<div class='align-right'>	
+				<H2>Sort By Criteria</H2>    
+					<form action="select" method="POST"> 
+							<select name="Any" >  
+								<option> Any </option>       
+								<option> In Auction </option>     
+								<option> Lowest Bid Price </option> 
+								<option> Highest Bid Price </option>          
+							</select>    
+						<input type="submit" value="Submit"/> 
+					</form> 
+			</div>
+			
+			
+			</div>
+
+
+
 		</CENTER>
 	  
 	<% 
 		try {
-			AuctionSite auctionSite = new AuctionSite();
-
+			
 		    ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 
@@ -74,6 +108,9 @@
 			if ( viewActiveAuctionItems ){
 				query = query + " and in_auction = true";
 			}
+			
+			
+			
 			
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 			Statement stmt = con.createStatement();
