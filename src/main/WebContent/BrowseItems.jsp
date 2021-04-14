@@ -13,39 +13,63 @@
 			<title>View Items Page</title>
 			<style>
 				ol {
-				  background: #ff9999;
+				  background: #9b9b9b;
 				  padding: 20px;
 				}
 				
 				ol li {
-				  background: #ffe5e5;
-				  margin-left: 20px;
-				  list-style-type: none;
-				  margin-bottom: 20px;
-				  padding: 8;
+					list-style-type: none;
 				}
 			</style>
 			
 			<style type="text/css">	 
 				.container { 
-								width:100% ; 
-								margin-bottom: 200px;
-								 background-color: lightblue;
-							}
+					width:100% ; 
+					margin-bottom: 200px;
+					background-color: lightblue;
+				}
 					
-				.align-left { 	float: left ; 
-								width:50% ; 
-							}
-							
+				.align-left { 	
+					float: left ; 
+					width:50% ; 
+				}
+					
 				.align-right { 
-								float: right ;
-								width:50% ; 
-							 }
+					float: right ;
+					width:50% ; 
+				 }
+				.item-container {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					background: #ffe5e5;
+				  	margin-left: 20px;
+				  	margin-bottom: 20px;
+				  	padding: 8;
+				  	height: 100px;
+				}
+				.sub-container {
+					display: 'flex';
+					flex-direction: 'column';
+					padding-left: 20px;
+					}
+				.description-container {
+					marginTop: 8px;
+					marginBottom: 8px;
+					
+					}
+				.fit-picture {
+				    width: 100px;
+				}
+				.right-align-sub-container{
+					margin-left: auto;
+					margin-right: 20px;
+				}
 			</style> 
 
 		</head>
 
-	<body BGCOLOR="#ffffcc">
+	<body BGCOLOR="#e6e6e6">
 		<CENTER>     
 			<H2>Browse Items</H2>
 			
@@ -53,7 +77,7 @@
 			
 			<div  class='align-left' >		
 				<form action="">
-				  <p>Select Item Type:</p>
+				  <H3>Browse Items</H3>
 				<input type="radio" id="all" name="itemType" value="all" checked >
 				  	<label for="male">All</label><br>
 				<input type="radio" id="bike" name="itemType" value="bike">
@@ -66,11 +90,22 @@
 			</div>
 
 			<div class='align-right'>	
-				<H2>Sort By Criteria</H2>    
+				<H3>Sort Availability </H3>    
+					<form action="select" method="POST"> 
+							<select name="All" >  
+								<option> All </option>       
+								<option> In Auction </option>     
+								<option> Not In Auction </option>         
+							</select>    
+						<input type="submit" value="Submit"/> 
+					</form> 
+			</div>
+			
+			<div class='align-right'>	
+				<H3>Sort By Criteria</H3>    
 					<form action="select" method="POST"> 
 							<select name="Any" >  
-								<option> Any </option>       
-								<option> In Auction </option>     
+								<option> Any </option>         
 								<option> Lowest Bid Price </option> 
 								<option> Highest Bid Price </option>          
 							</select>    
@@ -92,8 +127,8 @@
 			Connection con = db.getConnection();
 
 			// Get All Items From Database
-			String query = "Bike";
-			boolean viewActiveAuctionItems = true;
+			String query = "Any";
+			String auctionCriteria = "Any";
 			
 			if ( query.equals("Any") ) {
 				query = "SELECT * FROM items";
@@ -105,9 +140,12 @@
 				query = " SELECT * FROM items WHERE item_type = 'car'";
 			} 
 						
-			if ( viewActiveAuctionItems ){
+			if ( auctionCriteria.equals("True") ){
 				query = query + " and in_auction = true";
+			} 	else if ( auctionCriteria.equals("False") ){
+				query = query + " and in_auction = false";
 			}
+			
 			
 			
 			
@@ -125,28 +163,65 @@
 				int item_id = rs.getInt("item_id");
 				int item_year = rs.getInt("item_year");
 				boolean inAuction = rs.getBoolean("in_auction");
+				String img = null;
+				if (item_type.equals("car")){
+					img = "https://i.imgur.com/DOVgfjE.png";
+				}	else if (item_type.equals("bike")){
+					img = "https://i.imgur.com/f0gjT3e.gif";
+				}	else if (item_type.equals("truck")){
+					img = "https://i.imgur.com/PPtmo88.jpg";
+				}
+				
 				%>
-					<li> 
-						<a href="#">  
-							<div>
-							Item ID: <%= String.valueOf(item_id) %>
+					<li  > 
+							<div class='item-container' >
+     							<div class='sub-container'>
+										<img class="fit-picture"
+										     src=<%= img %>
+										     alt="">
+								</div>		
+								<div class='sub-container'>
+									<div class='description-container'>
+										Item ID: <%= String.valueOf(item_id) %>
+									</div>
+									<div class='description-container'>
+				
+									</div>
+								</div>			
+								<div class='sub-container'>
+									<div class='description-container'>
+										Model: <%= model_number %>
+									</div>
+									<div class='description-container'>
+										Color: <%= color %>
+										
+									</div>
+								</div>
+
+								<div class='sub-container'>
+									<div class='description-container'>
+										Year: <%= String.valueOf(item_year) %>
+									</div>
+									<div class='description-container'>
+										In Auction: <%= inAuction %>
+									</div>
+								</div>
+								
+								<div class='right-align-sub-container'> 
+								
+									<div class='sub-container'>
+										<div class='description-container'>
+											Bid: ??? 
+										</div>
+									</div>
+									
+									<div class='sub-container'>
+										<button type="button"> View  </button>
+									</div>
+								
+								</div>
+								
 							</div>
-							<div>
-							ItemType: <%= item_type %>
-							</div>
-							<div>
-							Model: <%= model_number %>
-							</div>
-							<div>
-							Year: <%= String.valueOf(item_year) %>
-							</div>
-							<div>
-							Color: <%= color %>
-							</div>
-							<div>
-							In Auction: <%= inAuction %>
-							</div>
-						  </a>
 					</li>
 				<% 
 			}
