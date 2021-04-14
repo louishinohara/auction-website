@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
-
+<%@ page import="AuctionSite.*" %>
 
 
 
@@ -54,9 +54,10 @@
 		
 				
 				<br>
-				
+				<%ItemList itemList = new ItemList();
+					session.setAttribute("itemList", itemList);%>
 				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Continue" onclick=location.href="CreateAuctionPage.jsp">
+					<input type="button" value="Create Auction" onclick=location.href="CreateAuctionPage.jsp">
 				
 				</form>
 				

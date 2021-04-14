@@ -97,5 +97,15 @@ public class Item {
 	}
 		
     }
+    
+    public String toString() {
+    	String output = "";
+    	output += "Type: " + this.itemType + ", ";
+    	output += "ID: " + this.itemID + ", ";
+    	output += "Model: " + this.modelNumber + ", ";
+    	output += "Year: " + this.year + ", ";
+    	output += "Color: " + this.color;
+    	return output;
+    }
 
 }

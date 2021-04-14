@@ -92,7 +92,15 @@ public class ItemList {
     public void removeItemFromSQL(Item item){
         // Remove Item From SQL Table
     }
+    
+    public boolean isEmpty() {
+    	return this.itemList.isEmpty();
+    }
 
+    //needed a diff accessor
+    public List<Item> getCurrentList(){
+    	return this.itemList;
+    }
 
 
 }

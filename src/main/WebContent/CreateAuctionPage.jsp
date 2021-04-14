@@ -15,7 +15,9 @@
 
 <body>
 
-	<% ItemList itemList = new ItemList(); %>
+	<% ItemList itemList = new ItemList();
+		itemList = (ItemList) session.getAttribute("itemList"); 
+		%>
 
 	<br><h3>Enter Item Info</h3>
 		<form method="get">
@@ -55,15 +57,25 @@
 					
 					if(itemType.equals("bike") || itemType.equals("bicycle")){
 						int id = Item.generateItemID();
-						Bike newItem = new Bike(id, model, false, Integer.parseInt(year), color);
-						%> Bike created with id: "<%=id %>" <%
-					   itemList.addItemToTheList(newItem);
+						Bike newBike = new Bike(id, model, false, Integer.parseInt(year), color);
+						%> Bike created with id: "<%=id %>" <br><%
+					   itemList.addItemToTheList(newBike);
 						
-					   newItem.addToSQL();
+					   newBike.addToSQL();
 					}else if(itemType.equals("car")){
-					
+						String miles = request.getParameter("miles");
+						int id = Item.generateItemID();
+						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
+						%> Car created with id: "<%=id %>" <br><%
+						itemList.addItemToTheList(newCar);
+						newCar.addToSQL();
 					}else if(itemType.equals("truck")){
-					
+						String miles = request.getParameter("miles");
+						int id = Item.generateItemID();
+						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
+						%> Truck created with id: "<%=id %>" <br><%
+						itemList.addItemToTheList(newTruck);
+						newTruck.addToSQL();
 					}else{
 						%>Invalid Item Type "<%=itemType%>"<%
 					}
@@ -74,6 +86,14 @@
 			%>Please fill out all relevant fields<%
 		}
 		
+		if(itemList != null && !itemList.isEmpty()){
+			%>Current Item List <br><%
+			for(Item item : itemList.getCurrentList()){
+				String line = item.toString();
+				%>"<%=line %> <br>"<%
+				
+			}
+		}
 		
 		%>
 		
