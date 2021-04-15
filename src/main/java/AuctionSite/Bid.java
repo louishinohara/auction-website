@@ -41,49 +41,19 @@ public class Bid {
         this.isActive = true;
     }
 
-
-    public void addToSQL(){
-    	ApplicationDB db = new ApplicationDB();	
-		Connection con = db.getConnection();
-		try {
-			Statement stmt = con.createStatement();
-			//String query = "INSERT INTO items VALUES(\"" + this.itemType + "\", " + this.modelNumber + ", " + this.itemID + ", false, " + this.year + ", \"" + this.color + "\");";
-			String insert = "INSERT INTO bid(BUYER_ID, itemID, BID_ID, BID_PRICE, UPPER_BID_LIMIT, date, time, allowAutomaticBidding, isActive)"
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
-			PreparedStatement ps = con.prepareStatement(insert);
-
-			//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
-			ps.setInt(1, this.BUYER_ID);
-			ps.setInt(2, this.itemID);
-			ps.setInt(3, this.BID_ID);
-			ps.setDouble(4, this.BID_PRICE);
-			ps.setDouble(5, this.UPPER_BID_LIMIT);
-			ps.setString(6, this.date);
-			ps.setString(7, this.time);
-			ps.setBoolean(8, this.allowAutomaticBidding);
-			ps.setBoolean(9, this.isActive);
-			//Run the query against the DB
-			ps.executeUpdate();
-		
-		}catch(Exception E) {
-			E.printStackTrace();
-		}
-    }
-    
-
     public int getBidID() {
         return this.BID_ID;
     }
-
+    
     public double getCurrPrice(){
         return this.BID_PRICE;
     }
 
+    
     public double setCurrPrice(double price){
        return this.BID_PRICE = price;
     }
-
+    
     public double getUpperBidLimit(){
         return this.UPPER_BID_LIMIT;
     }
@@ -92,16 +62,40 @@ public class Bid {
         return this.BUYER_ID;
     }
 
+    public String getDate(){
+        return this.date;
+    }
+    
+    public String getTime(){
+        return this.time;
+    }
+    
     public boolean getAllowAutomaticBidding(){
         return this.allowAutomaticBidding;
     }
 
+    public void setInActive() {
+        this.isActive = false;
+    	ApplicationDB db = new ApplicationDB();	
+		Connection con = db.getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			
+	         String query = "update bid set isActive=0 where bidID=?";
+	         PreparedStatement ps = con.prepareStatement(query);
+	         ps.setInt(1, this.BID_ID);
+	         ps.executeUpdate();
+	         System.out.println("Set Bid Inactive " + String.valueOf(this.BID_ID));
+	        
+    } catch (Exception e){
+    	System.out.println(e);
+    }
+		
+    }
+    
     public boolean getIsActive(){
         return this.isActive;
     }
 
-    public void setInActive(){
-        this.isActive = false;
-    }
 
 }
