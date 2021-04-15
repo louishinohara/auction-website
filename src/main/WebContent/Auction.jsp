@@ -331,7 +331,6 @@
 	    private int itemID;
 	    private double currItemPrice;
 	    private int buyerInLeaderID;
-	    private double buyerInLeaderIDUpperLimit = 0;
 	    private int bidID = 0;
 	    private double incrementVal;
 	    private int reservePrice; 
@@ -391,7 +390,6 @@
 					this.incrementVal = rs.getInt("incrementVal");
 					this.reservePrice = rs.getInt("reservePrice");
 					this.currItemPrice = rs.getInt("currentBidPrice");
-					this.buyerInLeaderIDUpperLimit = rs.getFloat("upperBidLimit");
 				}
 				
 				query = "SELECT * FROM bid WHERE itemID = " + String.valueOf(this.itemID) + " AND isActive = 1";
@@ -429,14 +427,11 @@
 	                    System.out.println("This is the price to beat " + priceToBeat);
 	                    System.out.println("This is " + bid.getBuyerID() + "'s Bid price " + bid.getCurrPrice());
 
-	                    if ( bidPrice >= priceToBeat & bidPrice >= this.buyerInLeaderIDUpperLimit) {    // Bid is greater than current price. 
+	                    if ( bidPrice >= priceToBeat) {    // Bid is greater than current price. 
 	                        System.out.println("Bid is greater than current price. Setting as new bid price");
 	                        double newBidPrice = Math.max( bidPrice , priceToBeat );        // Set the new bid price as which ever is larger -> Probably always bidPrice
 	                        updateAuctionDetailsInSQL(newBidPrice, bid.getBuyerID());
 	                        // If this bidder has an upper limit, then save it
-	                        if (bid.getAllowAutomaticBidding()){
-	                        	this.buyerInLeaderIDUpperLimit = bid.getUpperBidLimit();
-	                        }
 	                    } else {                            // Bid is less than current price
 	                        
 	                        System.out.println("Checking for automatic bidding for " + bid.getBuyerID() + ": " + bid.getAllowAutomaticBidding());
