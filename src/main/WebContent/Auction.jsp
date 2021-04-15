@@ -280,7 +280,7 @@
 	try {
 			Random rand = new Random();				// Temp til we get get unique bidID
 			int item_id = 2;						// Get from Previous Page (Item List)
-			int buyerID = 9;						// Get from the currently Signed In User. Again passing in data
+			int buyerID = 3;						// Get from the currently Signed In User. Again passing in data
 			int bidID = 0;
 			// Date/Time
 			String date = "10/11/1996";
@@ -420,7 +420,7 @@
 	    public List<Integer> findBidWinner(){
 	        List<Integer> customerToContact = new ArrayList<Integer>();
 	        boolean keepGoing = true ;                                                                  // Keep Going terminates when there is only one active bid
-	        while ( keepGoing ){
+	        for ( int k = 0; k < 2; k++ ){
 	            for ( int i = 0; i < this.BidList.size(); i++ ) {                                       // For every single active bid
 	                Bid bid = this.BidList.get(i);
 	                if ( bid.getIsActive() & bid.getBuyerID() != this.buyerInLeaderID ){                  // Active Bid Unless The Active Bid Is The Current Leading Bid
@@ -429,48 +429,70 @@
 	                    System.out.println("This is the price to beat " + priceToBeat);
 	                    System.out.println("This is " + bid.getBuyerID() + "'s Bid price " + bid.getCurrPrice());
 
-	                    if ( bidPrice >= priceToBeat & bidPrice >= this.buyerInLeaderIDUpperLimit) {    // Bid is greater than current price. 
-	                        System.out.println("Bid is greater than current price. Setting as new bid price");
-	                        double newBidPrice = Math.max( bidPrice , priceToBeat );        // Set the new bid price as which ever is larger -> Probably always bidPrice
-	                        updateAuctionDetailsInSQL(newBidPrice, bid.getBuyerID());
-	                        // If this bidder has an upper limit, then save it
-	                        if (bid.getAllowAutomaticBidding()){
-	                        	this.buyerInLeaderIDUpperLimit = bid.getUpperBidLimit();
-	                        }
-	                    } else {                            // Bid is less than current price
-	                        
-	                        System.out.println("Checking for automatic bidding for " + bid.getBuyerID() + ": " + bid.getAllowAutomaticBidding());
-	                        System.out.println("Checking bid upper limit " + bid.getUpperBidLimit() + ", Price To Beat: " + priceToBeat);
-	                        
-	                        if ( bid.getAllowAutomaticBidding() & bid.getUpperBidLimit() >= priceToBeat ){        // If bidder has automatic bid set and upper limit is greater than price to beat
-	                            System.out.println("Bid is less than current price. Automatic bidding is set. Setting this bid inactive and creating new bid... \n");
-	                            // Generate New Bid 
-	                            String date = "4/10/21";
-	                            String time = "1:00 AM";
+				     		if ( bidPrice >= priceToBeat | bid.getUpperBidLimit() >= priceToBeat ){
+				     			System.out.println("Bid is greater than current price. Or bidder's upper limit is greater Setting as new bid price");
+			                    if ( bidPrice >= this.buyerInLeaderIDUpperLimit ) {    // Bid is greater than Automatic Buy Price
+			                    	System.out.println("Bid price is greater than the upper limit of " + String.valueOf(this.buyerInLeaderIDUpperLimit));
+			                        double newBidPrice = Math.max( bidPrice , priceToBeat );        // Set the new bid price as which ever is larger -> Probably always bidPrice
+			                        updateAuctionDetailsInSQL(newBidPrice, bid.getBuyerID());
+			                        
+			                        // If this bidder has an upper limit, then save it
+			                        if (bid.getAllowAutomaticBidding()){
+			                        	System.out.println("This bidder set automatic bidding so we will set the new upperBidLimitValue\n");
+			                        	this.buyerInLeaderIDUpperLimit = bid.getUpperBidLimit();
+			                        }
+			                        
+			                    } else {                            			// Bid is less than automatic Bid Price but still won 
+			                    	System.out.println("Bid is greater than current price. However it is less than the current buyer's upper limit\n");
+			                        if ( bid.getAllowAutomaticBidding() ){		//
+			                        	
+			                        	System.out.println(bid.getBuyerID() + " has automatic bidding.");
+				                        System.out.println("Checking bid upper limit " + bid.getUpperBidLimit() + ", Price To Beat: " + priceToBeat + "\n");
+			                            
+				                        // Generate New Bid 
+			                            String date = "4/10/21";
+			                            String time = "1:00 AM";
+			                            
+				                        if ( bid.getUpperBidLimit() >= this.buyerInLeaderIDUpperLimit ){        // If bidder has automatic bid set and upper limit is greater than price to beat
+				                            System.out.println("New bids' upper limit is greater than current upper limit \n");
 
-	                            // Use copy constructor to create new bid with buyer credentials but different price
-	                            bid.setInActive();
-	                            setBidInactive(bid.getBidID());
-	                            Bid newBid = new Bid(bid, createBidID(), priceToBeat, date, time );
-	                            // Add Bid To This List and SQL
-								addBid(newBid, this.itemID, date, time);
-								
-								// Set current bid winner
-								updateAuctionDetailsInSQL(priceToBeat, bid.getBuyerID());
-	                            
-								
-	                            
-	                            
-	                        } else {                                    // Bid lost. Close it and add buyer ID to list of customers to notify     
-	                            System.out.println("Bid is less than current price. Setting bid inactive and adding customer to list to contact \n");
-	                            customerToContact.add(bid.getBuyerID());
-	                        }
-	                        bid.setInActive();      // Within this scope, we need to set the current bid as inactive (Created new bid or lost)
-	                        setBidInactive(bid.getBidID());
-	                    }
+				                            // Use copy constructor to create new bid with buyer credentials but different price
+				                            bid.setInActive();
+				                            setBidInactive(bid.getBidID());
+				                            // Create new bid but price is the current bid's upper limit price that was beat
+				                            Bid newBid = new Bid(bid, createBidID(), this.buyerInLeaderIDUpperLimit, date, time );
+				                            // Add Bid To This List and SQL
+											addBid(newBid, this.itemID, date, time);
+											
+											// Set current bid winner
+											updateAuctionDetailsInSQL(priceToBeat, bid.getBuyerID());				                            
+				                            
+				                        } else {                                    // Current bid upper limit is higher. So you end up losing. Set this bid to my bid as new price				                        	
+				                            System.out.println("Current bidders' upper limit is higher so new bid lost. \n");
+											bid.setInActive();
+											setBidInactive(bid.getBidID());
+											// I think setting the new bid's contents will occur when it loops back to the winning bid
+				                        }
+				                        
+			                        } else {
+			                        	// My bid is less than automatic bid and I don't have automatic bid so ends here.
+			                        	System.out.println("New bid is less than automatic bid so new bid lost \n");
+				                        bid.setInActive();
+				                        setBidInactive(bid.getBidID());
+			                        	updateAuctionDetailsInSQL(bidPrice, this.buyerInLeaderID);
+			                        	customerToContact.add(bid.getBuyerID());
+				                        
+			                        }
+			                        
+			                    }
+			                    
+		                        bid.setInActive();      // Within this scope, we need to set the current bid as inactive (Created new bid or lost)
+		                        setBidInactive(bid.getBidID());
+		                        customerToContact.add(bid.getBuyerID());
+				     		}
 	                }
 	            }
-
+/*
 	            int numActiveBids = 0;                              // Check how many active bids are there
 	            for ( int j = 0; j < this.BidList.size(); j++ ){
 	                Bid bidToCheck = this.BidList.get(j);
@@ -482,7 +504,7 @@
 	            if ( numActiveBids <= 1 ){                        // There should only be one active bid (buyerInLeadID)
 	                keepGoing = false;                          // Break loop if that is the case. Otherwise keep going (Automatic Bidding)
 	            }
-
+*/
 	        }
 	        System.out.println("\n");
 

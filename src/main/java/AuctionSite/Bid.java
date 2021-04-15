@@ -76,21 +76,7 @@ public class Bid {
 
     public void setInActive() {
         this.isActive = false;
-    	ApplicationDB db = new ApplicationDB();	
-		Connection con = db.getConnection();
-		try {
-			Statement stmt = con.createStatement();
-			
-	         String query = "update bid set isActive=0 where bidID=?";
-	         PreparedStatement ps = con.prepareStatement(query);
-	         ps.setInt(1, this.BID_ID);
-	         ps.executeUpdate();
-	         System.out.println("Set Bid Inactive " + String.valueOf(this.BID_ID));
-	        
-    } catch (Exception e){
-    	System.out.println(e);
-    }
-		
+ 
     }
     
     public boolean getIsActive(){
