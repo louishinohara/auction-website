@@ -318,7 +318,7 @@
 				automaticBidder.addBid(bid, item_id, date, time);	//TODO Not sure why it gives me method error for these last 3 fields.
 				automaticBidder.findBidWinner();
 						
-				if ( false ){
+				if ( true ){
 					automaticBidder.checkReserveMet();
 				}
 				
@@ -544,8 +544,8 @@
 	}
 	    
 	  public void checkReserveMet(){
-		  if ( this.reservePrice >= this.currItemPrice ){
-			  String msgForWinner = "You have won item " + String.valueOf(this.itemID);
+		  if ( this.reservePrice <= this.currItemPrice ){
+			  String msgForWinner = "Congrats. You have won item " + String.valueOf(this.itemID);
 			  sendAlert(this.buyerInLeaderID, msgForWinner);
 		  } else {
 			  String reservePriceNotMetMsg = "Reserve price was not been met for " + String.valueOf(this.itemID) + ". Item not purchased.";
