@@ -55,7 +55,9 @@
 				
 				<br>
 				<%ItemList itemList = new ItemList();
-					session.setAttribute("itemList", itemList);%>
+					session.setAttribute("itemList", itemList);
+					int accountID = result.getInt("accountID");
+					session.setAttribute("accountID", accountID);%>
 				<form method = "get" action="InfoPage.jsp">
 					<input type="button" value="Create Auction" onclick=location.href="CreateAuctionPage.jsp">
 				

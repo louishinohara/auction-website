@@ -1,6 +1,11 @@
 package AuctionSite;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
+
+import com.dbproj.pkg.ApplicationDB;
 
 public class Auction {
     private BidSystem bidSystem;        // Does all of the Automatic Bidding Stuff
@@ -14,9 +19,10 @@ public class Auction {
     private double incrementVal;        // What's the incrmement val for the next bid
     private boolean isOpen;             // Is this auction still open? 
     private String closeTime;           // When does this auction end?
+    private String closeDate;			//what day does this auction end?
     
 
-    public Auction( int auctionID, double initialPrice, double reservePrice, int sellerID, int itemID, String closeTime, double incrementVal ){
+    public Auction( int auctionID, double initialPrice, double reservePrice, int sellerID, int itemID, String closeTime, String closeDate, double incrementVal ){
         this.auctionID = auctionID;
         this.initialPrice = initialPrice; 
         this.reservePrice = reservePrice;
@@ -25,6 +31,7 @@ public class Auction {
         this.itemID = itemID;
         this.closeTime = closeTime;
         this.isOpen = true;
+        this.closeDate = closeDate;
         this.bidSystem = new BidSystem( initialPrice, incrementVal );
     }
 
@@ -82,12 +89,34 @@ public class Auction {
         // Send Alert To Seller
         // Send Alert To Winner
     }
+    
+    public static int generateAuctionID() {
+    	ApplicationDB db = new ApplicationDB();	
+		Connection con = db.getConnection();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT MAX(auctionID) as latest FROM auction;";
+			
+			ResultSet result = stmt.executeQuery(query);
+			
+			result.next();
+			
+			int id = result.getInt("latest");
+			return id+1;
+		}catch(Exception E) {
+			E.printStackTrace();
+		return -1;
+	}
+		
+    }
+
 
     public static void main(String[] args) {
         String closeTime = "9:00";
+        String closeDate = "10/15/2021";
 
         // Create the auction item and place it on the auction. This will also add it to the SQL table
-        Auction auction = new Auction(1, 100, 500, 1, 666, closeTime, 50);
+        Auction auction = new Auction(1, 100, 500, 1, 666, closeTime, closeDate, 50);
 
         // Let's say the buyer has found an item that they like. itemID # 666
 
