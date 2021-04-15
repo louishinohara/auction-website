@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="AuctionSite.*"%>
-    
+<%@ page import="java.util.stream.Collectors" %>
 <%@ page language="java" import="com.dbproj.pkg.*"%>
-    
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
@@ -280,7 +280,7 @@
 	try {
 			Random rand = new Random();				// Temp til we get get unique bidID
 			int item_id = 2;						// Get from Previous Page (Item List)
-			int buyerID = 9;						// Get from the currently Signed In User. Again passing in data
+			int buyerID = rand.nextInt(1000);						// Get from the currently Signed In User. Again passing in data
 			int bidID = 0;
 			// Date/Time
 			String date = "10/11/1996";
@@ -316,10 +316,16 @@
 				// Add To Automatic Bidder and SQL
 				AutomaticBidder automaticBidder = new AutomaticBidder(item_id, bidID);
 				automaticBidder.addBid(bid, item_id, date, time);	//TODO Not sure why it gives me method error for these last 3 fields.
-				List<Integer> customerToContact = automaticBidder.findBidWinner();
+				automaticBidder.findBidWinner();
 						
+				if ( false ){
+					automaticBidder.checkReserveMet();
 				}
+				
+			}
 			
+
+					
 		} catch (Exception e){
 			System.err.println(e);
 	}
@@ -334,6 +340,7 @@
 	    private int bidID = 0;
 	    private double incrementVal;
 	    private int reservePrice; 
+		private int sellerID;
 		
 	    public AutomaticBidder(int itemID, int bidID){
 	        this.BidList = new ArrayList<Bid>();
@@ -390,6 +397,7 @@
 					this.incrementVal = rs.getInt("incrementVal");
 					this.reservePrice = rs.getInt("reservePrice");
 					this.currItemPrice = rs.getInt("currentBidPrice");
+					this.sellerID = rs.getInt("sellerID");
 				}
 				
 				query = "SELECT * FROM bid WHERE itemID = " + String.valueOf(this.itemID) + " AND isActive = 1";
@@ -409,13 +417,13 @@
 				}
 				
 			} catch (Exception e){
-				
+				System.out.println(e);
 				
 				
 			}
 	    }
 	    // Automatic Bidding 
-	    public List<Integer> findBidWinner(){
+	    public void findBidWinner(){
 	        List<Integer> customerToContact = new ArrayList<Integer>();
 	        boolean keepGoing = true ;                                                                  // Keep Going terminates when there is only one active bid
 	        while ( keepGoing ){
@@ -481,7 +489,16 @@
 	        }
 	        System.out.println("\n");
 
-	        return customerToContact;
+	        List<Bid> removedDuplicatesList = this.BidList.stream().distinct().collect(Collectors.toList());
+	        // Alert the loser that they have been outbid
+	        for (int k = 0; k < removedDuplicatesList.size(); k++){
+	        	Bid bid = removedDuplicatesList.get(k);
+	        	if ( !bid.getIsActive() ){
+		        	String msgForLoser = "You have been outbid for item " + String.valueOf(this.itemID) + ". Price to beat is now " + String.valueOf(this.currItemPrice + this.incrementVal);
+		        	sendAlert(bid.getBuyerID(), msgForLoser);
+	        	}
+
+	        }
 	    }
 
 
@@ -495,7 +512,6 @@
 			Connection con = db.getConnection();
 			try {
 				Statement stmt = con.createStatement();
-				
 		         String query = "update bid set isActive=0 where bidID=?";
 		         PreparedStatement ps = con.prepareStatement(query);
 		         ps.setInt(1, bidID);
@@ -526,6 +542,66 @@
 	    	System.out.println(e);
 	    }
 	}
+	    
+	  public void checkReserveMet(){
+		  if ( this.reservePrice >= this.currItemPrice ){
+			  String msgForWinner = "You have won item " + String.valueOf(this.itemID);
+			  sendAlert(this.buyerInLeaderID, msgForWinner);
+		  } else {
+			  String reservePriceNotMetMsg = "Reserve price was not been met for " + String.valueOf(this.itemID) + ". Item not purchased.";
+			  sendAlert(this.buyerInLeaderID, reservePriceNotMetMsg);
+					  
+			  String msgToSeller = "Reserve price was not been met for " + String.valueOf(this.itemID) + ". Item not sold.";
+			  sendAlert(this.sellerID, msgToSeller);
+		  }
+	  }
+		  
+	  
+	  
+	  private int getAlertID(){
+		  	ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			int alertID = 0;
+			try {
+				Statement stmt = con.createStatement();
+				String query = "select max(alertID) from alert";
+				ResultSet rs = stmt.executeQuery(query);
+				
+				while (rs.next()){
+					alertID = rs.getInt("max(AlertID)")+ 1;
+				}
+				
+			} catch (Exception e){
+				System.out.println(e);
+			}
+			return alertID;
+	  }
+	  
+	  public void sendAlert(int ID, String msg){
+		  ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				
+				String insert = "INSERT INTO alert(alertID, buyerID, acknowledgedAlert, message)"
+						+ "VALUES (?, ?, ?, ?)";
+				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
+				PreparedStatement ps = con.prepareStatement(insert);
+
+				//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
+				ps.setInt(1, getAlertID());
+				ps.setInt(2, ID);
+				ps.setBoolean(3, false);
+				ps.setString(4,  msg );
+				ps.executeUpdate();
+				
+			} catch (Exception e){
+				System.err.println(e.getMessage());
+				
+			}
+	  }
+		
+	  
 	}
 	
 	%>
