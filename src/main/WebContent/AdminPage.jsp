@@ -31,6 +31,8 @@
 		
 		<input type="button" value="Return" onclick=location.href="Login.jsp">
 		
+		%>
+		
 	</body>
 	
 </html>
