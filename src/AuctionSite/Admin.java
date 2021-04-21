@@ -2,11 +2,7 @@ package AuctionSite;
 
 public class Admin extends Person {
     private int adminID;
-    private double totalEarnings;
-    private double totalBike;
-    private double totalCar;
-    private double 
-
+    
     public Admin(String firstName, String lastName, String SSN, String email, String address, int adminID){
         super( firstName,  lastName,  SSN,  email, address);
         this.adminID = adminID;
@@ -22,7 +18,74 @@ public class Admin extends Person {
     
     private void findTotalEarnings()
     {
-       return this.totalEarnings;
+        int totalEarnings = 0;
+        
+        for(Auction temp; AuctionList.auctionlist) {
+            if(temp.isOpen == false)
+            {
+                totalEarnings += temp.currenBidPrice;
+            }
+        }
+        System.out.println(totalEarnings);
+    }
+    
+     private void findTotalEarningsCar()
+    {
+        int totalEarnings = 0;
+        
+        for(Auction temp; AuctionList.auctionlist) {
+            if(temp.isOpen == false)
+            {
+               for(Item item: ItemList.itemlist) {
+                   if(item.itemID.equals(temp.itemID)) {
+                       if(item instanceof Car) {
+                           totalEarnings+=temp.currentBidPrice;
+                       }
+                   }
+               }
+            }
+        }
+        System.out.println(totalEarnings);
+    }
+    
+     private void findTotalEarningsBike()
+    {
+        int totalEarnings = 0;
+        
+        for(Auction temp; AuctionList.auctionlist) {
+            if(temp.isOpen == false)
+            {
+               for(Item item: ItemList.itemlist) {
+                   if(item.itemID.equals(temp.itemID)) {
+                       if(item instanceof Bike) {
+                           totalEarnings+=temp.currentBidPrice;
+                       }
+                   }
+               }
+            }
+        }
+        System.out.println(totalEarnings);
+    }
+    
+       private void findTotalEarningsTruck()
+    {
+        int totalEarnings = 0;
+        
+        for(Auction temp; AuctionList.auctionlist) {
+            if(temp.isOpen == false)
+            {
+               for(Item item: ItemList.itemlist) {
+                   if(item.itemID.equals(temp.itemID)) {
+                       if(item instanceof Truck) {
+                           totalEarnings+=temp.currentBidPrice;
+                       }
+                   }
+               }
+            }
+        }
+        System.out.println(totalEarnings);
+    }
+        
     }
 
     
