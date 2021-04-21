@@ -10,7 +10,7 @@
 <html>
     	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-      		<title>Earning Per Item<title>
+      		<title>Earning Per Type<title>
        </head>
        <body>
        <%
