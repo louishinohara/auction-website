@@ -35,12 +35,13 @@
 						
 					out.println(" ");
 					out.println(" ");
-						
+					
+					Statement stmt1 = con.createStatement();
 					//craft query
 					String totalEarningsItem = "SELECT i.item_ID, SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Item FROM item i inner join auction a WHERE i.item_id = a.itemID and a.isOPen == false";
 	
 					//Run the query against the database.
-					ResultSet result1 = stmt.executeQuery(totalEarningsItem);
+					ResultSet result1 = stmt1.executeQuery(totalEarningsItem);
 					
 					out.println(""ItemID" + " " + "Item Earnings");
 					
@@ -106,4 +107,5 @@
 					}
 					%>
       
-        
+</body>
+</html>    
