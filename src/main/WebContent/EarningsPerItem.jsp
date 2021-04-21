@@ -21,7 +21,7 @@
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
 		
-			String totalEarningsItem = "SELECT i.item_ID, SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Item FROM item i inner join auction a WHERE i.item_id = a.itemID and a.isOPen == false";
+			String totalEarningsItem = "SELECT i.item_ID, SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Item FROM items i inner join auction a WHERE i.item_id = a.itemID and a.isOPen == false";
 	
 			ResultSet result = stmt.executeQuery(totalEarningsItem);
 			
