@@ -97,8 +97,7 @@ public class Admin extends Person
                {
                    if(item.itemID.equals(temp.itemID))
                    {
-                        System.out.print(item.itemID);
-                        System.out.println(temp.currentBidPrice - initialPrice);
+                        System.out.print(item.itemID + " " + temp.currentBidPrice - initialPrice);
                    }
                }
             }
