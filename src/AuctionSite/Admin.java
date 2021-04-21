@@ -86,5 +86,22 @@ public class Admin extends Person
             }
         }
         System.out.println(totalEarnings);
-    }                              
+    }
+       private void findEarningsPerItem() 
+       {   
+        for(Auction temp; AuctionList.auctionlist) 
+        {
+            if(temp.isOpen == false)
+            {
+               for(Item item: ItemList.itemlist) 
+               {
+                   if(item.itemID.equals(temp.itemID))
+                   {
+                        System.out.print(item.itemID);
+                        System.out.println(temp.currentBidPrice - initialPrice);
+                   }
+               }
+            }
+        }  
+    }
 }
