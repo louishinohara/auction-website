@@ -27,7 +27,7 @@
 		
 		<input type="button" value="Best Selling" onclick=location.href="BestSelling.jsp">
 		
-		<input type="button" value="Best Selling" onclick=location.href="BestBuyers.jsp">
+		<input type="button" value="Best Buyers" onclick=location.href="BestBuyers.jsp">
 		
 		<input type="button" value="Return" onclick=location.href="Login.jsp">
 		
