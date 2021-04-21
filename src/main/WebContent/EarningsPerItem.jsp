@@ -28,8 +28,7 @@
 					
 			while(result.next()) {
 				String sum = result.getString("Total Earnings Item");
-				string itemId = result.getString("item_ID");
-				out.println("Total Earnigs: " + sum);
+				string itemID = result.getString("item_ID");
 				out.println(itemID + " " + sum);
 				} catch(Exception ex) {
 							out.print(ex);
