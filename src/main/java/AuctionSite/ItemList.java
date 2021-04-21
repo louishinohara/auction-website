@@ -28,6 +28,13 @@ public class ItemList {
         }
         this.itemList.add(item);
     }
+    
+    //Proposed alternate version
+    public void addItemToTheList(Item item) {
+    	Item theItem = (Item) item;
+    	this.itemList.add(theItem);
+    	
+    }
 
     public List<Item> getItemList(){
     	System.out.println("ItemList GetItemList");
@@ -85,7 +92,15 @@ public class ItemList {
     public void removeItemFromSQL(Item item){
         // Remove Item From SQL Table
     }
+    
+    public boolean isEmpty() {
+    	return this.itemList.isEmpty();
+    }
 
+    //needed a diff accessor
+    public List<Item> getCurrentList(){
+    	return this.itemList;
+    }
 
 
 }
