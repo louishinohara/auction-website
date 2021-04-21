@@ -10,7 +10,7 @@
 	<html>
     <head>
 			<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-      <title>Sales Report<title>
+      <title>Total Earnings<title>
         
     <body>
        <%
@@ -27,7 +27,11 @@
 			if(result.next()) {
 				String sum = result.getString("Total Earnings");
 				out.println("Total Earnigs: " + sum);
-				}
+			} catch(Exception ex) {
+				out.print(ex);
+					}
+					
+			<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
 	%>
       
 </body>
