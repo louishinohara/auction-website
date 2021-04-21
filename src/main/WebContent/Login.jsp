@@ -55,8 +55,14 @@
 				
 				<br>
 				
+				if(accountType.equals("customer"))
 				<form method = "get" action="InfoPage.jsp">
 					<input type="button" value="Continue" onclick=location.href="CreateAuctionPage.jsp">
+					
+				if(accountType.equals("admin"))
+				<form method = "get" action="InfoPage.jsp">
+					<input type="button" value="Continue" onclick=location.href="AdminPage.jsp">	
+					
 				
 				</form>
 				
