@@ -25,7 +25,7 @@
 	
 			ResultSet result = stmt.executeQuery(totalEarningsItem);
 			
-			out.println(""ItemID" + " " + "Item Earnings");		
+			out.println("ItemID" + " " + "Item Earnings");		
 					
 			while(result.next()) {
 				String sum = result.getString("Total Earnings Item");
