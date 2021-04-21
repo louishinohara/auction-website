@@ -28,7 +28,7 @@
 	
 			ResultSet result = stmt.executeQuery(BestSelling);
 			
-			out.println("ItemID" + " " + "Item Earnings");		
+			out.println("ItemID");		
 					
 			while(result.next()) {
 				string itemID = result.getString("item_ID");
