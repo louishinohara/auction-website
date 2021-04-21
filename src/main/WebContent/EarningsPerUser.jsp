@@ -24,7 +24,7 @@
 	
 			ResultSet result = stmt.executeQuery(totalEarningsUser);
 			
-			out.println(""sellerID" + " " + "Seller Earnings");		
+			out.println("sellerID" + " " + "Seller Earnings");		
 					
 			while(result.next()) {
 				String sum = result.getString("Total Earnings");
