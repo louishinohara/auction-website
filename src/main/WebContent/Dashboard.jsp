@@ -214,7 +214,7 @@
 								
 				</div>
 				
-				
+					<a href="InfoPage.jsp"> <button>Log Out</button></a> 
 				<%
 				
 			}else{

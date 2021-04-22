@@ -101,29 +101,26 @@
 
 	<body BGCOLOR="#e6e6e6">
 	
-		<%
+	<%
+		// Global Variables For The Page
 		String userName = (String) session.getAttribute("userName");
 		String pass = (String) session.getAttribute("pass");
 		int accountID = (Integer) session.getAttribute("accountID");
 		int itemID = Integer.parseInt(request.getParameter("itemID"));
 		boolean globalInAuction = true;
 		boolean notCurrentBidder = false;
-		%>
-	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
-	
-	
+		boolean notSeller = false;
+	%>
+		<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
 		<CENTER>     
-			<H2>Item</H2>			
-
+			<H2>Item <%=itemID%></H2>			
 		</CENTER>
-	  
 	<% 
 		try {
-			
+			// Get Item Details From SQL
 		    ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 		
-			// TO DO => GET ITEM ID FROM FROM BROWSEITEMS.JSP
 			int item_id = itemID;
 			
 			// Query to get information abbout item and auction
@@ -147,6 +144,7 @@
 			double reservePrice = 0;
 			double incrementVal = 0;
 			boolean isOpen = false;
+			
 			while (rs.next()){
 				 item_type = rs.getString("item_type");
 				 model_number = String.valueOf(rs.getInt("model_number"));
@@ -154,6 +152,7 @@
 				 item_year = rs.getInt("item_year");
 				 inAuction = rs.getBoolean("isOpen");
 				 globalInAuction = inAuction;
+				 notSeller = accountID == sellerID;
 				 img = null;
 				 
 				if (item_type.equals("car")){
@@ -216,44 +215,36 @@
 			</div>
 			
 			<div class="bid-container">
-			<div class="bid-container-left">
-			<%
-			if ( globalInAuction & !notCurrentBidder) {
-				%>
-			
-				
-					<h2> Create A Bid </h2>
-					<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
-					<form method="get">
-						<label for="itemID">Item ID:</label><br>
-					  <input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
-					  <label for="bidPrice">Bid Price:</label><br>
-					  <input type="text" id="bidPrice" name="bidPrice" value=""><br>
-					   <input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
-					   <label for="bidUpperLimit">Bid Upper Limit:</label><br>
-					  <input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
-					  <input type="submit" value="Place Bid">
-					</form> 
-			
-							
-	
-				
-				
-			<% 
-			}
-			%>
+				<div class="bid-container-left">
+		<%
+		if ( globalInAuction & !notCurrentBidder & !notSeller) {
+		%>
+			<h2> Create A Bid </h2>
+			<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
+			<form method="get">
+				<label for="itemID">Item ID:</label><br>
+			  	<input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
+			  	<label for="bidPrice">Bid Price:</label><br>
+			  	<input type="text" id="bidPrice" name="bidPrice" value=""><br>
+			  	<input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
+			  	<label for="bidUpperLimit">Bid Upper Limit:</label><br>
+			  	<input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
+			  	<input type="submit" value="Place Bid">
+			</form> 
+		<% 
+		}
+		%>
 		</div>
-				
 			<h2> Bid History </h2>
 			<div class="bid-container-right">
 		       
-			<%
-		        try {
-					String bidQuery = String.format("select itemID, buyerID, bidID, bidPrice, date, time FROM bid WHERE itemID = %s ORDER BY bidPrice DESC", String.valueOf(item_id));
-					ResultSet qrs = stmt.executeQuery(bidQuery);
-					
+		<%
+	        try {
+	        	// Get Bid History Information
+				String bidQuery = String.format("select itemID, buyerID, bidID, bidPrice, date, time FROM bid WHERE itemID = %s ORDER BY bidPrice DESC", String.valueOf(item_id));
+				ResultSet qrs = stmt.executeQuery(bidQuery);		
 			%>
-			<ol>
+				<ol>
 			<%
 					while (qrs.next()){
 						String buyerID = String.valueOf(qrs.getInt("buyerID"));
@@ -285,9 +276,8 @@
 								</div>
 							</div>
 						</li>
-			<% 
-						
-					}
+			<% 				
+			}
 			%>
 			</ol>
 			<%
@@ -301,12 +291,11 @@
 	<% 				
 		} catch (Exception e) {
 			System.err.println(e);
-		}
+	}
 	%>
 
 	<%
 	// Form For The Bidder To Place Bid 
-
 		try {
 
 			int item_id = itemID;						// Get from Previous Page (Item List)
@@ -314,9 +303,9 @@
 			int bidID = 0;
 			// Date/Time
 			String date = String.valueOf(java.time.LocalDate.now());
-		     java.util.Date day = new java.util.Date();
-		     String strDateFormat = "HH:mm:ss a";
-		     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
+		    java.util.Date day = new java.util.Date();
+		    String strDateFormat = "HH:mm:ss a";
+		    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
 			String time = String.valueOf(sdf.format(day));
 			try {
 				// Get the maxBid to create bidID
@@ -326,12 +315,15 @@
 				String query = "select max(bidID) from bid";
 				ResultSet rs = stmt.executeQuery(query);
 				
-				while (rs.next()){
+				while (rs.next()) {
 					bidID = rs.getInt("max(bidID)") + 1;
 				}
-			} catch (Exception e){
 				
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			
+			// If Bid Is Valid
 			if ( request.getParameter("bidPrice") != null ) {
 				
 				// Get Data From Form
@@ -340,45 +332,47 @@
 				String automaticBid = request.getParameter("automaticBid");
 				boolean automaticBidBool = false;
 				
+				// User has picked to use automaticBid
 				if ("true".equals(automaticBid)){
 					automaticBidBool = true;
 				} 
-				// Idk if we'll need this
+				
+				// Create New Bid
 				Bid bid = new Bid( buyerID, item_id,  bidID,  bidPrice,  upperBidLimit,  date,  time, automaticBidBool); 
 			 	
 				// Add To Automatic Bidder and SQL
+				// Create Automatic Bidding System
 				AutomaticBidder automaticBidder = new AutomaticBidder(item_id, bidID);
-				automaticBidder.addBid(bid, item_id, date, time);	//TODO Not sure why it gives me method error for these last 3 fields.
+				// Add the current bid with date and time
+				automaticBidder.addBid(bid, item_id, date, time);
+				// Contact Losers
 				List<Integer> customerToContact = automaticBidder.findBidWinner();
-						
-				}
+			}
 			
 		} catch (Exception e){
 			System.err.println(e);
 	}	
-
+//=======================================================================================================================================================================================================================================
 	%>
+
 	<%!
-	
+		// Code For The Automatic Bid System
 		public class AutomaticBidder {
 	    private List<Bid> BidList; 
 	    private int itemID;
+	    private int bidID = 0;
 	    private double currItemPrice;
 	    private int buyerInLeaderID;
 	    private double buyerInLeaderIDUpperLimit = 0;
-	    private int bidID = 0;
 	    private double incrementVal;
 	    private int reservePrice; 
 	    private int sellerID;
-	    
 	    
 	    public AutomaticBidder(int itemID, int bidID){
 	        this.BidList = new ArrayList<Bid>();
 	        this.itemID = itemID;
 	        this.bidID = bidID;
 	        getAuctionDetails();
-	   //     this.currItemPrice =  initialPrice;
-	     //   this.incrementVal = incrementVal;
 	    }
 	    // Add Bid to list
 	    public void addBid(Bid bid, int itemID, String date, String time){
@@ -526,18 +520,7 @@
 				     		}
 	                }
 	            }
-/*
-	            int numActiveBids = 0;                              // Check how many active bids are there
-	            for ( int j = 0; j < this.BidList.size(); j++ ){
-	                Bid bidToCheck = this.BidList.get(j);
-	                if ( bidToCheck.getIsActive() ){
-	                    numActiveBids += 1;
-	                }
-	            }
-	            if ( numActiveBids <= 1 ){                        // There should only be one active bid (buyerInLeadID)
-	                keepGoing = false;                          // Break loop if that is the case. Otherwise keep going (Automatic Bidding)
-	            }
-*/
+
 	        }
 	        System.out.println("\n");
 	        return customerToContact;
@@ -577,9 +560,7 @@
 			  sendAlert(this.sellerID, msgToSeller);
 		  }
 	  }
-		  
-	  
-	  
+		   
 	  private int getAlertID(){
 		  	ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
@@ -631,9 +612,6 @@
 			}
 	  }
 		
-	  
-	
-	
 	    public void updateAuctionDetailsInSQL(double priceToBeat, int buyerID){
             this.currItemPrice = priceToBeat;
             this.buyerInLeaderID = buyerID;
