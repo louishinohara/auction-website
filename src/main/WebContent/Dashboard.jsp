@@ -91,7 +91,7 @@
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
-
+		
 		//Create a SQL statement
 		Statement stmt = con.createStatement();
 
@@ -147,11 +147,6 @@
 					session.setAttribute("accountID", accountID);%>
 
 				<div class="action-row-container">
-					<div class="action-container">
-						<form method = "get" action="InfoPage.jsp">
-							<input type="button" value="Create Auction" onclick=location.href="CreateAuctionPage.jsp">
-						</form>
-					</div>
 					
 					<div class="action-container" method = "get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="CreateAuctionPage.jsp">
 						<div >
@@ -163,7 +158,7 @@
 					</div>
 					
 				
-					<div class="action-container">
+					<div class="action-container" method = "get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="AlertPage.jsp">
 						
 						<div>
 							<h3 class="heading-text"> View Alerts </h3>
@@ -177,7 +172,7 @@
 				</div>
 									
 				<div class="action-row-container">
-					<div class="action-container">
+					<div class="action-container" method = "get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="BrowseItems.jsp">
 						<div>
 							<h3 class="heading-text"> View Items </h3>
 						</div>

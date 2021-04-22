@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="AuctionSite.*"%>
+    pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*,com.AuctionSite.*"%>
     
 <%@ page language="java" import="com.dbproj.pkg.*"%>
     
@@ -231,10 +231,9 @@
 											</div>
 										</div>
 										
-										<div class='sub-container'>
-											<button type="button"> View  </button>
+										<div class='sub-container' method = "get" action="BrowseItems.jsp" style="cursor: pointer;" onclick=location.href="Auction.jsp">
+											<button type="submit" > View  </button>
 										</div>
-									
 									</div>
 									
 								</div>

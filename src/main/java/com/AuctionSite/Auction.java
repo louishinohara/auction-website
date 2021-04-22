@@ -84,11 +84,6 @@ public class Auction {
         System.out.println("This is the current bid price " + currPrice );
         return currPrice;
     }
-
-    private void sendAlertToCustomer(){
-        // Send Alert To Seller
-        // Send Alert To Winner
-    }
     
     public static int generateAuctionID() {
     	ApplicationDB db = new ApplicationDB();	

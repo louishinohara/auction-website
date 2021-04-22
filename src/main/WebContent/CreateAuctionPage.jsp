@@ -59,7 +59,7 @@
 						int id = Item.generateItemID();
 						Bike newBike = new Bike(id, model, false, Integer.parseInt(year), color);
 						%> Bike created with id: "<%=id %>" <br><%
-					   itemList.addItemToTheList(newBike);
+					   //itemList.addItemToTheList(newBike);
 						
 					   newBike.addToSQL();
 					}else if(itemType.equals("car")){
@@ -67,14 +67,14 @@
 						int id = Item.generateItemID();
 						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
 						%> Car created with id: "<%=id %>" <br><%
-						itemList.addItemToTheList(newCar);
+						//itemList.addItemToTheList(newCar);
 						newCar.addToSQL();
 					}else if(itemType.equals("truck")){
 						String miles = request.getParameter("miles");
 						int id = Item.generateItemID();
 						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
 						%> Truck created with id: "<%=id %>" <br><%
-						itemList.addItemToTheList(newTruck);
+						//itemList.addItemToTheList(newTruck);
 						newTruck.addToSQL();
 					}else{
 						%>Invalid Item Type "<%=itemType%>"<%
