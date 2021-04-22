@@ -1,9 +1,11 @@
+  
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="com.AuctionSite.*"%>
-<%@ page import="java.util.stream.Collectors" %>
+    
 <%@ page language="java" import="com.dbproj.pkg.*"%>
-<%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+    
+<%@ page import="java.io.*,java.util.*,java.sql.*,java.text.SimpleDateFormat.*"%>
+<%@ page import="java.util.Date.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -98,12 +100,15 @@
 		</head>
 
 	<body BGCOLOR="#e6e6e6">
-	<%
+	
+		<%
 		String userName = (String) session.getAttribute("userName");
 		String pass = (String) session.getAttribute("pass");
-	
-	%>
+		int accountID = (Integer) session.getAttribute("accountID");
+		int itemID = Integer.parseInt(request.getParameter("itemID"));
+		%>
 	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
+	
 	
 		<CENTER>     
 			<H2>Item</H2>			
@@ -116,8 +121,8 @@
 		    ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 		
-
-			int item_id = Integer.parseInt(request.getParameter("itemID"));
+			// TO DO => GET ITEM ID FROM FROM BROWSEITEMS.JSP
+			int item_id = itemID;
 			int auction_id = 1;
 			
 			// Query to get information abbout item and auction
@@ -212,6 +217,8 @@
 					<h2> Create A Bid </h2>
 					<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
 					<form method="get">
+						<label for="itemID">Item ID:</label><br>
+					  <input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
 					  <label for="bidPrice">Bid Price:</label><br>
 					  <input type="text" id="bidPrice" name="bidPrice" value=""><br>
 					   <input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
@@ -257,7 +264,7 @@
 										Date: <%= date %>
 									</div>
 									<div>
-										Buyer ID: <%= time %>
+										Time: <%= time %>
 									</div>
 								</div>
 							</div>
@@ -284,13 +291,16 @@
 	<%
 	// Form For The Bidder To Place Bid 
 	try {
-			Random rand = new Random();				// Temp til we get get unique bidID
-			int item_id = 2;						// Get from Previous Page (Item List)
-			int buyerID = (Integer) session.getAttribute("accountID");						// Get from the currently Signed In User. Again passing in data
+
+			int item_id = itemID;						// Get from Previous Page (Item List)
+			int buyerID = accountID;						// Get from the currently Signed In User. Again passing in data
 			int bidID = 0;
 			// Date/Time
 			String date = String.valueOf(java.time.LocalDate.now());
-			String time = String.valueOf(java.time.LocalTime.now());
+		     java.util.Date day = new java.util.Date();
+		     String strDateFormat = "HH:mm:ss a";
+		     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
+			String time = String.valueOf(sdf.format(day));
 			try {
 				// Get the maxBid to create bidID
 		    	ApplicationDB db = new ApplicationDB();	
@@ -322,15 +332,10 @@
 				// Add To Automatic Bidder and SQL
 				AutomaticBidder automaticBidder = new AutomaticBidder(item_id, bidID);
 				automaticBidder.addBid(bid, item_id, date, time);	//TODO Not sure why it gives me method error for these last 3 fields.
-				automaticBidder.findBidWinner();
+				List<Integer> customerToContact = automaticBidder.findBidWinner();
 						
-				if ( true ){
-					automaticBidder.checkReserveMet();
 				}
-				
-			}
 			
-					
 		} catch (Exception e){
 			System.err.println(e);
 	}
@@ -342,11 +347,13 @@
 	    private int itemID;
 	    private double currItemPrice;
 	    private int buyerInLeaderID;
+	    private double buyerInLeaderIDUpperLimit = 0;
 	    private int bidID = 0;
 	    private double incrementVal;
 	    private int reservePrice; 
-		private int sellerID;
-		
+	    private int sellerID;
+	    
+	    
 	    public AutomaticBidder(int itemID, int bidID){
 	        this.BidList = new ArrayList<Bid>();
 	        this.itemID = itemID;
@@ -399,7 +406,7 @@
 					this.incrementVal = rs.getInt("incrementVal");
 					this.reservePrice = rs.getInt("reservePrice");
 					this.currItemPrice = rs.getInt("currentBidPrice");
-					this.sellerID = rs.getInt("sellerID");
+					this.buyerInLeaderIDUpperLimit = rs.getFloat("upperBidLimit");
 				}
 				
 				query = "SELECT * FROM bid WHERE itemID = " + String.valueOf(this.itemID) + " AND isActive = 1";
@@ -419,16 +426,16 @@
 				}
 				
 			} catch (Exception e){
-				System.out.println(e);
+				
 				
 				
 			}
 	    }
 	    // Automatic Bidding 
-	    public void findBidWinner(){
+	    public List<Integer> findBidWinner(){
 	        List<Integer> customerToContact = new ArrayList<Integer>();
 	        boolean keepGoing = true ;                                                                  // Keep Going terminates when there is only one active bid
-	        while ( keepGoing ){
+	        for ( int k = 0; k < 2; k++ ){
 	            for ( int i = 0; i < this.BidList.size(); i++ ) {                                       // For every single active bid
 	                Bid bid = this.BidList.get(i);
 	                if ( bid.getIsActive() & bid.getBuyerID() != this.buyerInLeaderID ){                  // Active Bid Unless The Active Bid Is The Current Leading Bid
@@ -436,43 +443,72 @@
 	                    double priceToBeat = this.currItemPrice + this.incrementVal;                    // Find the price that needs to be beaten 
 	                    System.out.println("This is the price to beat " + priceToBeat);
 	                    System.out.println("This is " + bid.getBuyerID() + "'s Bid price " + bid.getCurrPrice());
-	                    if ( bidPrice >= priceToBeat) {    // Bid is greater than current price. 
-	                        System.out.println("Bid is greater than current price. Setting as new bid price");
-	                        double newBidPrice = Math.max( bidPrice , priceToBeat );        // Set the new bid price as which ever is larger -> Probably always bidPrice
-	                        updateAuctionDetailsInSQL(newBidPrice, bid.getBuyerID());
-	                        // If this bidder has an upper limit, then save it
-	                    } else {                            // Bid is less than current price
-	                        
-	                        System.out.println("Checking for automatic bidding for " + bid.getBuyerID() + ": " + bid.getAllowAutomaticBidding());
-	                        System.out.println("Checking bid upper limit " + bid.getUpperBidLimit() + ", Price To Beat: " + priceToBeat);
-	                        
-	                        if ( bid.getAllowAutomaticBidding() & bid.getUpperBidLimit() >= priceToBeat ){        // If bidder has automatic bid set and upper limit is greater than price to beat
-	                            System.out.println("Bid is less than current price. Automatic bidding is set. Setting this bid inactive and creating new bid... \n");
-	                            // Generate New Bid 
-								String date = String.valueOf(java.time.LocalDate.now());
-								String time = String.valueOf(java.time.LocalTime.now());
-	                            // Use copy constructor to create new bid with buyer credentials but different price
-	                            bid.setInActive();
-	                            setBidInactive(bid.getBidID());
-	                            Bid newBid = new Bid(bid, createBidID(), priceToBeat, date, time );
-	                            // Add Bid To This List and SQL
-								addBid(newBid, this.itemID, date, time);
-								
-								// Set current bid winner
-								updateAuctionDetailsInSQL(priceToBeat, bid.getBuyerID());
-	                            
-								
-	                            
-	                            
-	                        } else {                                    // Bid lost. Close it and add buyer ID to list of customers to notify     
-	                            System.out.println("Bid is less than current price. Setting bid inactive and adding customer to list to contact \n");
-	                            customerToContact.add(bid.getBuyerID());
-	                        }
-	                        bid.setInActive();      // Within this scope, we need to set the current bid as inactive (Created new bid or lost)
-	                        setBidInactive(bid.getBidID());
-	                    }
+				     		if ( bidPrice >= priceToBeat | bid.getUpperBidLimit() >= priceToBeat ){
+				     			System.out.println("Bid is greater than current price. Or bidder's upper limit is greater Setting as new bid price");
+			                    if ( bidPrice >= this.buyerInLeaderIDUpperLimit ) {    // Bid is greater than Automatic Buy Price
+			                    	System.out.println("Bid price is greater than the upper limit of " + String.valueOf(this.buyerInLeaderIDUpperLimit));
+			                        double newBidPrice = Math.max( bidPrice , priceToBeat );        // Set the new bid price as which ever is larger -> Probably always bidPrice
+			                        updateAuctionDetailsInSQL(newBidPrice, bid.getBuyerID());
+			                        
+			                        // If this bidder has an upper limit, then save it
+			                        if (bid.getAllowAutomaticBidding()){
+			                        	System.out.println("This bidder set automatic bidding so we will set the new upperBidLimitValue\n");
+			                        	this.buyerInLeaderIDUpperLimit = bid.getUpperBidLimit();
+			                        }
+			                        
+			                    } else {                            			// Bid is less than automatic Bid Price but still won 
+			                    	System.out.println("Bid is greater than current price. However it is less than the current buyer's upper limit\n");
+			                        if ( bid.getAllowAutomaticBidding() ){		//
+			                        	
+			                        	System.out.println(bid.getBuyerID() + " has automatic bidding.");
+				                        System.out.println("Checking bid upper limit " + bid.getUpperBidLimit() + ", Price To Beat: " + priceToBeat + "\n");
+			                            
+				                        // Generate New Bid 
+										  String date = String.valueOf(java.time.LocalDate.now());
+									      java.util.Date day = new java.util.Date();
+									      String strDateFormat = "HH:mm:ss a";
+									      java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
+										String time = String.valueOf(sdf.format(day));
+			                            
+				                        if ( bid.getUpperBidLimit() >= this.buyerInLeaderIDUpperLimit ){        // If bidder has automatic bid set and upper limit is greater than price to beat
+				                            System.out.println("New bids' upper limit is greater than current upper limit \n");
+				                            // Use copy constructor to create new bid with buyer credentials but different price
+				                            bid.setInActive();
+				                            setBidInactive(bid.getBidID());
+				                            // Create new bid but price is the current bid's upper limit price that was beat
+				                            Bid newBid = new Bid(bid, createBidID(), this.buyerInLeaderIDUpperLimit, date, time );
+				                            // Add Bid To This List and SQL
+											addBid(newBid, this.itemID, date, time);
+											
+											// Set current bid winner
+											updateAuctionDetailsInSQL(priceToBeat, bid.getBuyerID());				                            
+				                            
+				                        } else {                                    // Current bid upper limit is higher. So you end up losing. Set this bid to my bid as new price				                        	
+				                            System.out.println("Current bidders' upper limit is higher so new bid lost. \n");
+											bid.setInActive();
+											setBidInactive(bid.getBidID());
+											// I think setting the new bid's contents will occur when it loops back to the winning bid
+				                        }
+				                        
+			                        } else {
+			                        	// My bid is less than automatic bid and I don't have automatic bid so ends here.
+			                        	System.out.println("New bid is less than automatic bid so new bid lost \n");
+				                        bid.setInActive();
+				                        setBidInactive(bid.getBidID());
+			                        	updateAuctionDetailsInSQL(bidPrice, this.buyerInLeaderID);
+			                        	customerToContact.add(bid.getBuyerID());
+				                        
+			                        }
+			                        
+			                    }
+			                    
+		                        bid.setInActive();      // Within this scope, we need to set the current bid as inactive (Created new bid or lost)
+		                        setBidInactive(bid.getBidID());
+		                        customerToContact.add(bid.getBuyerID());
+				     		}
 	                }
 	            }
+/*
 	            int numActiveBids = 0;                              // Check how many active bids are there
 	            for ( int j = 0; j < this.BidList.size(); j++ ){
 	                Bid bidToCheck = this.BidList.get(j);
@@ -483,17 +519,10 @@
 	            if ( numActiveBids <= 1 ){                        // There should only be one active bid (buyerInLeadID)
 	                keepGoing = false;                          // Break loop if that is the case. Otherwise keep going (Automatic Bidding)
 	            }
+*/
 	        }
 	        System.out.println("\n");
-	        List<Bid> removedDuplicatesList = this.BidList.stream().distinct().collect(Collectors.toList());
-	        // Alert the loser that they have been outbid
-	        for (int k = 0; k < removedDuplicatesList.size(); k++){
-	        	Bid bid = removedDuplicatesList.get(k);
-	        	if ( !bid.getIsActive() ){
-		        	String msgForLoser = "You have been outbid for item " + String.valueOf(this.itemID) + ". Price to beat is now " + String.valueOf(this.currItemPrice + this.incrementVal);
-		        	sendAlert(bid.getBuyerID(), msgForLoser);
-	        	}
-	        }
+	        return customerToContact;
 	    }
 	    // Create a unique BIDID for this auction
 	    public int createBidID(){
@@ -505,6 +534,7 @@
 			Connection con = db.getConnection();
 			try {
 				Statement stmt = con.createStatement();
+				
 		         String query = "update bid set isActive=0 where bidID=?";
 		         PreparedStatement ps = con.prepareStatement(query);
 		         ps.setInt(1, bidID);
@@ -516,25 +546,6 @@
 			
 	    }
 	    
-	    public void updateAuctionDetailsInSQL(double priceToBeat, int buyerID){
-            this.currItemPrice = priceToBeat;
-            this.buyerInLeaderID = buyerID;
-            
-	    	ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();
-			try {
-				Statement stmt = con.createStatement();
-				
-		         String query = "update auction set buyerInLeaderID=?, currentBidPrice=? where itemID=" + String.valueOf(this.itemID);;
-		         PreparedStatement ps = con.prepareStatement(query);
-		         ps.setInt(1, buyerID);
-		         ps.setDouble(2, priceToBeat);
-		         ps.executeUpdate();
-		        
-	    } catch (Exception e){
-	    	System.out.println(e);
-	    }
-	}
 	    
 	  public void checkReserveMet(){
 		  if ( this.reservePrice <= this.currItemPrice ){
@@ -565,6 +576,7 @@
 				}
 				
 			} catch (Exception e){
+				System.out.println("6");
 				System.out.println(e);
 			}
 			return alertID;
@@ -576,7 +588,10 @@
 			try {
 				Statement stmt = con.createStatement();
 				String date = String.valueOf(java.time.LocalDate.now());
-				String time = String.valueOf(java.time.LocalTime.now());
+			     java.util.Date day = new java.util.Date();
+			     String strDateFormat = "HH:mm:ss a";
+			     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
+				String time = String.valueOf(sdf.format(day));
 				String insert = "INSERT INTO alert(alertID, itemID, buyerID, acknowledgedAlert, date, time, message)"
 						+ "VALUES (?, ?, ?, ?, ?, ?)";
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
@@ -592,14 +607,38 @@
 				ps.executeUpdate();
 				
 			} catch (Exception e){
+				System.out.println("7");
 				System.err.println(e.getMessage());
 				
 			}
 	  }
 		
 	  
+	
+	
+	    public void updateAuctionDetailsInSQL(double priceToBeat, int buyerID){
+            this.currItemPrice = priceToBeat;
+            this.buyerInLeaderID = buyerID;
+            
+	    	ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				
+		         String query = "update auction set buyerInLeaderID=?, currentBidPrice=? where itemID=" + String.valueOf(this.itemID);;
+		         PreparedStatement ps = con.prepareStatement(query);
+		         ps.setInt(1, buyerID);
+		         ps.setDouble(2, priceToBeat);
+		         ps.executeUpdate();
+		        
+	    } catch (Exception e){
+	    	System.out.println(e);
+	    }
+	}
+	    
 	}
 	
+
 	%>
 	</body>
 </html>
