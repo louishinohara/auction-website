@@ -210,7 +210,7 @@
 					   <input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
 					   <label for="bidUpperLimit">Bid Upper Limit:</label><br>
 					  <input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
-					  <input type="submit" value="Place Bid">
+					  <input type="submit" value="Place Bid" action="Auction.jsp" style="cursor: pointer;" onclick=location.href="Auction.jsp" >
 					</form> 
 				</div>
 				
@@ -279,7 +279,7 @@
 	try {
 			Random rand = new Random();				// Temp til we get get unique bidID
 			int item_id = 2;						// Get from Previous Page (Item List)
-			int buyerID = rand.nextInt(1000);						// Get from the currently Signed In User. Again passing in data
+			int buyerID = (Integer) session.getAttribute("accountID");						// Get from the currently Signed In User. Again passing in data
 			int bidID = 0;
 			// Date/Time
 			String date = String.valueOf(java.time.LocalDate.now());

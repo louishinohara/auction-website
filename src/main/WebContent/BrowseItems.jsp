@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*,com.AuctionSite.*"%>
     
-<%@ page language="java" import="com.dbproj.pkg.*"%>
-    
+ <%@ page import="java.io.*,java.util.*,java.sql.*,jakarta.servlet.ServletException.*,jakarta.servlet.annotation.WebServlet.*,jakarta.servlet.http.HttpServlet.*,jakarta.servlet.http.HttpServletRequest.*,jakarta.servlet.http.HttpServletResponse.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
@@ -234,6 +233,14 @@
 										<div class='sub-container' method = "get" action="BrowseItems.jsp" style="cursor: pointer;" onclick=location.href="Auction.jsp">
 											<button type="submit" > View  </button>
 										</div>
+										
+										<div>
+										
+											<form action="${com.AuctionSite}/myservlet" method="post">
+									    	<button type="submit" name="button" value="button1"> Button 1</button>
+											</form>
+										</div>
+										
 									</div>
 									
 								</div>
