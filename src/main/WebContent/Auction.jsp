@@ -106,6 +106,8 @@
 		String pass = (String) session.getAttribute("pass");
 		int accountID = (Integer) session.getAttribute("accountID");
 		int itemID = Integer.parseInt(request.getParameter("itemID"));
+		boolean globalInAuction = true;
+		boolean notCurrentBidder = false;
 		%>
 	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
 	
@@ -123,7 +125,6 @@
 		
 			// TO DO => GET ITEM ID FROM FROM BROWSEITEMS.JSP
 			int item_id = itemID;
-			int auction_id = 1;
 			
 			// Query to get information abbout item and auction
 			String query = "select * from items i inner join auction a where i.item_id = a.itemID and a.itemID =" + String.valueOf(item_id);
@@ -151,7 +152,8 @@
 				 model_number = String.valueOf(rs.getInt("model_number"));
 				 color = rs.getString("color");
 				 item_year = rs.getInt("item_year");
-				 inAuction = rs.getBoolean("in_auction");
+				 inAuction = rs.getBoolean("isOpen");
+				 globalInAuction = inAuction;
 				 img = null;
 				 
 				if (item_type.equals("car")){
@@ -165,6 +167,7 @@
 				 auctionID = rs.getInt("auctionID");
 				 sellerID = rs.getInt("sellerID");
 				 buyerInLeadID = rs.getInt("buyerInLeaderID");
+				 notCurrentBidder = buyerInLeadID == accountID;
 				 initialPrice = rs.getFloat("initialPrice");
 				 currentBidPrice = rs.getFloat("currentBidPrice");
 				 reservePrice = rs.getFloat("reservePrice");
@@ -213,7 +216,12 @@
 			</div>
 			
 			<div class="bid-container">
-				<div class="bid-container-left">
+			<div class="bid-container-left">
+			<%
+			if ( globalInAuction & !notCurrentBidder) {
+				%>
+			
+				
 					<h2> Create A Bid </h2>
 					<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
 					<form method="get">
@@ -226,7 +234,15 @@
 					  <input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
 					  <input type="submit" value="Place Bid">
 					</form> 
-				</div>
+			
+							
+	
+				
+				
+			<% 
+			}
+			%>
+		</div>
 				
 			<h2> Bid History </h2>
 			<div class="bid-container-right">
@@ -290,7 +306,8 @@
 
 	<%
 	// Form For The Bidder To Place Bid 
-	try {
+
+		try {
 
 			int item_id = itemID;						// Get from Previous Page (Item List)
 			int buyerID = accountID;						// Get from the currently Signed In User. Again passing in data
@@ -338,7 +355,8 @@
 			
 		} catch (Exception e){
 			System.err.println(e);
-	}
+	}	
+
 	%>
 	<%!
 	
