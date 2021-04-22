@@ -14,7 +14,7 @@
        </head>
        <body>
        <%
-            String AuctionID=request.getParameter("AuctionID");
+            String AuctionID=request.getParameter("auctionID");
             
             try 
             {
