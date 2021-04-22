@@ -46,6 +46,7 @@
 		
 		
 		<%
+		try {
 		if( (request.getParameter("type") != null) && (request.getParameter("model") != null) && (request.getParameter("year") != null) && (request.getParameter("color") != null)){
 				
 				String itemType = request.getParameter("type");
@@ -53,11 +54,12 @@
 				
 				String year = request.getParameter("year");
 				String color = request.getParameter("color");
-				
+				Item itemName = null;
+				 
 				if(!(request.getParameter("miles").equals("")) || (itemType.equals("bike") || itemType.equals("bicycle"))){
 				
 				itemType = itemType.toLowerCase();
-				 System.out.println("1213213");
+				
 					if(itemType.equals("bike") || itemType.equals("bicycle")){
 						
 						int id = Item.generateItemID();
@@ -65,27 +67,53 @@
 						%> Bike created with id: "<%=id %>" <br><%
 					   itemList.addItemToTheList(newBike);
 						
-					   newBike.addToSQL();
-					  System.out.println("1");
-					}else if(itemType.equals("car")){
-						System.out.println("Tits");
+					   //newBike.addToSQL();
+					  itemName = newBike;
+					}else if(itemType.equals("car")){ 
 						String miles = request.getParameter("miles");
 						int id = Item.generateItemID();
 						
 						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
 						%> Car created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newCar);
-						newCar.addToSQL();
+						//newCar.addToSQL();
+						itemName = newCar;
 					}else if(itemType.equals("truck")){
 						String miles = request.getParameter("miles");
 						int id = Item.generateItemID();
 						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
 						%> Truck created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newTruck);
-						newTruck.addToSQL();
+						//newTruck.addToSQL();
+						itemName = newTruck;
 					}else{
 						%>Invalid Item Type "<%=itemType%>"<%
 					}
+					// Adding items here instead
+					if (itemType.equals("bike") || itemType.equals("car") || itemType.equals("truck") )  {
+		
+				    	ApplicationDB db = new ApplicationDB();	
+						Connection conn = db.getConnection();
+
+						try {
+							String insert = "INSERT INTO items(item_type, model_number, item_id, in_auction, item_year, color)"
+									+ "VALUES (?, ?, ?, ?,?,?)";
+							PreparedStatement pss = conn.prepareStatement(insert);
+							pss.setString(1, itemName.getItemType());
+							pss.setInt(2, Integer.parseInt(itemName.getModelNumber()));
+							pss.setInt(3, itemName.getItemID());
+							pss.setBoolean(4, false);
+							pss.setInt(5, itemName.getYear());
+							pss.setString(6, itemName.getColor());
+							
+							//Run the query against the DB
+							pss.executeUpdate();
+						} catch (Exception e){
+							e.printStackTrace();
+						}
+						
+					}
+
 			}else{
 				%>Please fill out all relevant fields<%
 			}
@@ -160,7 +188,11 @@
 				%>Auction has been posted, itemList has been reset!<%
 					
 				}
+		}		
+		} catch (Exception e){
+			e.printStackTrace();
 		}
+
 		
 		%>
 		

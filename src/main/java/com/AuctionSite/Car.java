@@ -20,4 +20,10 @@ public class Car extends Item {
     	return super.getItemType();
     }
     
+    @Override
+    public void addToSQL(){
+        super.addToSQL();
+    }
+    
+    
 }

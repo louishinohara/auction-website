@@ -19,5 +19,10 @@ public class Truck extends Item {
     public String getItemType() {
     	return super.getItemType();
     }
+
+    @Override
+    public void addToSQL(){
+        super.addToSQL();
+    }
     
 }
