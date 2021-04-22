@@ -27,15 +27,13 @@
                     ResultSet result = stmt.executeQuery(remove);
                     
                     if(result.next()) {
-                           out.println("Auction Deleted Successfully!");
+                           out.println("Bid Deleted Successfully!"); 
                      }
 		     
             } catch(Exception e) {
                     out.print(e);
             }
-            
-            <input type="button" value="Return" onclick=location.href="CustomerRep.jsp">
-            
+	    
        %>
             </body>
             </html>
