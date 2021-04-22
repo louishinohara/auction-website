@@ -10,7 +10,6 @@
 <html>
     <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Total Earnings<title>
     </head>   
     <body>
        <%
@@ -20,7 +19,7 @@
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
 		
-			String totalEarnings = "SELECT SUM(currentBidPrice - initialBidPrice) as Total Earnings FROM auction WHERE auction.isOPen == false";
+			String totalEarnings = "SELECT SUM(currentBidPrice - initialBidPrice) as Total Earnings FROM auction WHERE auction.isOPen = false";
 	
 			ResultSet result = stmt.executeQuery(totalEarnings);
 					
