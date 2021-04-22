@@ -15,28 +15,28 @@
 	<br>
 		<form method="get" action="RemoveAuction.jsp">   
 				<td>AuctionID</td><td><input type="text" name="auctionID"></td>
-				<input type="submit" value="Remove Auction">
+				<input type="submit" value="Remove Auction" onclick=location.href="RemoveAuction.jsp">
 		</form>
 	<br>
 	REMOVE BID:
 	<br>
 		<form method="get" action="RemoveBid.jsp">   
 				<td>BidID</td><td><input type="text" name="bidID"></td>
-				<input type="submit" value="Remove Bid">
+				<input type="submit" value="Remove Bid" onclick=location.href="RemoveBid.jsp">
 		</form>
 	<br>
 	REMOVE ACCOUNT INFO:
 	<br>
-		<form method="get" action="RemoveAccountInfo.jsp">   
+		<form method="get" action="RemoveAccount.jsp">   
 				<td>username</td><td><input type="text" name="username"></td>
-				<input type="submit" value="Remove Account">
+				<input type="submit" value="Remove Account" onclick=location.href="RemoveAccount.jsp">
 		</form>
 	<br>
 	EDIT ACCOUNT:
 	<br>
 		<form method="get" action="EditAccount.jsp">   
 				<td>username</td><td><input type="text" name="username"></td>
-				<input type="submit" value="Edit Account">
+				<input type="submit" value="Edit Account" onclick=location.href="EditAccount.jsp">
 		</form>
 	<br>
 	
