@@ -11,31 +11,44 @@
 <html>
     <head>
 			<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-      <title>Admin<title>
 	</head>
 	<body>
-		<%
 		
-		<input type="button" value="Create CustomerRep" onclick=location.href="Register.jsp">
+		 <br>
+      	 Admin Portal:
+     	 <br>
+     	 <br>
 		
-		<input type="button" value="Total Earnings" onclick=location.href="TotalEarnings.jsp">
+		<input type="button" value="Create Customer Rep" onclick=location.href="Register.jsp"> <br>
 		
-		<input type="button" value="Total Earnings Per Item" onclick=location.href="EarningsPerItem.jsp">
+		<br>
 		
-		<input type="button" value="Total Earnings Per Type" onclick=location.href="EarningsPerType.jsp">
+		<input type="button" value="Total Earnings" onclick=location.href="TotalEarnings.jsp"> <br>
 		
-		<input type="button" value="Total Earnings Per User" onclick=location.href="EarningsPerUser.jsp">
+		<br>
 		
-		<input type="button" value="Best Selling" onclick=location.href="BestSelling.jsp">
+		<input type="button" value="Total Earnings Per Item" onclick=location.href="EarningsPerItem.jsp"> <br>
 		
-		<input type="button" value="Best Buyers" onclick=location.href="BestBuyers.jsp">
+		<br>
 		
-		<input type="button" value="Return" onclick=location.href="Login.jsp">
+		<input type="button" value="Total Earnings Per Type" onclick=location.href="EarningsPerType.jsp"> <br>
 		
-		%>
+		<br>
+		
+		<input type="button" value="Total Earnings Per User" onclick=location.href="EarningsPerUser.jsp"> <br>
+		
+		<br>
+		
+		<input type="button" value="Best Selling" onclick=location.href="BestSelling.jsp"> <br>
+		
+		<br>
+		
+		<input type="button" value="Best Buyers" onclick=location.href="BestBuyers.jsp"> <br>
+		
+		<br>
+		
+		<input type="button" value="Return" onclick=location.href="Login.jsp"><br>
 		
 	</body>
-	
 </html>
-		  
         
