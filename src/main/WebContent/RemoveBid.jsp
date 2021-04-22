@@ -19,8 +19,8 @@
             try 
             {
                     ApplicationDB db = new ApplicationDB();	
-		    		Connection con = db.getConnection();
-		    		Statement stmt = con.createStatement();
+		    Connection con = db.getConnection();
+		    Statement stmt = con.createStatement();
                     
                     String remove = "DELETE FROM bid WHERE bidID="+bidID);
                     
