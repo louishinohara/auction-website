@@ -346,7 +346,7 @@
 				// Add the current bid with date and time
 				automaticBidder.addBid(bid, item_id, date, time);
 				// Contact Losers
-				List<Integer> customerToContact = automaticBidder.findBidWinner();
+				//List<Integer> customerToContact = automaticBidder.findBidWinner();
 			}
 			
 		} catch (Exception e){
@@ -374,17 +374,84 @@
 	        this.bidID = bidID;
 	        getAuctionDetails();
 	    }
+	    
+
+	    // Create a unique BIDID for this auction
+	    public int createBidID(){ // This Code Is Good
+	        this.bidID += 1;
+	        return this.bidID;
+	    }
+	    
+	    // Set Active Bid Inactive
+	    public void setBidInactive(int bidID){
+	    	ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				
+		         String query = "UPDATE bid SET isActive=0 WHERE bidID=?";
+		         PreparedStatement ps = con.prepareStatement(query);
+		         ps.setInt(1, bidID);
+		         ps.executeUpdate();
+		        
+		    } catch (Exception e){
+		    	System.out.println(e);
+		    }
+	    }
+	    
+	    // Get details about auction
+	    public void getAuctionDetails(){ // This Code Is Good
+	    	
+	    	ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			// Get Auction Details
+			try {
+				Statement stmt = con.createStatement();
+				String query = "select * from auction where itemID = " + String.valueOf(this.itemID);
+				ResultSet rs = stmt.executeQuery(query);
+				
+				while (rs.next()){
+					this.buyerInLeaderID = rs.getInt("buyerInLeaderID");
+					this.incrementVal = rs.getInt("incrementVal");
+					this.reservePrice = rs.getInt("reservePrice");
+					this.currItemPrice = rs.getInt("currentBidPrice");
+					this.buyerInLeaderIDUpperLimit = rs.getFloat("upperBidLimit");
+				}
+				
+				// Get Bid Details
+				query = "SELECT * FROM bid WHERE itemID = " + String.valueOf(this.itemID) + " AND isActive = 1";
+				rs = stmt.executeQuery(query);
+				// Add only the active bid to the list
+				while (rs.next()){
+					int buyerID = rs.getInt("buyerID");
+					int itemID = rs.getInt("itemID");
+					int bidID = rs.getInt("bidID");
+					double bidPrice = rs.getFloat("bidPrice");
+					double upperBidLimit = rs.getInt("upperBidLimit");
+					String date = rs.getString("date");
+					String time = rs.getString("time");
+					boolean automaticBid = rs.getBoolean("automaticBid");
+					Bid bid = new Bid(buyerID, itemID, bidID, bidPrice, upperBidLimit, date, time, automaticBid);
+					this.BidList.add(bid);
+				}
+				
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+	    }
+	    
 	    // Add Bid to list
-	    public void addBid(Bid bid, int itemID, String date, String time){
+	    public void addBid(Bid bid, int itemID, String date, String time){	// This Code Is Good
+	    	// If bid is not the current top bidder which it won't be
 	    	if (bid.getBuyerID() != this.buyerInLeaderID) {
 	    		 this.BidList.add(bid);
+	    		 
 	 	    	ApplicationDB db = new ApplicationDB();	
 	 			Connection con = db.getConnection();
+	 			
 	 			try {
 	 				Statement stmt = con.createStatement();
-	 				//String query = "INSERT INTO items VALUES(\"" + this.itemType + "\", " + this.modelNumber + ", " + this.itemID + ", false, " + this.year + ", \"" + this.color + "\");";
-	 				String insert = "INSERT INTO bid(buyerID, itemID, bidID, bidPrice, upperBidLimit, date, time, automaticBid, isActive)"
-	 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	 				String insert = "INSERT INTO bid(buyerID, itemID, bidID, bidPrice, upperBidLimit, date, time, automaticBid, isActive)" + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 	 				PreparedStatement ps = con.prepareStatement(insert);
 	 				//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
@@ -404,45 +471,29 @@
 	 			}
 	    	}
 	    }
-	    // Get details about auction
-	    public void getAuctionDetails(){
+		
+	    // Update the auction in SQL
+	    public void updateAuctionDetailsInSQL(double priceToBeat, int buyerID){
+            this.currItemPrice = priceToBeat;
+            this.buyerInLeaderID = buyerID;
+            
 	    	ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 			try {
 				Statement stmt = con.createStatement();
-				String query = "select * from auction where itemID = " + String.valueOf(this.itemID);
-				ResultSet rs = stmt.executeQuery(query);
 				
-				while (rs.next()){
-					this.buyerInLeaderID = rs.getInt("buyerInLeaderID");
-					this.incrementVal = rs.getInt("incrementVal");
-					this.reservePrice = rs.getInt("reservePrice");
-					this.currItemPrice = rs.getInt("currentBidPrice");
-					this.buyerInLeaderIDUpperLimit = rs.getFloat("upperBidLimit");
-				}
-				
-				query = "SELECT * FROM bid WHERE itemID = " + String.valueOf(this.itemID) + " AND isActive = 1";
-				rs = stmt.executeQuery(query);
-				
-				while (rs.next()){
-					int buyerID = rs.getInt("buyerID");
-					int itemID = rs.getInt("itemID");
-					int bidID = rs.getInt("bidID");
-					double bidPrice = rs.getFloat("bidPrice");
-					double upperBidLimit = rs.getInt("upperBidLimit");
-					String date = rs.getString("date");
-					String time = rs.getString("time");
-					boolean automaticBid = rs.getBoolean("automaticBid");
-					Bid bid = new Bid(buyerID, itemID, bidID, bidPrice, upperBidLimit, date, time, automaticBid);
-					this.BidList.add(bid);
-				}
-				
-			} catch (Exception e){
-				
-				
-				
-			}
-	    }
+		         String query = "UPDATE auction SET buyerInLeaderID=?, currentBidPrice=? WHERE itemID=" + String.valueOf(this.itemID);;
+		         PreparedStatement ps = con.prepareStatement(query);
+		         ps.setInt(1, buyerID);
+		         ps.setDouble(2, priceToBeat);
+		         ps.executeUpdate();
+		        
+		    } catch (Exception e){
+		    	System.out.println(e);
+		    }
+		}
+	    
+	    
 	    // Automatic Bidding 
 	    public List<Integer> findBidWinner(){
 	        List<Integer> customerToContact = new ArrayList<Integer>();
@@ -525,27 +576,8 @@
 	        System.out.println("\n");
 	        return customerToContact;
 	    }
-	    // Create a unique BIDID for this auction
-	    public int createBidID(){
-	        this.bidID += 1;
-	        return this.bidID;
-	    }
-	    public void setBidInactive(int bidID){
-	    	ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();
-			try {
-				Statement stmt = con.createStatement();
-				
-		         String query = "update bid set isActive=0 where bidID=?";
-		         PreparedStatement ps = con.prepareStatement(query);
-		         ps.setInt(1, bidID);
-		         ps.executeUpdate();
-		        
-	    } catch (Exception e){
-	    	System.out.println(e);
-	    }
-			
-	    }
+
+
 	    
 	    
 	  public void checkReserveMet(){
@@ -612,25 +644,7 @@
 			}
 	  }
 		
-	    public void updateAuctionDetailsInSQL(double priceToBeat, int buyerID){
-            this.currItemPrice = priceToBeat;
-            this.buyerInLeaderID = buyerID;
-            
-	    	ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();
-			try {
-				Statement stmt = con.createStatement();
-				
-		         String query = "update auction set buyerInLeaderID=?, currentBidPrice=? where itemID=" + String.valueOf(this.itemID);;
-		         PreparedStatement ps = con.prepareStatement(query);
-		         ps.setInt(1, buyerID);
-		         ps.setDouble(2, priceToBeat);
-		         ps.executeUpdate();
-		        
-	    } catch (Exception e){
-	    	System.out.println(e);
-	    }
-	}
+
 	    
 	}
 	
