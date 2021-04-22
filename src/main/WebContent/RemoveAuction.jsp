@@ -19,8 +19,8 @@
             try 
             {
                     ApplicationDB db = new ApplicationDB();	
-				            Connection con = db.getConnection();
-				            Statement stmt = con.createStatement();
+		    Connection con = db.getConnection();
+		    Statement stmt = con.createStatement();
                     
                     String remove = "DELETE FROM auction WHERE auctionID="+AuctionID);
                     
@@ -29,6 +29,7 @@
                     if(result.next()) {
                            out.println("Auction Deleted Successfully!");
                      }
+		     
             } catch(Exception e) {
                     out.print(e);
             }
