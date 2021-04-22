@@ -85,7 +85,17 @@
 			
 			<div class='container'>
 				<form  method="get">
-		
+	
+					
+					<div class='align-left'>	
+						<H3>Sort By Viewed </H3>    
+							<select name="availability" >  
+								<option value="null"> All </option>       
+								<option value="Viewed"> Viewed </option>     
+								<option value="Not Viewed"> Not Viewed </option>         
+							</select>    
+					</div>
+						
 					<div class='align-right'>	
 						<H3>Sort By Criteria</H3>    
 							<select name="sortBy" >  
@@ -94,15 +104,6 @@
 								<option value="highest"> Highest Bid Price </option>          
 							</select>    
 						<input type="submit" value="Submit"/> 
-					</div>
-					
-					<div class='align-left'>	
-						<H3>Sort By Viewed </H3>    
-							<select name="availability" >  
-								<option value="null"> All </option>       
-								<option value="true"> Viewed </option>     
-								<option value="false"> Not Viewed </option>         
-							</select>    
 					</div>
 
 				</form> 
@@ -119,11 +120,22 @@
 			Connection con = db.getConnection();
  
 			int id = (Integer) session.getAttribute("accountID");	
- 
+ 	
 			
-			if ( true ){
+			if (  request.getParameter("availability") != null ){
 
 				String query = " select * from alert where buyerID =" + String.valueOf(id);
+				
+				String availabilityType = request.getParameter("availability");
+				
+				if ( availabilityType.equals("All") ) {					// Get requested item
+					// Do Nothing? 
+				} else if ( availabilityType.equals("Not Viewed") ){
+					query = query + " AND acknowledgedAlert = False";
+				} else if ( availabilityType.equals("Viewed") ) {
+					query = query + " AND acknowledgedAlert = True";
+				} 
+				
 
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 				Statement stmt = con.createStatement();
