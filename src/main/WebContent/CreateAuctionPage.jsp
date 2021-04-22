@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Create Auction Item </title>
 </head>
 
 
@@ -17,8 +17,11 @@
 
 	<% ItemList itemList = new ItemList();
 		itemList = (ItemList) session.getAttribute("itemList"); 
-		%>
-
+		String userName = (String) session.getAttribute("userName");
+		String pass = (String) session.getAttribute("pass");
+	%>
+	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
+	
 	<br><h3>Enter Item Info</h3>
 		<form method="get">
 			<table>

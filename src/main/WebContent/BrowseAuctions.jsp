@@ -13,6 +13,7 @@
 			<style>
 				ol {
 				  background: #9b9b9b;
+				  padding: 20px;
 				}
 				
 				ol li {
@@ -68,6 +69,14 @@
 		</head>
 
 	<body BGCOLOR="#e6e6e6">
+		
+	<%
+		String userName = (String) session.getAttribute("userName");
+		String pass = (String) session.getAttribute("pass");
+	
+	%>
+		<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
+	
 		<CENTER>     
 			<H2>Browse Auctions</H2>
 			
@@ -229,10 +238,8 @@
 										</div>
 									</div>										
 									 
-									<div class='sub-container' method = "get" action="BrowseItems.jsp" style="cursor: pointer;" onclick=location.href="Auction.jsp">
-										<button type="submit" > View  </button>
-									</div>
-									
+									 <a href="Auction.jsp?itemID=<%=itemID%>"> <button>View</button></a> 
+									 
 								</div>
 						</li>
 					<% 

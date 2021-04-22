@@ -99,6 +99,8 @@
 		String username = request.getParameter("username");
 		String pass = request.getParameter("pass");
 		
+		session.setAttribute("userName", username);
+		session.setAttribute("pass", pass);
 		//craft query
 		String select = "SELECT count(*) FROM account WHERE username=\"" + username + "\" and pass=\"" + pass + "\";";
 	

@@ -98,6 +98,13 @@
 		</head>
 
 	<body BGCOLOR="#e6e6e6">
+	<%
+		String userName = (String) session.getAttribute("userName");
+		String pass = (String) session.getAttribute("pass");
+	
+	%>
+	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
+	
 		<CENTER>     
 			<H2>Item</H2>			
 
@@ -109,8 +116,8 @@
 		    ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 		
-			// TO DO => GET ITEM ID FROM FROM BROWSEITEMS.JSP
-			int item_id = 2;
+
+			int item_id = Integer.parseInt(request.getParameter("itemID"));
 			int auction_id = 1;
 			
 			// Query to get information abbout item and auction
@@ -210,7 +217,7 @@
 					   <input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
 					   <label for="bidUpperLimit">Bid Upper Limit:</label><br>
 					  <input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
-					  <input type="submit" value="Place Bid" action="Auction.jsp" style="cursor: pointer;" onclick=location.href="Auction.jsp" >
+					  <input type="submit" value="Place Bid">
 					</form> 
 				</div>
 				

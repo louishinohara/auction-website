@@ -80,6 +80,11 @@
 		</head>
 
 	<body BGCOLOR="#e6e6e6">
+		<% 	String userName = (String) session.getAttribute("userName");
+			String pass = (String) session.getAttribute("pass");
+		%>
+	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
+	
 		<CENTER>     
 			<H2>Your Alerts</H2>
 			

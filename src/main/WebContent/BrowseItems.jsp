@@ -69,6 +69,13 @@
 		</head>
 
 	<body BGCOLOR="#e6e6e6">
+	<%
+		String userName = (String) session.getAttribute("userName");
+		String pass = (String) session.getAttribute("pass");
+	
+	%>
+	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
+	
 		<CENTER>     
 			<H2>Browse Items</H2>
 			
@@ -167,6 +174,7 @@
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
+				
 		%>
 			<ol>
 				<%
@@ -176,6 +184,7 @@
 					String color = rs.getString("color");
 					String currBid = "$" + String.valueOf(rs.getInt("currentBidPrice"));
 					int item_id = rs.getInt("item_id");
+					int itemID = rs.getInt("item_id");
 					int item_year = rs.getInt("item_year");
 					boolean inAuction = rs.getBoolean("in_auction");
 					String img = null;
@@ -230,15 +239,9 @@
 											</div>
 										</div>
 										
-										<div class='sub-container' method = "get" action="BrowseItems.jsp" style="cursor: pointer;" onclick=location.href="Auction.jsp">
-											<button type="submit" > View  </button>
-										</div>
 										
-										<div>
-										
-											<form action="${com.AuctionSite}/myservlet" method="post">
-									    	<button type="submit" name="button" value="button1"> Button 1</button>
-											</form>
+										<div>										
+											<a href="Auction.jsp?itemID=<%=itemID%>"> <button type="submit">View</button></a> 
 										</div>
 										
 									</div>
