@@ -36,6 +36,8 @@
 	<br>
 		<form method="get" action="EditAccount.jsp">   
 				<td>username</td><td><input type="text" name="username"></td>
+				<td>pass</td><td><input type="text" name="pass"></td>
+				<td>type</td><td><input type="text" name="type"></td>
 				<input type="submit" value="Edit Account" onclick=location.href="EditAccount.jsp">
 		</form>
 	<br>
