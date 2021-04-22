@@ -54,27 +54,31 @@
 				if(!(request.getParameter("miles").equals("")) || (itemType.equals("bike") || itemType.equals("bicycle"))){
 				
 				itemType = itemType.toLowerCase();
-					
+				 System.out.println("1213213");
 					if(itemType.equals("bike") || itemType.equals("bicycle")){
+						
 						int id = Item.generateItemID();
 						Bike newBike = new Bike(id, model, false, Integer.parseInt(year), color);
 						%> Bike created with id: "<%=id %>" <br><%
-					   //itemList.addItemToTheList(newBike);
+					   itemList.addItemToTheList(newBike);
 						
 					   newBike.addToSQL();
+					  System.out.println("1");
 					}else if(itemType.equals("car")){
+						System.out.println("Tits");
 						String miles = request.getParameter("miles");
 						int id = Item.generateItemID();
+						
 						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
 						%> Car created with id: "<%=id %>" <br><%
-						//itemList.addItemToTheList(newCar);
+						itemList.addItemToTheList(newCar);
 						newCar.addToSQL();
 					}else if(itemType.equals("truck")){
 						String miles = request.getParameter("miles");
 						int id = Item.generateItemID();
 						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
 						%> Truck created with id: "<%=id %>" <br><%
-						//itemList.addItemToTheList(newTruck);
+						itemList.addItemToTheList(newTruck);
 						newTruck.addToSQL();
 					}else{
 						%>Invalid Item Type "<%=itemType%>"<%

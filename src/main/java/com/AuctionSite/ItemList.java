@@ -45,7 +45,6 @@ public class ItemList {
     public void getItemsFromSQL(){
     	ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
-		System.out.println("AAA");
 		try {
 			
 			String query = "SELECT * FROM items";

@@ -141,8 +141,8 @@
 							
 				<div class="dashboard-container">
 				
-				<% //ItemList itemList = new ItemList();
-					//session.setAttribute("itemList", itemList);
+				<% ItemList itemList = new ItemList();
+					session.setAttribute("itemList", itemList);
 					int accountID = result.getInt("accountID");
 					session.setAttribute("accountID", accountID);%>
 
