@@ -181,7 +181,7 @@
 						</div>
 					</div>
 					
-					<div class="action-container">
+<div class="action-container" method = "get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="BrowseAuctions.jsp">
 						<div>
 							<h3 class="heading-text"> View Auctions </h3>
 						</div>
