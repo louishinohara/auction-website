@@ -1,4 +1,4 @@
-package AuctionSite;
+package com.AuctionSite;
 
 public class Person {
     

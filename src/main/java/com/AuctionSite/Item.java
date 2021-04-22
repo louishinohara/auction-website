@@ -1,4 +1,4 @@
-package AuctionSite;
+package com.AuctionSite;
 
 import com.dbproj.pkg.ApplicationDB;
 //import com.dbproj.pkg.Connection;

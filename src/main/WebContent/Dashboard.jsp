@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*"%>
+    pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*,com.AuctionSite.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
-<%@ page import="AuctionSite.*" %>
+
 
 
 
@@ -141,8 +141,8 @@
 							
 				<div class="dashboard-container">
 				
-				<%ItemList itemList = new ItemList();
-					session.setAttribute("itemList", itemList);
+				<% //ItemList itemList = new ItemList();
+					//session.setAttribute("itemList", itemList);
 					int accountID = result.getInt("accountID");
 					session.setAttribute("accountID", accountID);%>
 

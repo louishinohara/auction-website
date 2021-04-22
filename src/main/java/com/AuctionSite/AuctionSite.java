@@ -1,4 +1,4 @@
-package AuctionSite;
+package com.AuctionSite;
 
 import java.util.List;
 
@@ -27,7 +27,6 @@ public class AuctionSite {
     }
 
     public List<Item> getItemList() {
-    	out.println("dasda.java");
     	return this.itemList.getItemList();
     }
     
