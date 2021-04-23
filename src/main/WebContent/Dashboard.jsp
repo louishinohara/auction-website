@@ -126,7 +126,7 @@
 				<div class="welcome-header">
 					<div class="header">
 						<h2>
-							Hello: <%=username %>
+							Hello <%=username %>!
 						</h2>
 					</div>
 				</div>
