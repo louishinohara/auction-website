@@ -39,7 +39,9 @@
 			out.print(ex);
 		}				
 	%>
+	    <br>
 	    <input type="button" value="Return" onclick=location.href="AdminPage.jsp">
+	    <br>
       
    </body>
 </html>    
