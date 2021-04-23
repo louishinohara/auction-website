@@ -29,7 +29,7 @@
                            out.println("Auction Deleted Successfully!");
                      }
 		     else {
-		     	   out.printlb("Auction Failed to Delete!");
+		     	   out.println("Auction Failed to Delete!");
 		     }
 		     
             } catch(Exception e) {
