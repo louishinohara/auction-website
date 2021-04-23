@@ -130,11 +130,11 @@
 				if ( availability.equals("All") ) {					// Get requested item
 					// Do Nothing? 
 				} else if ( availability.equals("null") ){
-					query =  "SELECT a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.item_type FROM auction a INNER JOIN items i on i.item_id = a.itemID";
+					query =  "SELECT a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.img, i.item_type FROM auction a INNER JOIN items i on i.item_id = a.itemID";
 				} else if ( availability.equals("open") ) {
-					query = " SELECT a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.item_type FROM auction a INNER JOIN items i on i.item_id = a.itemID where isOpen = true";
+					query = " SELECT a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.img, i.item_type FROM auction a INNER JOIN items i on i.item_id = a.itemID where isOpen = true";
 				} else if ( availability.equals("closed") ){
-					query = " SELECT a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.item_type FROM auction a INNER JOIN items i on i.item_id = a.itemID where isOpen = false";
+					query = " SELECT a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.img, i.item_type FROM auction a INNER JOIN items i on i.item_id = a.itemID where isOpen = false";
 				} 
 					
 				
@@ -142,11 +142,11 @@
 				
 				if ( customerType.equals("bidder") ){
 					 if ( availability.equals("null") ){
-						query = "SELECT DISTINCT b.itemID, b.buyerID, a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.item_type FROM bid b INNER JOIN auction a ON b.itemID = a.itemID INNER JOIN items i ON b.itemID = i.item_ID where buyerID="+ String.valueOf(accountID);
+						query = "SELECT DISTINCT b.itemID, b.buyerID, a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.img, i.item_type FROM bid b INNER JOIN auction a ON b.itemID = a.itemID INNER JOIN items i ON b.itemID = i.item_ID where buyerID="+ String.valueOf(accountID);
 					} else if ( availability.equals("open") ) {
-						query = "SELECT DISTINCT b.itemID, a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.item_type FROM bid b INNER JOIN auction a ON b.itemID = a.itemID INNER JOIN items i ON b.itemID = i.item_ID where a.isOpen = true and buyerID="+ String.valueOf(accountID);
+						query = "SELECT DISTINCT b.itemID, a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.img, i.item_type FROM bid b INNER JOIN auction a ON b.itemID = a.itemID INNER JOIN items i ON b.itemID = i.item_ID where a.isOpen = true and buyerID="+ String.valueOf(accountID);
 					} else if ( availability.equals("closed") ){
-						query = "SELECT DISTINCT b.itemID, a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.item_type FROM bid b INNER JOIN auction a ON b.itemID = a.itemID INNER JOIN items i ON b.itemID = i.item_ID where a.isOpen = false and buyerID="+ String.valueOf(accountID);
+						query = "SELECT DISTINCT b.itemID, a.auctionID, a.itemID, a.sellerID, a.initialPrice, a.currentBidPrice, a.isOpen, a.time, a.date, i.img, i.item_type FROM bid b INNER JOIN auction a ON b.itemID = a.itemID INNER JOIN items i ON b.itemID = i.item_ID where a.isOpen = false and buyerID="+ String.valueOf(accountID);
 					} 
 				} else if (customerType.equals("seller")) {
 					if ( availability.equals("null") ){
@@ -183,15 +183,16 @@
 					String date = rs.getString("time");
 					String time = rs.getString("date");
 					String item_type = rs.getString("item_type");
-					String img = null;
-					
-					if (item_type.equals("car")){
-						img = "https://i.imgur.com/DOVgfjE.png";
-					}	else if (item_type.equals("bike")){
-						img = "https://i.imgur.com/f0gjT3e.gif";
-					}	else if (item_type.equals("truck")){
-						img = "https://i.imgur.com/PPtmo88.jpg";
-					}
+					String img = rs.getString("img");
+					if ( img.equals("null") ){
+						if (item_type.equals("car")){
+							img = "https://i.imgur.com/DOVgfjE.png";
+						}	else if (item_type.equals("bike")){
+							img = "https://i.imgur.com/f0gjT3e.gif";
+						}	else if (item_type.equals("truck")){
+							img = "https://i.imgur.com/PPtmo88.jpg";
+						}
+					} 
 					
 					%>
 						<li  > 
@@ -250,8 +251,9 @@
 			
 			}
 			
-		} catch (Exception ex) {
-				out.print("Unable To Get Data");
+		} catch (Exception e) {
+				e.printStackTrace();
+		
 		}
 	%>
 	

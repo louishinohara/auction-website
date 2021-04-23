@@ -40,6 +40,9 @@
 				<tr>
 					<td>Color</td><td><input type="text" name="color"></td>
 				</tr>
+				<tr>
+					<td>Image (Optional)</td><td><input type="text" name="img" value="null"></td>
+				</tr>
 			</table>
 			<input type="submit" value="Enter">
 		</form>
@@ -54,6 +57,9 @@
 				
 				String year = request.getParameter("year");
 				String color = request.getParameter("color");
+				String img = request.getParameter("img");
+				System.out.println(img);
+				
 				Item itemName = null;
 				 
 				if(!(request.getParameter("miles").equals("")) || (itemType.equals("bike") || itemType.equals("bicycle"))){
@@ -63,7 +69,7 @@
 					if(itemType.equals("bike") || itemType.equals("bicycle")){
 						
 						int id = Item.generateItemID();
-						Bike newBike = new Bike(id, model, false, Integer.parseInt(year), color);
+						Bike newBike = new Bike(id, model, false, Integer.parseInt(year), color, img);
 						%> Bike created with id: "<%=id %>" <br><%
 					   itemList.addItemToTheList(newBike);
 						
@@ -73,7 +79,7 @@
 						String miles = request.getParameter("miles");
 						int id = Item.generateItemID();
 						
-						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
+						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles), img);
 						%> Car created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newCar);
 						//newCar.addToSQL();
@@ -81,7 +87,7 @@
 					}else if(itemType.equals("truck")){
 						String miles = request.getParameter("miles");
 						int id = Item.generateItemID();
-						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
+						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles), img);
 						%> Truck created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newTruck);
 						//newTruck.addToSQL();
@@ -96,8 +102,8 @@
 						Connection conn = db.getConnection();
 
 						try {
-							String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color)"
-									+ "VALUES (?, ?, ?, ?,?,?)";
+							String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color, img)"
+									+ "VALUES (?, ?, ?, ?,?,?,?)";
 							PreparedStatement pss = conn.prepareStatement(insert);
 							pss.setString(1, itemName.getItemType());
 							pss.setString(2, itemName.getModelNumber());
@@ -105,7 +111,7 @@
 							pss.setBoolean(4, true);
 							pss.setInt(5, itemName.getYear());
 							pss.setString(6, itemName.getColor());
-							
+							pss.setString(7, itemName.getImg());
 							//Run the query against the DB
 							pss.executeUpdate();
 						} catch (Exception e){

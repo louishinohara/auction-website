@@ -127,7 +127,7 @@
 
 			// Get All Items From Database
 			if ( request.getParameter("itemType") != null ){
-				String query = " select i.item_type, i.model, i.item_id, i.in_auction, i.item_year, i.color, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
+				String query = " select i.item_type, i.model, i.item_id, i.in_auction, i.item_year, i.color, i.img, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
 				String itemType = request.getParameter("itemType");
 												
 				if ( itemType.equals("All") ) {					// Get requested item
@@ -187,14 +187,17 @@
 					int itemID = rs.getInt("item_id");
 					int item_year = rs.getInt("item_year");
 					boolean inAuction = rs.getBoolean("in_auction");
-					String img = null;
-					if (item_type.equals("car")){
-						img = "https://i.imgur.com/DOVgfjE.png";
-					}	else if (item_type.equals("bike")){
-						img = "https://i.imgur.com/f0gjT3e.gif";
-					}	else if (item_type.equals("truck")){
-						img = "https://i.imgur.com/PPtmo88.jpg";
-					}
+					String img = rs.getString("img");
+					if ( img.equals("null") ){
+						if (item_type.equals("car")){
+							img = "https://i.imgur.com/DOVgfjE.png";
+						}	else if (item_type.equals("bike")){
+							img = "https://i.imgur.com/f0gjT3e.gif";
+						}	else if (item_type.equals("truck")){
+							img = "https://i.imgur.com/PPtmo88.jpg";
+						}
+					} 
+					
 					
 					%>
 						<li  > 

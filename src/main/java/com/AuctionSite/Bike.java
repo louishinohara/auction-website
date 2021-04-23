@@ -2,8 +2,8 @@ package com.AuctionSite;
 
 public class Bike extends Item {
     
-    public Bike(int itemID, String modelNumber, boolean inAuction, int year, String color){
-        super(itemID, "bike", modelNumber, inAuction, year, color);
+    public Bike(int itemID, String modelNumber, boolean inAuction, int year, String color, String img){
+        super(itemID, "bike", modelNumber, inAuction, year, color, img);
     }
 
     @Override

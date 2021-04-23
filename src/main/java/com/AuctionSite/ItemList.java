@@ -44,7 +44,6 @@ public class ItemList {
     public void getItemsFromSQL(){
     	ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
-		System.out.println("AAA");
 		try {
 			
 			String query = "SELECT * FROM items";
@@ -60,15 +59,16 @@ public class ItemList {
 				boolean inAuction = rs.getBoolean("in_auction");
 				int item_year = rs.getInt("item_year");
 				String color = rs.getString("color");
+				String img = rs.getString("img");
 				
 		        if (item_type.equals("bike")){
-		            Bike bike = new Bike(item_id, model, inAuction, item_year, color);
+		            Bike bike = new Bike(item_id, model, inAuction, item_year, color, img);
 		            addItemToList(bike,"bike");
 		        } else if (item_type.equals("truck")){
-		            Truck truck = new Truck(item_id, model, inAuction, item_year, color, 0);
+		            Truck truck = new Truck(item_id, model, inAuction, item_year, color, 0, img);
 		            addItemToList(truck,"truck");
 		        } else if (item_type.equals("car")){
-		            Car car = new Car(item_id ,model, inAuction, item_year, color, 0);
+		            Car car = new Car(item_id ,model, inAuction, item_year, color, 0, img);
 		            addItemToList(car,"car");
 		        }
 				

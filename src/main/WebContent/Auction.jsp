@@ -154,15 +154,17 @@
 				 item_year = rs.getInt("item_year");
 				 inAuction = rs.getBoolean("isOpen");
 				 globalInAuction = inAuction;
-				 img = null;
-				 
-				if (item_type.equals("car")){
-					img = "https://i.imgur.com/DOVgfjE.png";
-				}	else if (item_type.equals("bike")){
-					img = "https://i.imgur.com/f0gjT3e.gif";
-				}	else if (item_type.equals("truck")){
-					img = "https://i.imgur.com/PPtmo88.jpg";
-				}
+				img = rs.getString("img");
+				if ( img.equals("null") ){
+					if (item_type.equals("car")){
+						img = "https://i.imgur.com/DOVgfjE.png";
+					}	else if (item_type.equals("bike")){
+						img = "https://i.imgur.com/f0gjT3e.gif";
+					}	else if (item_type.equals("truck")){
+						img = "https://i.imgur.com/PPtmo88.jpg";
+					}
+				} 
+					
 				
 				 auctionID = rs.getInt("auctionID");
 				 sellerID = rs.getInt("sellerID");

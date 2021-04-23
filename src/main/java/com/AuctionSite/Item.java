@@ -13,15 +13,17 @@ public class Item {
     protected boolean inAuction; 
     protected int year;
     protected String color; 
+    protected String img;
 
 
-    public Item( int itemID, String itemType, String model, boolean inAuction, int year, String color){
+    public Item( int itemID, String itemType, String model, boolean inAuction, int year, String color, String img){
         this.itemID = itemID;
         this.itemType = itemType;
         this.model = model;
         this.inAuction = inAuction;
         this.year = year;
         this.color = color;
+        this.img = img;
     }
 
     public int getItemID(){
@@ -34,8 +36,8 @@ public class Item {
         try {
             Statement stmt = con.createStatement();
   
-            String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color)"
-                    + "VALUES (?, ?, ?, ?,?,?)";
+            String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color, img)"
+                    + "VALUES (?, ?, ?, ?,?,?,?)";
             //Create a Prepared SQL statement allowing you to introduce the parameters of the query
             PreparedStatement ps = con.prepareStatement(insert);
 
@@ -46,6 +48,8 @@ public class Item {
             ps.setBoolean(4, false);
             ps.setInt(5, this.year);
             ps.setString(6, this.color);
+            ps.setString(7,this.img);
+
             //Run the query against the DB
             ps.executeUpdate();
         }catch(Exception E) {
@@ -73,6 +77,9 @@ public class Item {
     	return this.color;
     }
     
+    public String getImg(){
+        return this.img;
+    }
     public boolean getInAuction() {
     	return this.inAuction;
     }

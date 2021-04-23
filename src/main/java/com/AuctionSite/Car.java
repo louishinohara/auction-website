@@ -5,8 +5,8 @@ public class Car extends Item {
     private int miles;
 
 
-    public Car( int itemID, String modelNumber, boolean inAuction, int year, String color, int miles){
-        super(itemID, "car",modelNumber, inAuction, year, color);
+    public Car( int itemID, String modelNumber, boolean inAuction, int year, String color, int miles, String img){
+        super(itemID, "car",modelNumber, inAuction, year, color, img);
         this.miles = miles;
     }
 
