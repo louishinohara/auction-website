@@ -12,9 +12,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
        </head>
        <body>
-	       <br>
-	       Remove Account
-	       <br>
        <%
             String username=request.getParameter("username");
             
@@ -36,8 +33,6 @@
             } catch(Exception e) {
                     out.print(e);
             }
-            
-            <input type="button" value="Return" onclick=location.href="CustomerRep.jsp">
             
        %>
        </body>
