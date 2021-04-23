@@ -186,9 +186,7 @@
 											
 									<div class='right-align-sub-container'> 
 										
-										<div class='sub-container-message' method = "get" onClick="" >
-											<button type="submit" > Acknowledge  </button>
-										</div>
+										<a href="Auction.jsp?itemID=<%=itemID%>"> <button>View Item</button></a> 
 									</div>
 									
 								</div>
