@@ -132,7 +132,7 @@
 			ResultSet rs = stmt.executeQuery(query);
 			
 			String item_type = null;
-			String model_number = null;
+			String model = null;
 			String color = null;
 			int item_year = 0;
 			boolean inAuction = false;
@@ -149,7 +149,7 @@
 			
 			while (rs.next()){
 				 item_type = rs.getString("item_type");
-				 model_number = String.valueOf(rs.getInt("model_number"));
+				 model = rs.getString("model"); 
 				 color = rs.getString("color");
 				 item_year = rs.getInt("item_year");
 				 inAuction = rs.getBoolean("isOpen");
@@ -196,7 +196,7 @@
 					
 				<div class='sub-container'>
 					<div class='description-container'>
-						Model: <%= model_number %>
+						Model: <%= model %>
 					</div>
 					<div class='description-container'>
 						Color: <%= color %>

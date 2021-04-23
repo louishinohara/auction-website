@@ -127,7 +127,7 @@
 
 			// Get All Items From Database
 			if ( request.getParameter("itemType") != null ){
-				String query = " select i.item_type, i.model_number, i.item_id, i.in_auction, i.item_year, i.color, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
+				String query = " select i.item_type, i.model, i.item_id, i.in_auction, i.item_year, i.color, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
 				String itemType = request.getParameter("itemType");
 												
 				if ( itemType.equals("All") ) {					// Get requested item
@@ -180,7 +180,7 @@
 				<%
 				while (rs.next()) {
 					String item_type = rs.getString("item_type");
-					String model_number = String.valueOf(rs.getInt("model_number"));
+					String model = rs.getString("model"); 
 					String color = rs.getString("color");
 					String currBid = "$" + String.valueOf(rs.getInt("currentBidPrice"));
 					int item_id = rs.getInt("item_id");
@@ -214,7 +214,7 @@
 									</div>			
 									<div class='sub-container'>
 										<div class='description-container'>
-											Model: <%= model_number %>
+											Model: <%= model %>
 										</div>
 										<div class='description-container'>
 											Color: <%= color %>

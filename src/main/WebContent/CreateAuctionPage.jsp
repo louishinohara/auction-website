@@ -29,7 +29,7 @@
 					<td>Item Type</td><td><input type="text" name="type"></td>
 				</tr>
 				<tr>
-					<td>Model Number</td><td><input type="text" name="model"></td>
+					<td>Model </td><td><input type="text" name="model"></td>
 				</tr>
 				<tr>
 					<td>Miles (car or truck only)</td><td><input type="text" name="miles"></td>
@@ -96,13 +96,13 @@
 						Connection conn = db.getConnection();
 
 						try {
-							String insert = "INSERT INTO items(item_type, model_number, item_id, in_auction, item_year, color)"
+							String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color)"
 									+ "VALUES (?, ?, ?, ?,?,?)";
 							PreparedStatement pss = conn.prepareStatement(insert);
 							pss.setString(1, itemName.getItemType());
-							pss.setInt(2, Integer.parseInt(itemName.getModelNumber()));
+							pss.setString(2, itemName.getModelNumber());
 							pss.setInt(3, itemName.getItemID());
-							pss.setBoolean(4, false);
+							pss.setBoolean(4, true);
 							pss.setInt(5, itemName.getYear());
 							pss.setString(6, itemName.getColor());
 							

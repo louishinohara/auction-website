@@ -9,16 +9,16 @@ import java.sql.*;
 public class Item {
     protected int itemID; 
     protected String itemType;
-    protected String modelNumber;
+    protected String model;
     protected boolean inAuction; 
     protected int year;
     protected String color; 
 
 
-    public Item( int itemID, String itemType, String modelNumber, boolean inAuction, int year, String color){
+    public Item( int itemID, String itemType, String model, boolean inAuction, int year, String color){
         this.itemID = itemID;
         this.itemType = itemType;
-        this.modelNumber = modelNumber;
+        this.model = model;
         this.inAuction = inAuction;
         this.year = year;
         this.color = color;
@@ -34,14 +34,14 @@ public class Item {
         try {
             Statement stmt = con.createStatement();
   
-            String insert = "INSERT INTO items(item_type, model_number, item_id, in_auction, item_year, color)"
+            String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color)"
                     + "VALUES (?, ?, ?, ?,?,?)";
             //Create a Prepared SQL statement allowing you to introduce the parameters of the query
             PreparedStatement ps = con.prepareStatement(insert);
 
             //Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
             ps.setString(1, this.itemType);
-            ps.setInt(2, Integer.parseInt(this.modelNumber));
+            ps.setString(2, this.model);
             ps.setInt(3, this.itemID);
             ps.setBoolean(4, false);
             ps.setInt(5, this.year);
@@ -62,7 +62,7 @@ public class Item {
     }
     
     public String getModelNumber() {
-    	return this.modelNumber;
+    	return this.model;
     }
     
     public int getYear() {
@@ -101,7 +101,7 @@ public class Item {
     	String output = "";
     	output += "Type: " + this.itemType + ", ";
     	output += "ID: " + this.itemID + ", ";
-    	output += "Model: " + this.modelNumber + ", ";
+    	output += "Model: " + this.model + ", ";
     	output += "Year: " + this.year + ", ";
     	output += "Color: " + this.color;
     	return output;
