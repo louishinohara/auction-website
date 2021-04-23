@@ -10,7 +10,6 @@
 <html>
     	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-      		<title>Remove Auction<title>
        </head>
        <body>
        <%
@@ -29,14 +28,15 @@
                     if(result.next()) {
                            out.println("Auction Deleted Successfully!");
                      }
+		     else {
+		     	   out.printlb("Auction Failed to Delete!");
+		     }
 		     
             } catch(Exception e) {
                     out.print(e);
             }
             
-            <input type="button" value="Return" onclick=location.href="CustomerRep.jsp">
-            
        %>
-            </body>
-            </html>
+      </body>
+</html>
             
