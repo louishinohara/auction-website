@@ -13,10 +13,13 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-     		<title>Best-Selling<title>
+     	
 
     	</head>
 	<body>
+		<br>
+		Best-Selling
+		<br>
       		<%
         	try {
           
@@ -24,7 +27,7 @@
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
 		
-			String BestSelling = "SELECT TOP 5 * FROM items WHERE item_ID IN (SELECT i.item_ID,MAX(a.currentBidPrice - a.initialBidPrice) FROM items i inner join auctions a WHERE a.isOpen == false) ORDER BY item_ID DESC";
+			String BestSelling = "SELECT TOP 5 * FROM items WHERE item_ID IN (SELECT i.item_ID,MAX(a.currentBidPrice - a.initialBidPrice) FROM items i inner join auctions a WHERE a.isOpen = false) ORDER BY item_ID DESC";
 	
 			ResultSet result = stmt.executeQuery(BestSelling);
 			
@@ -33,12 +36,15 @@
 			while(result.next()) {
 				string itemID = result.getString("item_ID");
 				out.println(itemID);
-			} catch(Exception ex) {
-							out.print(ex);
-					}
-					
-			<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
-							
+			} 
+		    }catch(Exception ex) 
+		    {
+			out.print(ex);
+		    }
+			
 		%>
+			
+		<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
+							
 	</body>
 </html>    
