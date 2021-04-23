@@ -135,6 +135,10 @@
 			String model = null;
 			String color = null;
 			int item_year = 0;
+			String location = null;
+			String transmission = null;
+			String mpg = null;
+			String miles = null;
 			boolean inAuction = false;
 			String img = null;
 			
@@ -154,6 +158,11 @@
 				 item_year = rs.getInt("item_year");
 				 inAuction = rs.getBoolean("isOpen");
 				 globalInAuction = inAuction;
+				 location = rs.getString("location"); 
+				 transmission = rs.getString("transmission");
+				 mpg = rs.getString("mpg"); 
+				 miles = rs.getString("miles");
+
 				img = rs.getString("img");
 				if ( img.equals("null") ){
 					if (item_type.equals("car")){
@@ -213,6 +222,22 @@
 						In Auction: <%= inAuction %>
 					</div>
 				</div>
+
+				<div class='sub-container'>
+					<div class='description-container'>
+						Location: <%= location %>
+					</div>
+					<div class='description-container'>
+						Transmission: <%= transmission %>
+					</div>
+					<div class='description-container'>
+						MPG: <%= mpg %>
+					</div>
+					<div class='description-container'>
+						Miles: <%= miles %>
+					</div>
+				</div>
+
 				<div class='right-align-sub-container'>
 					<img class="fit-picture" src= <%= img %> alt="" >
 				</div>				

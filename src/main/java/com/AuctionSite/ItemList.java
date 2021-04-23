@@ -60,15 +60,19 @@ public class ItemList {
 				int item_year = rs.getInt("item_year");
 				String color = rs.getString("color");
 				String img = rs.getString("img");
-				
+				String location = rs.getString("location");
+				String transmission = rs.getString("transmission");
+				String mpg = rs.getString("mpg");
+				String miles = rs.getString("miles");
+
 		        if (item_type.equals("bike")){
-		            Bike bike = new Bike(item_id, model, inAuction, item_year, color, img);
+		            Bike bike = new Bike(item_id, model, inAuction, item_year, color,  img, location, transmission, mpg, miles);
 		            addItemToList(bike,"bike");
 		        } else if (item_type.equals("truck")){
-		            Truck truck = new Truck(item_id, model, inAuction, item_year, color, 0, img);
+		            Truck truck = new Truck(item_id, model, inAuction, item_year, color, img, location, transmission, mpg, miles);
 		            addItemToList(truck,"truck");
 		        } else if (item_type.equals("car")){
-		            Car car = new Car(item_id ,model, inAuction, item_year, color, 0, img);
+		            Car car = new Car(item_id ,model, inAuction, item_year, color, img, location, transmission, mpg, miles );
 		            addItemToList(car,"car");
 		        }
 				

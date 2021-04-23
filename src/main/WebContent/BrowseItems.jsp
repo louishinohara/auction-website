@@ -127,7 +127,7 @@
 
 			// Get All Items From Database
 			if ( request.getParameter("itemType") != null ){
-				String query = " select i.item_type, i.model, i.item_id, i.in_auction, i.item_year, i.color, i.img, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
+				String query = " select i.item_type, i.model, i.item_id, i.in_auction, i.item_year, i.color, i.img, i.location, i.transmission, i.mpg, i.miles, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
 				String itemType = request.getParameter("itemType");
 												
 				if ( itemType.equals("All") ) {					// Get requested item
@@ -186,6 +186,11 @@
 					int item_id = rs.getInt("item_id");
 					int itemID = rs.getInt("item_id");
 					int item_year = rs.getInt("item_year");
+					String location = rs.getString("location"); 
+					String transmission = rs.getString("transmission");
+					String mpg = rs.getString("mpg"); 
+					String miles = rs.getString("miles");
+
 					boolean inAuction = rs.getBoolean("in_auction");
 					String img = rs.getString("img");
 					if ( img.equals("null") ){
@@ -225,6 +230,21 @@
 										</div>
 									</div>
 
+									<div class='sub-container'>
+										<div class='description-container'>
+											Location: <%= location %>
+										</div>
+										<div class='description-container'>
+											Transmission: <%= transmission %>
+										</div>
+										<div class='description-container'>
+											MPG: <%= mpg %>
+										</div>
+										<div class='description-container'>
+											Miles: <%= miles %>
+										</div>
+									</div>
+									
 									<div class='sub-container'>
 										<div class='description-container'>
 											Year: <%= String.valueOf(item_year) %>

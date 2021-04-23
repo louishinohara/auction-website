@@ -14,9 +14,12 @@ public class Item {
     protected int year;
     protected String color; 
     protected String img;
+    protected String location;
+    protected String transmission;
+    protected String mpg;
+    protected String miles;
 
-
-    public Item( int itemID, String itemType, String model, boolean inAuction, int year, String color, String img){
+    public Item( int itemID, String itemType, String model, boolean inAuction, int year, String color, String img, String location, String transmission, String mpg, String miles){
         this.itemID = itemID;
         this.itemType = itemType;
         this.model = model;
@@ -24,6 +27,10 @@ public class Item {
         this.year = year;
         this.color = color;
         this.img = img;
+        this.location = location;
+        this.transmission = transmission;
+        this.mpg = mpg;
+        this.miles = miles;
     }
 
     public int getItemID(){
@@ -36,8 +43,8 @@ public class Item {
         try {
             Statement stmt = con.createStatement();
   
-            String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color, img)"
-                    + "VALUES (?, ?, ?, ?,?,?,?)";
+            String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color, img, location, transmission, mpg, miles)"
+                    + "VALUES (?, ?, ?, ?,?,?,?,?,?,?,?)";
             //Create a Prepared SQL statement allowing you to introduce the parameters of the query
             PreparedStatement ps = con.prepareStatement(insert);
 
@@ -45,11 +52,14 @@ public class Item {
             ps.setString(1, this.itemType);
             ps.setString(2, this.model);
             ps.setInt(3, this.itemID);
-            ps.setBoolean(4, false);
+            ps.setBoolean(4, true);
             ps.setInt(5, this.year);
             ps.setString(6, this.color);
             ps.setString(7,this.img);
-
+            ps.setString(8, this.location);
+            ps.setString(9, this.transmission);
+            ps.setString(10,this.mpg);
+            ps.setString(11,this.miles);
             //Run the query against the DB
             ps.executeUpdate();
         }catch(Exception E) {
@@ -84,6 +94,21 @@ public class Item {
     	return this.inAuction;
     }
     
+    public String getLocation() {
+    	return this.location;
+    }
+
+    public String getTransmission() {
+    	return this.transmission;
+    }
+
+    public String getMPG() {
+    	return this.mpg;
+    }
+
+    public String getMiles() {
+    	return this.miles;
+    }
     public static int generateItemID() {
     	ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
