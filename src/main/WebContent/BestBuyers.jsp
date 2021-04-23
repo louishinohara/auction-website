@@ -13,13 +13,14 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-     		<title>Best Buyers<title>
-
     	</head>
 	<body>
+		<br>
+		Best Buyers
+		<br>
       		<%
-        	try {
-          
+        	try 
+		{
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
@@ -33,12 +34,14 @@
 			while(result.next()) {
 				string customerID = result.getString("buyerInLeadID");
 				out.println(customerID);
-			} catch(Exception ex) {
-							out.print(ex);
-					}
-					
-			<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
-							
+			}
+		} catch(Exception ex) {
+			out.print(ex);
+		}
+		
 		%>
+		
+		<input type="button" value="Return" onclick=location.href="AdminPage.jsp">						
+		
 	</body>
 </html>    
