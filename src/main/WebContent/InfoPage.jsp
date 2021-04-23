@@ -209,11 +209,6 @@ public class AutoAuction {
 		         String query = "UPDATE auction SET isOpen = 0 WHERE itemID=" + String.valueOf(itemID);
 		         PreparedStatement ps = con.prepareStatement(query);
 		         ps.executeUpdate();
-		        
-		         // Close auction in item table
-		         query = "UPDATE item SET in_auction = 0 WHERE item_id=" + String.valueOf(itemID);
-		         PreparedStatement nps = con.prepareStatement(query);
-		         nps.executeUpdate();
 		         
 		         
 		    } catch (Exception e){

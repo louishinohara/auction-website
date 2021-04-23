@@ -150,6 +150,7 @@
 			double reservePrice = 0;
 			double incrementVal = 0;
 			boolean isOpen = false;
+			String closeDate = null;
 			
 			while (rs.next()){
 				 item_type = rs.getString("item_type");
@@ -162,7 +163,8 @@
 				 transmission = rs.getString("transmission");
 				 mpg = rs.getString("mpg"); 
 				 miles = rs.getString("miles");
-
+				closeDate = rs.getString("date");
+				
 				img = rs.getString("img");
 				if ( img.equals("null") ){
 					if (item_type.equals("car")){
@@ -202,6 +204,9 @@
 					</div>
 					<div class='description-container'>
 						Current Bidder:  <%= String.valueOf(buyerInLeadID) %>
+					</div>
+					<div class='description-container'>
+						Close Date:  <%= closeDate %>
 					</div>
 				</div>		
 					

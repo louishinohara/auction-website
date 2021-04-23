@@ -10,7 +10,6 @@ public class Item {
     protected int itemID; 
     protected String itemType;
     protected String model;
-    protected boolean inAuction; 
     protected int year;
     protected String color; 
     protected String img;
@@ -19,11 +18,10 @@ public class Item {
     protected String mpg;
     protected String miles;
 
-    public Item( int itemID, String itemType, String model, boolean inAuction, int year, String color, String img, String location, String transmission, String mpg, String miles){
+    public Item( int itemID, String itemType, String model, int year, String color, String img, String location, String transmission, String mpg, String miles){
         this.itemID = itemID;
         this.itemType = itemType;
         this.model = model;
-        this.inAuction = inAuction;
         this.year = year;
         this.color = color;
         this.img = img;
@@ -43,8 +41,8 @@ public class Item {
         try {
             Statement stmt = con.createStatement();
   
-            String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color, img, location, transmission, mpg, miles)"
-                    + "VALUES (?, ?, ?, ?,?,?,?,?,?,?,?)";
+            String insert = "INSERT INTO items(item_type, model, item_id, item_year, color, img, location, transmission, mpg, miles)"
+                    + "VALUES (?, ?, ?, ?,?,?,?,?,?,?)";
             //Create a Prepared SQL statement allowing you to introduce the parameters of the query
             PreparedStatement ps = con.prepareStatement(insert);
 
@@ -52,14 +50,13 @@ public class Item {
             ps.setString(1, this.itemType);
             ps.setString(2, this.model);
             ps.setInt(3, this.itemID);
-            ps.setBoolean(4, true);
-            ps.setInt(5, this.year);
-            ps.setString(6, this.color);
-            ps.setString(7,this.img);
-            ps.setString(8, this.location);
-            ps.setString(9, this.transmission);
-            ps.setString(10,this.mpg);
-            ps.setString(11,this.miles);
+            ps.setInt(4, this.year);
+            ps.setString(5, this.color);
+            ps.setString(6,this.img);
+            ps.setString(7, this.location);
+            ps.setString(8, this.transmission);
+            ps.setString(9,this.mpg);
+            ps.setString(10,this.miles);
             //Run the query against the DB
             ps.executeUpdate();
         }catch(Exception E) {

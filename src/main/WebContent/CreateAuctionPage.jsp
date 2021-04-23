@@ -112,20 +112,19 @@
 						Connection conn = db.getConnection();
 
 						try {
-							String insert = "INSERT INTO items(item_type, model, item_id, in_auction, item_year, color, img,location, transmission, mpg, miles)"
-									+ "VALUES (?, ?, ?, ?,?,?,?,?,?,?,?)";
+							String insert = "INSERT INTO items(item_type, model, item_id, item_year, color, img,location, transmission, mpg, miles)"
+									+ "VALUES (?, ?, ?, ?,?,?,?,?,?,?)";
 							PreparedStatement pss = conn.prepareStatement(insert);
 							pss.setString(1, itemName.getItemType());
 							pss.setString(2, itemName.getModelNumber());
 							pss.setInt(3, itemName.getItemID());
-							pss.setBoolean(4, true);
-							pss.setInt(5, itemName.getYear());
-							pss.setString(6, itemName.getColor());
-							pss.setString(7, itemName.getImg());
-							pss.setString(8, itemName.getLocation());
-							pss.setString(9, itemName.getTransmission());
-							pss.setString(10, itemName.getMPG());
-							pss.setString(11, itemName.getMiles());
+							pss.setInt(4, itemName.getYear());
+							pss.setString(5, itemName.getColor());
+							pss.setString(6, itemName.getImg());
+							pss.setString(7, itemName.getLocation());
+							pss.setString(8, itemName.getTransmission());
+							pss.setString(9, itemName.getMPG());
+							pss.setString(10, itemName.getMiles());
 							//Run the query against the DB
 							pss.executeUpdate();
 						} catch (Exception e){

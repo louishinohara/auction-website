@@ -127,7 +127,7 @@
 
 			// Get All Items From Database
 			if ( request.getParameter("itemType") != null ){
-				String query = " select i.item_type, i.model, i.item_id, i.in_auction, i.item_year, i.color, i.img, i.location, i.transmission, i.mpg, i.miles, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
+				String query = " select i.item_type, i.model, i.item_id, i.item_year, i.color, i.img, i.location, i.transmission, i.mpg, i.miles, a.isOpen, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
 				String itemType = request.getParameter("itemType");
 												
 				if ( itemType.equals("All") ) {					// Get requested item
@@ -149,9 +149,9 @@
 					}
 					
 					if ( auctionCriteria.equals("true") ){
-						query = query + "i.in_auction = true";
+						query = query + "a.isOpen = true";
 					} 	else if ( auctionCriteria.equals("false") ){
-						query = query + "i.in_auction = false";
+						query = query + "a.isOpen = false";
 					}
 					
 				}
@@ -191,7 +191,7 @@
 					String mpg = rs.getString("mpg"); 
 					String miles = rs.getString("miles");
 
-					boolean inAuction = rs.getBoolean("in_auction");
+					boolean inAuction = rs.getBoolean("isOpen");
 					String img = rs.getString("img");
 					if ( img.equals("null") ){
 						if (item_type.equals("car")){
