@@ -87,9 +87,6 @@ public class Item {
     public String getImg(){
         return this.img;
     }
-    public boolean getInAuction() {
-    	return this.inAuction;
-    }
     
     public String getLocation() {
     	return this.location;

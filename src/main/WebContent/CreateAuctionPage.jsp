@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*,com.AuctionSite.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -79,7 +78,7 @@
 				String mpg = request.getParameter("mpg");
 					if(itemType.equals("bike") || itemType.equals("bicycle")){
 						int id = Item.generateItemID();
-						Bike newBike = new Bike(id, model, false, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
+						Bike newBike = new Bike(id, model, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
 						%> Bike created with id: "<%=id %>" <br><%
 					   itemList.addItemToTheList(newBike);
 						
@@ -89,7 +88,7 @@
 						
 						int id = Item.generateItemID();
 						
-						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
+						Car newCar = new Car(id, model, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
 						%> Car created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newCar);
 						//newCar.addToSQL();
@@ -97,7 +96,7 @@
 					}else if(itemType.equals("truck")){
 						
 						int id = Item.generateItemID();
-						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
+						Truck newTruck = new Truck(id, model, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
 						%> Truck created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newTruck);
 						//newTruck.addToSQL();
