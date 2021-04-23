@@ -10,18 +10,19 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-     		<title>Earnings Per Item<title>
-
     	</head>
 	<body>
+		<br>
+		Earnings Per Item
+		<br>
       		<%
-        	try {
-          
+        	try 
+		{         
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
 		
-			String totalEarningsItem = "SELECT i.item_ID, SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Item FROM items i inner join auction a WHERE i.item_id = a.itemID and a.isOPen == false";
+			String totalEarningsItem = "SELECT i.item_ID, SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Item FROM items i inner join auction a WHERE i.item_id = a.itemID and a.isOPen = false";
 	
 			ResultSet result = stmt.executeQuery(totalEarningsItem);
 			
@@ -31,12 +32,15 @@
 				String sum = result.getString("Total Earnings Item");
 				string itemID = result.getString("item_ID");
 				out.println(itemID + " " + sum);
-				} catch(Exception ex) {
-							out.print(ex);
-					}
-					
-			<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
-							
+			}
+		}
+		catch(Exception ex) {
+			out.print(ex);
+		}
+		
 		%>
+					
+		<input type="button" value="Return" onclick=location.href="AdminPage.jsp">							
+		
 	</body>
 </html>    
