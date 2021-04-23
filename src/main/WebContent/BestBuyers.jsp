@@ -25,7 +25,7 @@
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
 		
-			String BestBuyers = "SELECT TOP 5 * FROM aution WHERE buyerInLeadID IN (SELECT a.buyerInLeadID,SUM(a.currentBidPrice - a.initialBidPrice) FROM auctions a WHERE a.isOpen == false) GROUP BY a.buyerInLeadID DESC";
+			String BestBuyers = "SELECT TOP 5 * FROM aution WHERE buyerInLeadID IN (SELECT a.buyerInLeadID,SUM(a.currentBidPrice - a.initialBidPrice) FROM auctions a WHERE a.isOpen = false) GROUP BY a.buyerInLeadID DESC";
 	
 			ResultSet result = stmt.executeQuery(BestBuyers);
 			
