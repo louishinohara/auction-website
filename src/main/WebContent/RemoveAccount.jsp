@@ -10,17 +10,19 @@
 <html>
     	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-      		<title>Remove Account<title>
        </head>
        <body>
+	       <br>
+	       Remove Account
+	       <br>
        <%
             String username=request.getParameter("username");
             
             try 
             {
                     ApplicationDB db = new ApplicationDB();	
-		                Connection con = db.getConnection();
-		                Statement stmt = con.createStatement();
+		    Connection con = db.getConnection();
+		    Statement stmt = con.createStatement();
                     
                     String remove = "DELETE FROM account WHERE username="+username);
                     
@@ -28,8 +30,9 @@
                     
                     if(result.next()) {
                            out.println("Auction Deleted Successfully!");
-                     }
-		     
+                     } else {
+		     	   out.println("Auction Failed to Delete!");
+		     }
             } catch(Exception e) {
                     out.print(e);
             }
@@ -37,5 +40,5 @@
             <input type="button" value="Return" onclick=location.href="CustomerRep.jsp">
             
        %>
-            </body>
-            </html>
+       </body>
+</html>
