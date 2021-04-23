@@ -21,9 +21,14 @@
 			
 			<style type="text/css">	 
 				.container { 
-					width:100% ; 
-					margin-bottom: 200px;
-					background-color: lightblue;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
+				}
+				
+				.filter-items {
+					flex: 1;
 				}
 					
 				.align-left { 	
@@ -35,6 +40,7 @@
 					float: right ;
 					width:50% ; 
 				 }
+				
 				.item-container {
 					display: flex;
 					flex-direction: row;
@@ -45,23 +51,49 @@
 				  	padding: 8;
 				  	height: 100px;
 				}
+				
 				.sub-container {
 					display: 'flex';
 					flex-direction: 'column';
 					padding-left: 20px;
-					}
+				}
+					
 				.description-container {
 					marginTop: 8px;
-					marginBottom: 8px;
+					marginBottom: 8px;	
+				}
 					
-					}
+				.outer-sub-container {
+					flex: 1;
+				}
+				
+				.view-button {
+					margin-left: 16px;
+				}
+				
 				.fit-picture {
 				    width: 100px;
 				}
+				
 				.right-align-sub-container{
 					margin-left: auto;
 					margin-right: 20px;
 				}
+				
+				.button {
+					margin-top: 10px;	
+				}
+				
+				.header {
+					font-size: 16px;
+					font-weight: bold;
+				}
+				
+				.description {
+					font-size: 14px;
+					font-weight: normal;
+				}
+				
 			</style> 
 
 		</head>
@@ -74,47 +106,43 @@
 	
 	%>
 		<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
-	
-		<CENTER>     
-			<H2>Browse Auctions</H2>
-			
-			<div class='container'>
-				<form  method="get">
+			<CENTER>     
+				<H2>Browse Auctions</H2>
+					<form  method="get">
+						<div class='container'>
+							<div class='filter-items'>	
+								<H3>Sort Availability </H3>    
+									<select name="availability" >  
+										<option value="null"> All </option>       
+										<option value="open"> Open </option>     
+										<option value="closed"> Closed </option>         
+									</select>    
+							</div>
 		
-					<div class='align-left'>	
-						<H3>Sort Availability </H3>    
-							<select name="availability" >  
-								<option value="null"> All </option>       
-								<option value="open"> Open </option>     
-								<option value="closed"> Closed </option>         
-							</select>    
-					</div>
-
-					<div class='align-right'>	
-						<H3>Sort Criteria (Buyer/Seller) </H3>    
-							<select name="customerType" >  
-								<option value="null"> All </option>       
-								<option value="seller"> As Seller </option>     
-								<option value="bidder"> As Bidder </option>         
-							</select>    
-					</div>
-					
-					<div class='align-right'>	
-						<H3>Order By Criteria</H3>    
-							<select name="orderBy" >  
-								<option value="null"> Any </option>         
-								<option value="lowest"> Lowest Bid Price </option> 
-								<option value="highest"> Highest Bid Price </option>     
-								<option value="date"> Date </option>     
-							</select>    
-						<input type="submit" value="Submit"/> 
-					</div>
-					
-				</form> 
-			</div>
-
-		</CENTER>
-	  
+							<div class='filter-items'>	
+								<H3>Sort Criteria (Buyer/Seller) </H3>    
+									<select name="customerType" >  
+										<option value="null"> All </option>       
+										<option value="seller"> As Seller </option>     
+										<option value="bidder"> As Bidder </option>         
+									</select>    
+							</div>
+							
+							<div class='filter-items'>	
+								<H3>Order By Criteria</H3>    
+									<select name="orderBy" >  
+										<option value="null"> Any </option>         
+										<option value="lowest"> Lowest Bid Price </option> 
+										<option value="highest"> Highest Bid Price </option>     
+										<option value="date"> Close Date </option>     
+									</select>    
+							</div>
+						</div>
+						<div class="button">
+							<input type="submit" value="Submit"/> 
+						</div>
+					</form> 
+			</CENTER>
 	<% 
 		try {
 			
@@ -173,7 +201,7 @@
 				ResultSet rs = stmt.executeQuery(query);
 		%>
 			<ol>
-				<%
+		<%
 				while (rs.next()) {
 					String auctionID = String.valueOf(rs.getInt("auctionID"));
 					String itemID = String.valueOf(rs.getInt("itemID"));
@@ -195,66 +223,65 @@
 						}
 					} 
 					
-					%>
-						<li  > 
-								<div class='item-container' >
+		%>
+						<li> 
+							<div class='item-container' >
+								<div class="outer-sub-container">
 	     							<div class='sub-container'>
 											<img class="fit-picture"
 											     src=<%= img %>
 											     alt="">
 									</div>		
+								</div>
+								
+								<div class="outer-sub-container">		
 									<div class='sub-container'>
 										<div class='description-container'>
-											Auction ID: <%= String.valueOf(auctionID) %>
-										</div>
-										<div class='description-container'>
-											Item ID: <%= String.valueOf(itemID) %>
+											<div class="header"> Item ID: <a class="description"> <%= String.valueOf(itemID) %></a></div> 
 										</div>
 									</div>			
 									<div class='sub-container'>
 										<div class='description-container'>
-											SellerID: <%= sellerID %>
-										</div>
-										<div class='description-container'>
-											Initial Price: $<%= initialPrice %>
-											
+											<div class="header"> Seller ID: <a class="description"> <%= sellerID %></a></div>  
 										</div>
 									</div>
-
+								</div>
+								
+								<div class="outer-sub-container">
 									<div class='sub-container'>
 										<div class='description-container'>
-											Current Bid Price: $ <%= currentBidPrice %>
+											<div class="header"> Initial Price: <a class="description">$<%= initialPrice %></a></div> 
 										</div>
 										<div class='description-container'>
-											In Auction: <%= inAuction %>
+											<div class="header"> Current Price: <a class="description">$<%= currentBidPrice %></a></div> 
 										</div>
 									</div>
-									
-									
+								</div>
+						
+								<div class="outer-sub-container">
 									<div class='sub-container'>
 										<div class='description-container'>
-											Date:  <%= date %> 
+											<div class="header"> In Auction: <a class="description"> <%= inAuction %></a></div>  
 										</div>
 										<div class='description-container'>
-											Time:  <%= time %> 
+											<div class="header"> Close Date: <a class="description"> <%= time %></a></div> 
 										</div>
 									</div>										
-									 
-									 <a href="Auction.jsp?itemID=<%=itemID%>"> <button>View</button></a> 
-									 
 								</div>
+								 
+								 <div class="outer-sub-container-button">
+									 <a class="view-button" href="Auction.jsp?itemID=<%=itemID%>"> <button> View Auction</button></a> 
+								 </div>
+							</div>
 						</li>
-					<% 
-				}
-				%>
+			<% 
+			}
+			%>
 			</ol> 
 			<% 
-			
 			}
-			
 		} catch (Exception e) {
 				e.printStackTrace();
-		
 		}
 	%>
 	
