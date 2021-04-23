@@ -128,19 +128,10 @@
 			
 			if (  request.getParameter("availability") != null ){
 
-				String query = " select * from alert where buyerID =" + String.valueOf(id);
+				String query = " select * from alert where accountID =" + String.valueOf(id);
 				
 				String availabilityType = request.getParameter("availability");
-				
-				if ( availabilityType.equals("All") ) {					// Get requested item
-					// Do Nothing? 
-				} else if ( availabilityType.equals("Not Viewed") ){
-					query = query + " AND acknowledgedAlert = False";
-				} else if ( availabilityType.equals("Viewed") ) {
-					query = query + " AND acknowledgedAlert = True";
-				} 
-				
-
+								
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
@@ -154,7 +145,6 @@
 					String message = rs.getString("message");
 					String date = rs.getString("date");
 					String time = rs.getString("time");
-					boolean acknowledgedAlert = rs.getBoolean("acknowledgedAlert");
 					%>
 						<li  > 
 								<div class='item-container' >	

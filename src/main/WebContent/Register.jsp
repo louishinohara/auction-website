@@ -51,8 +51,8 @@
 				
 				%>Created new customer account<%
 				
-				String insert = "INSERT INTO account(accountID, username, pass, type, logged_in)"
-						+ "VALUES (?, ?, ?, ?, ?)";
+				String insert = "INSERT INTO account(accountID, username, pass, type)"
+						+ "VALUES (?, ?, ?, ?)";
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 				PreparedStatement ps = con.prepareStatement(insert);
 
@@ -62,7 +62,6 @@
 				ps.setString(2, username);
 				ps.setString(3, pass);
 				ps.setString(4, "customer");
-				ps.setBoolean(5, false);
 				//Run the query against the DB
 				ps.executeUpdate();
 				%>
