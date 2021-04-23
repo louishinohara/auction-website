@@ -116,8 +116,8 @@
 		<%
 		
 			// Find auctions to close
-			AutoAuction autoAuction= new AutoAuction("2021-04-22");
-			autoAuction.findAuctionsToClose();
+			//AutoAuction autoAuction= new AutoAuction("2021-04-22");
+			//autoAuction.findAuctionsToClose();
 		
 		
 		%>
@@ -205,10 +205,17 @@ public class AutoAuction {
 			try {
 				Statement stmt = con.createStatement();
 				
+				 // Close auction in auction table
 		         String query = "UPDATE auction SET isOpen = 0 WHERE itemID=" + String.valueOf(itemID);
 		         PreparedStatement ps = con.prepareStatement(query);
 		         ps.executeUpdate();
 		        
+		         // Close auction in item table
+		         query = "UPDATE item SET in_auction = 0 WHERE item_id=" + String.valueOf(itemID);
+		         PreparedStatement nps = con.prepareStatement(query);
+		         nps.executeUpdate();
+		         
+		         
 		    } catch (Exception e){
 		    	System.out.println(e);
 		    }
