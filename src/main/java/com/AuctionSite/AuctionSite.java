@@ -131,13 +131,6 @@ public class AuctionSite {
 
         // Now that the bid has been placed, the user must wait for an alert from the automatic bidding system
 
-        
-
-
-        
-        
-
-
 
 	}
 

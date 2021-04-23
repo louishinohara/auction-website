@@ -552,7 +552,7 @@
 			try {
 				Statement stmt = con.createStatement();
 				
-		         String query = "UPDATE auction SET buyerInLeaderID=?, currentBidPrice=? WHERE itemID=" + String.valueOf(this.itemID);;
+		         String query = "UPDATE auction SET buyerInLeaderID=?, currentBidPrice=? WHERE itemID=" + String.valueOf(this.itemID);
 		         PreparedStatement ps = con.prepareStatement(query);
 		         ps.setInt(1, buyerID);
 		         ps.setDouble(2, priceToBeat);
@@ -724,18 +724,7 @@
 	 }
 	    
 	    
-	  public void checkReserveMet(){
-		  if ( this.reservePrice <= this.currItemPrice ){
-			  String msgForWinner = "Congrats. You have won item " + String.valueOf(this.itemID);
-			  sendAlert(this.buyerInLeaderID, msgForWinner);
-		  } else {
-			  String reservePriceNotMetMsg = "Reserve price was not been met for " + String.valueOf(this.itemID) + ". Item not purchased.";
-			  sendAlert(this.buyerInLeaderID, reservePriceNotMetMsg);
-					  
-			  String msgToSeller = "Reserve price was not been met for " + String.valueOf(this.itemID) + ". Item not sold.";
-			  sendAlert(this.sellerID, msgToSeller);
-		  }
-	  }
+
 		   
 	  private int getAlertID(){
 		  	ApplicationDB db = new ApplicationDB();	

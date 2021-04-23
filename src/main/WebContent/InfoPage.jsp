@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*,com.AuctionSite.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-
+<%@ page import="java.sql.*,java.text.SimpleDateFormat.*"%>
+<%@ page import="java.util.Date.*"%>
 
 
 
@@ -112,7 +113,160 @@
 		<h4>
 			Joshua Hymowitz, Ushio Shinohara, Isaac Perez 
 		</h4>
+		<%
+		
+			// Find auctions to close
+			AutoAuction autoAuction= new AutoAuction("2021-04-22");
+			autoAuction.findAuctionsToClose();
+		
+		
+		%>
 	</div>
+	<%!
+
+public class AutoAuction {
+	private String currDate;
+    
+	
+	public AutoAuction(String currDate) {
+		this.currDate = currDate;
+	}
+	
+	public void findAuctionsToClose() {
+		// Go through all the auctions
+
+			// Find auctions that are open
+			ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			
+			java.text.SimpleDateFormat sdformat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date formattedCurrDate = null;
+			try {
+				formattedCurrDate = sdformat.parse(this.currDate);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			// Get Auction Details
+			try {
+				Statement stmt = con.createStatement();
+				String query = "select * from auction where isOpen = 1";	// Getting open auctions
+				ResultSet rs = stmt.executeQuery(query);
+				// For each auction, check the date. If it is less than the curr date, close it
+				while (rs.next()){
+					int itemID = rs.getInt("itemID");
+					int sellerID = rs.getInt("sellerID");
+					int buyerInLeaderID = rs.getInt("buyerInLeaderID");
+					double currentBidPrice = rs.getFloat("currentBidPrice");
+					double reservePrice = rs.getFloat("reservePrice");
+					String date = rs.getString("date");
+					java.util.Date formattedAuctionEndDate = sdformat.parse(date);
+					// Date has passed
+					System.out.println("Stuff working til here");
+					System.out.println(formattedAuctionEndDate);
+					System.out.println(formattedCurrDate);
+					System.out.println(formattedAuctionEndDate.compareTo(formattedCurrDate) < 0);
+					if ( formattedAuctionEndDate.compareTo(formattedCurrDate) < 0 ) {
+						// Check Reserve Price and send alert
+						checkReserveMet(reservePrice, currentBidPrice, itemID, buyerInLeaderID, sellerID);
+						// Close Auction
+						updateAuctionDetailsInSQL(itemID);
+					}
+				}
+					
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		
+		
+		// Modify auction to close
+		
+		//
+	}
+	
+	  public void checkReserveMet(double reservePrice, double currItemPrice, int itemID, int buyerInLeaderID, int sellerID){
+		  System.out.println("Sent Alert To Buyer " + String.valueOf(buyerInLeaderID) + " and " + "Seller " + String.valueOf(sellerID) + " about Item # " + String.valueOf(itemID));
+		  if ( reservePrice <= currItemPrice ){
+			  String msgForWinner = "Congrats. You have won item " + String.valueOf(itemID);
+			  sendAlert(buyerInLeaderID, msgForWinner, itemID);
+		  } else {
+			  String reservePriceNotMetMsg = "Reserve price was not been met for " + String.valueOf(itemID) + ". Item not purchased.";
+			  sendAlert(buyerInLeaderID, reservePriceNotMetMsg, itemID);
+					  
+			  String msgToSeller = "Reserve price was not been met for " + String.valueOf(itemID) + ". Item not sold.";
+			  sendAlert(sellerID, msgToSeller, itemID);
+		  }
+	  }
+
+	    // Update the auction in SQL
+	    public void updateAuctionDetailsInSQL(int itemID){
+	    	ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				
+		         String query = "UPDATE auction SET isOpen = 0 WHERE itemID=" + String.valueOf(itemID);
+		         PreparedStatement ps = con.prepareStatement(query);
+		         ps.executeUpdate();
+		        
+		    } catch (Exception e){
+		    	System.out.println(e);
+		    }
+		}
+	    
+	  public void sendAlert(int ID, String msg, int itemID){
+		  ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			try {
+				Statement stmt = con.createStatement();
+				String date = String.valueOf(java.time.LocalDate.now());
+			     java.util.Date day = new java.util.Date();
+			     String strDateFormat = "HH:mm:ss a";
+			     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
+				String time = String.valueOf(sdf.format(day));
+				String insert = "INSERT INTO alert(alertID, itemID, buyerID, acknowledgedAlert, date, time, message)"
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
+				PreparedStatement ps = con.prepareStatement(insert);
+				//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
+				ps.setInt(1, getAlertID());
+				ps.setInt(2, itemID);
+				ps.setInt(3, ID);
+				ps.setBoolean(4, false);
+				ps.setString(5, date);
+				ps.setString(6, time);
+				ps.setString(7,  msg );
+				ps.executeUpdate();
+				
+			} catch (Exception e){
+				System.out.println("7");
+				System.err.println(e.getMessage());
+				
+			}
+	  }
+	  
+	  private int getAlertID(){
+		  	ApplicationDB db = new ApplicationDB();	
+			Connection con = db.getConnection();
+			int alertID = 0;
+			try {
+				Statement stmt = con.createStatement();
+				String query = "select max(alertID) from alert";
+				ResultSet rs = stmt.executeQuery(query);
+				
+				while (rs.next()){
+					alertID = rs.getInt("max(AlertID)")+ 1;
+				}
+				
+			} catch (Exception e){
+				System.out.println("6");
+				System.out.println(e);
+			}
+			return alertID;
+	  }
+}
+	
+	%>
 	</body>
 
 </html>

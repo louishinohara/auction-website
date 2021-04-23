@@ -1,5 +1,6 @@
 package com.AuctionSite;
 
-public class AlertSystem {
+public class AutoAuction {
+	
     
 }
