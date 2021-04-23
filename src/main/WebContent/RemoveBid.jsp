@@ -12,10 +12,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     </head>
     <body>
-    
-        <br>
-            Remove Bid
-        <br>
         
        <%
             String bidID=request.getParameter("bidID");
@@ -34,7 +30,7 @@
                            out.println("Bid Deleted Successfully!"); 
                      }
                     else {
-                        out.println("Bid does not exist!")
+                        out.println("Failed to delete Bid!")
                     }
 		     
             } catch(Exception e) {
