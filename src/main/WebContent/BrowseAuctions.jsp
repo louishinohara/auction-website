@@ -105,6 +105,7 @@
 								<option value="null"> Any </option>         
 								<option value="lowest"> Lowest Bid Price </option> 
 								<option value="highest"> Highest Bid Price </option>     
+								<option value="date"> Date </option>     
 							</select>    
 						<input type="submit" value="Submit"/> 
 					</div>
@@ -161,6 +162,8 @@
 					query += " ORDER BY currentBidPrice ASC" ;
 				} else if ( orderBy.equals("highest") ){
 					query +=  " ORDER BY currentBidPrice DESC";
+				} else if ( orderBy.equals("date") ){
+					query +=  " ORDER BY date ASC";
 				}
 				
 				

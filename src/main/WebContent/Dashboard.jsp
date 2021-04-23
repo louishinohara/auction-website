@@ -189,7 +189,7 @@
 						</div>
 					</div>
 					
-<div class="action-container" method = "get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="BrowseAuctions.jsp">
+					<div class="action-container" method = "get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="BrowseAuctions.jsp">
 						<div>
 							<h3 class="heading-text"> View Auctions </h3>
 						</div>
@@ -239,7 +239,7 @@
 				%></h3>
 		
 	<% } catch (Exception ex) {
-		out.print(ex);
+		ex.printStackTrace();
 		out.print("Login failed :()");
 	}
 %>
