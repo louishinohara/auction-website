@@ -33,10 +33,9 @@
 			} 
 		} catch(Exception ex) {
 			out.print(ex);
-		}
-					
-		 <input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
+		}				
 	%>
+	     <input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
       
 </body>
 </html>    
