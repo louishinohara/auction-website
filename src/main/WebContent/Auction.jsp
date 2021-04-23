@@ -292,6 +292,7 @@
 			<%
 		        } catch (Exception e){
 		        	System.out.print(e);
+		        	e.printStackTrace();
 		        }
 		    %>
 			</div>
@@ -300,6 +301,7 @@
 	<% 				
 		} catch (Exception e) {
 			System.err.println(e);
+			e.printStackTrace();
 	}
 	%>
 
@@ -337,45 +339,59 @@
 			if ( request.getParameter("bidPrice") != null ) {
 				double bidPrice = Double.parseDouble(request.getParameter("bidPrice"));
 				// If bid price is greater than current ask price
-				//if ( bidPrice > ( currentIncrementPriceGlobal + currentBidPriceGlobal ) ) {
-					
 					// Get Data From Form
 					
 					double upperBidLimit = Double.parseDouble(request.getParameter("bidUpperLimit"));
 					String automaticBid = request.getParameter("automaticBid");
 					boolean automaticBidBool = false;
 					
-					// User has picked to use automaticBid
-					if ("true".equals(automaticBid)){
-						automaticBidBool = true;
-					} 
 					
-					// Create New Bid
-					Bid bid = new Bid( buyerID, item_id,  bidID,  bidPrice,  upperBidLimit,  date,  time, automaticBidBool); 
-				 	
-					// Add To Automatic Bidder and SQL
-					// Create Automatic Bidding System
-					AutomaticBidder automaticBidder = new AutomaticBidder(item_id, bidID);
-					// Add the current bid with date and time
-					automaticBidder.addBid(bid, item_id, date, time);
-					// Find who won this round and contact loser
-					automaticBidder.findBidWinner();
+					if ( bidPrice < (currentBidPriceGlobal + currentIncrementPriceGlobal )){
+						%>
+						<div>
+							<h3>
+							Bid Is Less Than Current Ask Price. Try Again!
+							</h3>
+						</div>
+					<% 
+					} else {
+						// User has picked to use automaticBid
+						if ("true".equals(automaticBid)){
+							automaticBidBool = true;
+						} 
+						
+						if (automaticBidBool & upperBidLimit == 0 ) {
+							%>
+								<div>
+									<h3>
+									Add Upper Limit For Automatic Bid
+									</h3>
+								</div>
+							<% 
+						} else {
+							// Create New Bid
+							Bid bid = new Bid( buyerID, item_id,  bidID,  bidPrice,  upperBidLimit,  date,  time, automaticBidBool); 
+						 	
+							// Add To Automatic Bidder and SQL
+							// Create Automatic Bidding System
+							AutomaticBidder automaticBidder = new AutomaticBidder(item_id, bidID);
+							// Add the current bid with date and time
+							automaticBidder.addBid(bid, item_id, date, time);
+							// Find who won this round and contact loser
+							automaticBidder.findBidWinner();
+						}
+						
+					}
+
 					
-			//} else {
 		%>
-			<div>
-				<h3>
-				Getting this error each time. Ignore For Now: Bid Price is less than ask price. Try Again!
-				Also add check to display message if the box is checked but upper limit is not clicked
-				</h3>
-			</div>
 		<% 
-			//}
+
 
 			}
 			
 		} catch (Exception e){
-			
+			e.printStackTrace();
 			System.err.println(e);
 	}	
 //=======================================================================================================================================================================================================================================
@@ -395,6 +411,7 @@
 	    private double incrementVal;
 	    private int reservePrice; 
 	    private int sellerID;
+	    private boolean firstBid;
 	    
 	    public AutomaticBidder(int itemID, int bidID){
 	        this.BidList = new ArrayList<Bid>();
@@ -517,10 +534,12 @@
 	 				ps.setBoolean(8, bid.getAllowAutomaticBidding());
 	 				ps.setBoolean(9, true);
 	 				ps.executeUpdate();
-	 				
+		 			
 	 			} catch (Exception e){
 	 				System.out.print(e);
 	 			}
+	 			
+
 	    }
 	    
 	    // Update the auction in SQL
@@ -547,41 +566,83 @@
 	    
 	    // Automatic Bidding 
 	    public void findBidWinner(){
-			int loserBidVal = 0;
-			boolean currBidAutomaticBiddingEnabled = this.currBid.getAllowAutomaticBidding();
-			boolean newBidAutomaticBiddingEnabled = this.newBid.getAllowAutomaticBidding();
-			
-			if (!currBidAutomaticBiddingEnabled & !newBidAutomaticBiddingEnabled ) {				// Both Don't Have Automatic Bidding
-				if ( this.newBid.getCurrPrice() > ( this.currItemPrice + this.incrementVal ) ) {	// New Bid Is Greater Than Old Bid
-					// New Bid Wins
-					String msg = "You have been outbid for item " + String.valueOf(this.itemID);
-					setWinState(this.newBid.getCurrPrice(), this.newBid.getBuyerID(), this.currBid.getBidID(), this.currBid.getBuyerID(), msg);
-				}
-			} else if ( currBidAutomaticBiddingEnabled & !newBidAutomaticBiddingEnabled ) {		// Current Bid has automatic Bid
-				if (this.newBid.getCurrPrice() < this.currBid.getCurrPrice()){					
-					// Old Bid wins because new bid is not automatic and less than curr bid 
-					// However this is a situation that would never happen
-
-					String msg = "You have been outbid for item " + String.valueOf(this.itemID);
-					setWinState(this.currBid.getCurrPrice(), this.currBid.getBuyerID(), this.newBid.getBidID(), this.newBid.getBuyerID(), msg);
-				} else {
-					// New Bid Wins But Old Bid Has Automatic
-					System.out.println("New bid wins but old bid has automatic");
-					// Check if new bid is greater than curr bid's upper limit
-					if ( this.newBid.getCurrPrice() > this.currBid.getUpperBidLimit() ){
-						System.out.println("Impossible Situation");
-						// If new bid is higher, new bid wins
+	    	// If this is the first bid, then there won't be a curr bid so set this as winner
+			if ( this.currBid == null) {
+				updateAuctionDetailsInSQL(this.newBid.getCurrPrice(), this.newBid.getBuyerID());
+			} else {
+				boolean currBidAutomaticBiddingEnabled = this.currBid.getAllowAutomaticBidding();
+				boolean newBidAutomaticBiddingEnabled = this.newBid.getAllowAutomaticBidding();
+				
+				if (!currBidAutomaticBiddingEnabled & !newBidAutomaticBiddingEnabled ) {				// Both Don't Have Automatic Bidding
+					if ( this.newBid.getCurrPrice() > ( this.currItemPrice + this.incrementVal ) ) {	// New Bid Is Greater Than Old Bid
+						// New Bid Wins
 						String msg = "You have been outbid for item " + String.valueOf(this.itemID);
 						setWinState(this.newBid.getCurrPrice(), this.newBid.getBuyerID(), this.currBid.getBidID(), this.currBid.getBuyerID(), msg);
-					} else {
-						System.out.println("New Bid lost to current bid's automatic system");
-						// If automatic is higher, then curr bid stays but price is now new bid's price
+					}
+				} else if ( currBidAutomaticBiddingEnabled & !newBidAutomaticBiddingEnabled ) {		// Current Bid has automatic Bid
+					if (this.newBid.getCurrPrice() < this.currBid.getCurrPrice()){					
+						// Old Bid wins because new bid is not automatic and less than curr bid 
+						// However this is a situation that would never happen
+
 						String msg = "You have been outbid for item " + String.valueOf(this.itemID);
-						setWinState(this.newBid.getCurrPrice(), this.currBid.getBuyerID(), this.newBid.getBidID(), this.newBid.getBuyerID(), msg);
-						// Set Curr Bid Inactive
-						setBidInactive(this.currBid.getBidID());
+						setWinState(this.currBid.getCurrPrice(), this.currBid.getBuyerID(), this.newBid.getBidID(), this.newBid.getBuyerID(), msg);
+					} else {
+						// New Bid Wins But Old Bid Has Automatic
+						System.out.println("New bid wins but old bid has automatic");
+						// Check if new bid is greater than curr bid's upper limit
+						if ( this.newBid.getCurrPrice() > this.currBid.getUpperBidLimit() ){
+							System.out.println("Impossible Situation");
+							// If new bid is higher, new bid wins
+							String msg = "You have been outbid for item " + String.valueOf(this.itemID);
+							setWinState(this.newBid.getCurrPrice(), this.newBid.getBuyerID(), this.currBid.getBidID(), this.currBid.getBuyerID(), msg);
+						} else {
+							System.out.println("New Bid lost to current bid's automatic system");
+							// If automatic is higher, then curr bid stays but price is now new bid's price
+							String msg = "You have been outbid for item " + String.valueOf(this.itemID);
+							setWinState(this.newBid.getCurrPrice(), this.currBid.getBuyerID(), this.newBid.getBidID(), this.newBid.getBuyerID(), msg);
+							// Set Curr Bid Inactive
+							setBidInactive(this.currBid.getBidID());
+							
+							// Generate New Bid 
+							String date = String.valueOf(java.time.LocalDate.now());
+						    java.util.Date day = new java.util.Date();
+						    String strDateFormat = "HH:mm:ss a";
+						    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
+							String time = String.valueOf(sdf.format(day));
+											
+							// Create New Bid For Current Bid With New Price
+	                        Bid newBid = new Bid(this.currBid, createBidID(), this.newBid.getCurrPrice() + this.incrementVal, date, time );
+							
+	                        // Add Bid To SQL
+							addBid(newBid, this.itemID, date, time);
+						}
+					}
+				} else if ( !currBidAutomaticBiddingEnabled & newBidAutomaticBiddingEnabled ) {		// New Bid has automatic
+					System.out.println(" New bid automatic scenario");
+					if (this.newBid.getCurrPrice() < this.currBid.getCurrPrice()){					// New bid which has automatic is less than current bid
+						// Old Bid Wins. But a bunch of complicaed shit happens because newBid has automatic bidding
+						// Situation that could never occur
+					
+					} else {
+						// New Bid Wins And Old Bid Doesn't Have Automatic	
+						String msg = "You have been outbid for item " + String.valueOf(this.itemID);
+						setWinState(this.newBid.getCurrPrice(), this.newBid.getBuyerID(), this.currBid.getBidID(), this.currBid.getBuyerID(), msg);
+					}
+					
+				} else {																			// They both have automatic bid
+					System.out.println("Both Automatic Siutation");
+						double newBidUpperBidLimit = this.newBid.getUpperBidLimit();
+						double currBidUpperBidLimit = this.currBid.getUpperBidLimit();
+					if ( newBidUpperBidLimit >= currBidUpperBidLimit ){
+						// Current Bid loses
+						// Update Auction
+						String msg = "You have been outbid for item " + String.valueOf(this.itemID);
+						setWinState(currBidUpperBidLimit, this.newBid.getBuyerID(), this.currBid.getBidID(), this.currBid.getBuyerID(), msg);
 						
-						// Generate New Bid 
+						// Set New Bid Inactive To Create Bid That Beat The Current Bid
+						setBidInactive(this.newBid.getBidID());
+						
+						// Generate New Bid For Curr's Losing Bid To Maintain Track
 						String date = String.valueOf(java.time.LocalDate.now());
 					    java.util.Date day = new java.util.Date();
 					    String strDateFormat = "HH:mm:ss a";
@@ -589,102 +650,65 @@
 						String time = String.valueOf(sdf.format(day));
 										
 						// Create New Bid For Current Bid With New Price
-                        Bid newBid = new Bid(this.currBid, createBidID(), this.newBid.getCurrPrice() + this.incrementVal, date, time );
+	                    Bid currNewBid = new Bid(this.currBid, createBidID(), currBidUpperBidLimit, date, time );
 						
-                        // Add Bid To SQL
-						addBid(newBid, this.itemID, date, time);
-					}
-				}
-			} else if ( !currBidAutomaticBiddingEnabled & newBidAutomaticBiddingEnabled ) {		// New Bid has automatic
-				System.out.println(" New bid automatic scenario");
-				if (this.newBid.getCurrPrice() < this.currBid.getCurrPrice()){					// New bid which has automatic is less than current bid
-					// Old Bid Wins. But a bunch of complicaed shit happens because newBid has automatic bidding
-					// Situation that could never occur
-				
-				} else {
-					// New Bid Wins And Old Bid Doesn't Have Automatic	
-					String msg = "You have been outbid for item " + String.valueOf(this.itemID);
-					setWinState(this.newBid.getCurrPrice(), this.newBid.getBuyerID(), this.currBid.getBidID(), this.currBid.getBuyerID(), msg);
-				}
-				
-			} else {																			// They both have automatic bid
-				System.out.println("Both Automatic Siutation");
-					double newBidUpperBidLimit = this.newBid.getUpperBidLimit();
-					double currBidUpperBidLimit = this.currBid.getUpperBidLimit();
-				if ( newBidUpperBidLimit >= currBidUpperBidLimit ){
-					// Current Bid loses
-					// Update Auction
-					String msg = "You have been outbid for item " + String.valueOf(this.itemID);
-					setWinState(currBidUpperBidLimit, this.newBid.getBuyerID(), this.currBid.getBidID(), this.currBid.getBuyerID(), msg);
-					
-					// Set New Bid Inactive To Create Bid That Beat The Current Bid
-					setBidInactive(this.newBid.getBidID());
-					
-					// Generate New Bid For Curr's Losing Bid To Maintain Track
-					String date = String.valueOf(java.time.LocalDate.now());
-				    java.util.Date day = new java.util.Date();
-				    String strDateFormat = "HH:mm:ss a";
-				    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
-					String time = String.valueOf(sdf.format(day));
-									
-					// Create New Bid For Current Bid With New Price
-                    Bid currNewBid = new Bid(this.currBid, createBidID(), currBidUpperBidLimit, date, time );
-					
-                    // Add Curr's Losing Bid To SQL
-					addBidToSQL(currNewBid, this.itemID, date, time);	
-					setBidInactive(currNewBid.getBidID());
-                    
-					// Generate New Bid For Winning Bid For New Bid
-					date = String.valueOf(java.time.LocalDate.now());
-				    day = new java.util.Date();
-				    strDateFormat = "HH:mm:ss a";
-				    sdf = new java.text.SimpleDateFormat(strDateFormat);
-					time = String.valueOf(sdf.format(day));
-									
-					// Create New Bid For Current Bid With New Price
-                    Bid newBid = new Bid(this.newBid, createBidID(), currBidUpperBidLimit + this.incrementVal, date, time );
-					
-                    // Add Bid To SQL
-					addBidToSQL(newBid, this.itemID, date, time);
+	                    // Add Curr's Losing Bid To SQL
+						addBidToSQL(currNewBid, this.itemID, date, time);	
+						setBidInactive(currNewBid.getBidID());
+	                    
+						// Generate New Bid For Winning Bid For New Bid
+						date = String.valueOf(java.time.LocalDate.now());
+					    day = new java.util.Date();
+					    strDateFormat = "HH:mm:ss a";
+					    sdf = new java.text.SimpleDateFormat(strDateFormat);
+						time = String.valueOf(sdf.format(day));
+										
+						// Create New Bid For Current Bid With New Price
+	                    Bid newBid = new Bid(this.newBid, createBidID(), currBidUpperBidLimit + this.incrementVal, date, time );
+						
+	                    // Add Bid To SQL
+						addBidToSQL(newBid, this.itemID, date, time);
 
-				} else {		// Current bid's upper limit won
-					// New Bid loses
-					// Update Auction
-					String msg = "You have been outbid for item " + String.valueOf(this.itemID);
-					setWinState(newBidUpperBidLimit, this.currBid.getBuyerID(), this.newBid.getBidID(), this.newBid.getBuyerID(), msg);
-					
-					// Set Curr Bid Inactive To Create Bid That Beat The New Bid
-					setBidInactive(this.currBid.getBidID());
-					
-					// Generate New Bid For New Bid's Losing Bid To Maintain Track
-					String date = String.valueOf(java.time.LocalDate.now());
-				    java.util.Date day = new java.util.Date();
-				    String strDateFormat = "HH:mm:ss a";
-				    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
-					String time = String.valueOf(sdf.format(day));
-									
-					// Create New Bid For New Bid With New Price
-                    Bid newNewBid = new Bid(this.newBid, createBidID(), newBidUpperBidLimit, date, time );
-					
-                    // Add New Bid's Losing Bid To SQL
-					addBidToSQL(newNewBid, this.itemID, date, time);	
-					setBidInactive(newNewBid.getBidID());
-                    
-					// Generate New Bid For Winning Bid For New Bid
-					date = String.valueOf(java.time.LocalDate.now());
-				    day = new java.util.Date();
-				    strDateFormat = "HH:mm:ss a";
-				    sdf = new java.text.SimpleDateFormat(strDateFormat);
-					time = String.valueOf(sdf.format(day));
-									
-					// Create New Bid For Current Bid With New Price
-                    Bid newCurrBid = new Bid(this.currBid, createBidID(), newBidUpperBidLimit + this.incrementVal, date, time );
-					
-                    // Add Bid To SQL
-					addBidToSQL(newCurrBid, this.itemID, date, time);
-                    
-				}
+					} else {		// Current bid's upper limit won
+						// New Bid loses
+						// Update Auction
+						String msg = "You have been outbid for item " + String.valueOf(this.itemID);
+						setWinState(newBidUpperBidLimit, this.currBid.getBuyerID(), this.newBid.getBidID(), this.newBid.getBuyerID(), msg);
+						
+						// Set Curr Bid Inactive To Create Bid That Beat The New Bid
+						setBidInactive(this.currBid.getBidID());
+						
+						// Generate New Bid For New Bid's Losing Bid To Maintain Track
+						String date = String.valueOf(java.time.LocalDate.now());
+					    java.util.Date day = new java.util.Date();
+					    String strDateFormat = "HH:mm:ss a";
+					    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
+						String time = String.valueOf(sdf.format(day));
+										
+						// Create New Bid For New Bid With New Price
+	                    Bid newNewBid = new Bid(this.newBid, createBidID(), newBidUpperBidLimit, date, time );
+						
+	                    // Add New Bid's Losing Bid To SQL
+						addBidToSQL(newNewBid, this.itemID, date, time);	
+						setBidInactive(newNewBid.getBidID());
+	                    
+						// Generate New Bid For Winning Bid For New Bid
+						date = String.valueOf(java.time.LocalDate.now());
+					    day = new java.util.Date();
+					    strDateFormat = "HH:mm:ss a";
+					    sdf = new java.text.SimpleDateFormat(strDateFormat);
+						time = String.valueOf(sdf.format(day));
+										
+						// Create New Bid For Current Bid With New Price
+	                    Bid newCurrBid = new Bid(this.currBid, createBidID(), newBidUpperBidLimit + this.incrementVal, date, time );
+						
+	                    // Add Bid To SQL
+						addBidToSQL(newCurrBid, this.itemID, date, time);
+	                    
+					}
+				}		
 			}
+			
 			
 	    }
 

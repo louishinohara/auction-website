@@ -135,7 +135,7 @@
 					<td>Closing Time</td><td><input type="text" name="closingTime"></td>
 				</tr>
 				<tr>
-					<td>Closing Date</td><td><input type="text" name="closingDate"></td>
+					<td>Closing Date (YYYY-MM-DD) </td><td><input type="text" name="closingDate"></td>
 				</tr>
 				<tr>
 					<td>Minimum Price (hidden)</td><td><input type="text" name="minPrice"></td>
