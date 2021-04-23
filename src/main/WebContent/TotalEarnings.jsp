@@ -12,8 +12,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     </head>   
     <body>
+	    <br>
+	    Total Earnings
+	    <br>
        <%
-        	try {
+        	try 
+		{
           
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
@@ -26,11 +30,12 @@
 			if(result.next()) {
 				String sum = result.getString("Total Earnings");
 				out.println("Total Earnigs: " + sum);
-			} catch(Exception ex) {
-				out.print(ex);
-					}
+			} 
+		} catch(Exception ex) {
+			out.print(ex);
+		}
 					
-			<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
+		 <input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
 	%>
       
 </body>
