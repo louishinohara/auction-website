@@ -1,4 +1,4 @@
-%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="AuctionSite.*"%>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page language="java" import="com.dbproj.pkg.*"%>
@@ -26,9 +26,9 @@
                     ResultSet result = stmt.executeQuery(remove);
                     
                     if(result.next()) {
-                           out.println("Auction Deleted Successfully!");
+                           out.println("Account Deleted Successfully!");
                      } else {
-		     	   out.println("Auction Failed to Delete!");
+		     	   out.println("Account Failed to Delete!");
 		     }
             } catch(Exception e) {
                     out.print(e);
