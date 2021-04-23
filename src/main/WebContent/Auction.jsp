@@ -109,7 +109,7 @@
 		int itemID = Integer.parseInt(request.getParameter("itemID"));
 		boolean globalInAuction = true;
 		boolean notCurrentBidder = false;
-		boolean notSeller = false;
+		boolean notSeller = true;
 		double currentBidPriceGlobal = 0;
 		double currentIncrementPriceGlobal = 0;
 	%>
@@ -154,7 +154,6 @@
 				 item_year = rs.getInt("item_year");
 				 inAuction = rs.getBoolean("isOpen");
 				 globalInAuction = inAuction;
-				 notSeller = accountID == sellerID;
 				 img = null;
 				 
 				if (item_type.equals("car")){
@@ -167,6 +166,7 @@
 				
 				 auctionID = rs.getInt("auctionID");
 				 sellerID = rs.getInt("sellerID");
+				 notSeller = accountID == sellerID;
 				 buyerInLeadID = rs.getInt("buyerInLeaderID");
 				 notCurrentBidder = buyerInLeadID == accountID;
 				 initialPrice = rs.getFloat("initialPrice");
@@ -219,24 +219,29 @@
 			<div class="bid-container">
 				<div class="bid-container-left">
 		<%
-		if ( globalInAuction & !notCurrentBidder & !notSeller) {
-			currentIncrementPriceGlobal = incrementVal;
-			currentBidPriceGlobal = currentBidPrice;
-		%>
-			<h2> Create A Bid </h2>
-			<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
-			<form method="get">
-				<label for="itemID">Item ID:</label><br>
-			  	<input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
-			  	<label for="bidPrice">Bid Price:</label><br>
-			  	<input type="text" id="bidPrice" name="bidPrice" value=""><br>
-			  	<input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
-			  	<label for="bidUpperLimit">Bid Upper Limit:</label><br>
-			  	<input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
-			  	<input type="submit" value="Place Bid">
-			</form> 
-		<% 
+		if ( !notSeller ){
+		
+			if ( globalInAuction & !notCurrentBidder) {
+				currentIncrementPriceGlobal = incrementVal;
+				currentBidPriceGlobal = currentBidPrice;
+			%>
+				<h2> Create A Bid </h2>
+				<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
+				<form method="get">
+					<label for="itemID">Item ID:</label><br>
+				  	<input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
+				  	<label for="bidPrice">Bid Price:</label><br>
+				  	<input type="text" id="bidPrice" name="bidPrice" value=""><br>
+				  	<input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
+				  	<label for="bidUpperLimit">Bid Upper Limit:</label><br>
+				  	<input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
+				  	<input type="submit" value="Place Bid">
+				</form> 
+			<% 
+			}
+			
 		}
+		
 		%>
 		</div>
 			<h2> Bid History </h2>
@@ -370,6 +375,7 @@
 			}
 			
 		} catch (Exception e){
+			
 			System.err.println(e);
 	}	
 //=======================================================================================================================================================================================================================================
