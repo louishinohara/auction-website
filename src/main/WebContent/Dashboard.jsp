@@ -120,6 +120,13 @@
 				result.next();
 				
 				String accountType = result.getString("type");
+				
+				if(accountType.equals("admin")) {
+					response.sendRedirect("AdminPage.jsp?username"+username +"&pass="+pass);
+				}
+				if(accountType.equals("customerRep")) {
+					response.sendRedirect("CustomerRep.jsp?username"+username +"&pass="+pass);
+				}
 				%> 
 				
 				<div class="welcome-header">
