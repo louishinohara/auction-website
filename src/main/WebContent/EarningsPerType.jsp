@@ -10,7 +10,6 @@
 <html>
     	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-      		<title>Earning Per Type<title>
        </head>
        <body>
        <%
@@ -22,7 +21,7 @@
 				Statement stmt = con.createStatement();
 		
 				//craft query
-				String totalEarningsCar = "SELECT SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Car FROM items i inner join auction a WHERE i.item_id = a.itemID and i.item_type == "car" and a.isOPen == false";
+				String totalEarningsCar = "SELECT SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Car FROM items i inner join auction a WHERE i.item_id = a.itemID and i.item_type = "car" and a.isOPen = false";
 	
 				//Run the query against the database.
 				ResultSet result = stmt.executeQuery(totalEarningsCar);
@@ -30,6 +29,8 @@
 				if(result.next()) {
 					String sum = result.getString("Total Earnings Car");
 					out.println("Total Earnigs Car: " + sum);
+				} else {
+					out.println("No Earnings for Type Car");
 				}
 						
 				out.println(" ");
@@ -38,7 +39,7 @@
 				Statement stmt1 = con.createStatement();
 		
 				//craft query
-				String totalEarningsTruck = "SELECT SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Trucks FROM items i inner join auction a WHERE i.item_id = a.itemID and i.item_type == "truck" and a.isOPen == false";
+				String totalEarningsTruck = "SELECT SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Trucks FROM items i inner join auction a WHERE i.item_id = a.itemID and i.item_type = "truck" and a.isOPen = false";
 	
 				//Run the query against the database.
 				ResultSet result1 = stmt1.executeQuery(totalEarningsTruck);
@@ -46,6 +47,8 @@
 				if(result1.next()) {
 					String sum1 = result1.getString("Total Earnings Trucks");
 					out.println("Total Earnigs Trucks: " + sum);
+				} else {
+					out.println("No Earnings for Trucks");
 				}
 					
 				out.println(" ");
@@ -54,27 +57,27 @@
 				Statement stmt2 = con.createStatement();
 		
 				//craft query
-				String totalEarningsBike = "SELECT SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Bikes FROM items i inner join auction a WHERE i.item_id = a.itemID and i.item_type == "bike" and a.isOPen == false";
+				String totalEarningsBike = "SELECT SUM(a.currentBidPrice - a.initialBidPrice) as Total Earnings Bikes FROM items i inner join auction a WHERE i.item_id = a.itemID and i.item_type = "bike" and a.isOPen = false";
 	
 				//Run the query against the database.
 				ResultSet result2 = stmt2.executeQuery(totalEarningsBike);
 					
 				if(result2.next()) {
 					String sum2 = result2.getString("Total Earnings Bikes");
-					out.println("Total Earnigs Bikes: " + sum);
+					out.println("Total Earnings Bikes: " + sum);
+				} else {
+					out.println("No Earnings for Bikes");
 				}
 						
 				out.println(" ");
 				out.println(" ");
 					
 			} catch(Exception ex) {
-						out.print(ex);
-					}
-					
-			<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
-				
-				
-	%>
+					out.print(ex);
+				}				
+		%>
+	       
+	       <input type="button" value="Return" onclick=location.href="AdminPage.jsp">
       
 </body>
 </html>    
