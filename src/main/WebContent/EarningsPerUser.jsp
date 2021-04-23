@@ -10,11 +10,14 @@
 <html>
     <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Earnings Per User<title>
-    </head>   
+    </head>
     <body>
+	    	<br>
+		Earnings Per User
+		<br>
        <%
-        	try {
+        	try 
+		{
           
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
@@ -30,15 +33,13 @@
 				String sum = result.getString("Total Earnings");
 				string sellerId = result.getString("sellerID");
 				out.println(sellerID + " " + sum);
-				
-				} catch(Exception ex) {
-							out.print(ex);
-					}
-					
-			<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
-				
-				
+			}
+		} catch(Exception ex) 
+		{
+			out.print(ex);
+		}				
 	%>
+	    <input type="button" value="Return" onclick=location.href="AdminPage.jsp">
       
    </body>
 </html>    
