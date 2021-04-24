@@ -2,11 +2,10 @@ package com.AuctionSite;
 
 public class Truck extends Item {
 
-    private int miles;
 
-    public Truck( int itemID, String modelNumber, boolean inAuction, int year, String color, int miles){
-        super(itemID, "truck", modelNumber, inAuction, year, color);
-        this.miles = miles;
+
+    public Truck( int itemID, String modelNumber, int year, String color, String img, String location, String transmission, String mpg, String miles){
+        super(itemID, "truck", modelNumber, year, color, img, location, transmission, mpg, miles);
         
     }
 

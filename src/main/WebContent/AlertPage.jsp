@@ -4,7 +4,6 @@
 <%@ page language="java" import="com.dbproj.pkg.*"%>
     
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
@@ -51,14 +50,21 @@
 				}
 				
 				.sub-container {
-					display: 'flex';
-					flex-direction: 'column';
+					display: flex;
+					flex-direction: column;
 					padding-left: 20px;
+				}
+				.outer-container {
+					flex: 1;
 				}
 				
 				.sub-container-date-time {
-					display: 'flex';
-					flex-direction: 'column';
+					flex: 1;
+					
+				}
+				
+				.sub-container-message {
+					flex: 2;
 					margin-right: 12px;
 					margin-left: 12px;
 				}
@@ -67,14 +73,32 @@
 					marginTop: 8px;
 					marginBottom: 8px;
 					
-					}
+				}
+				
 				.fit-picture {
 				    width: 100px;
 				}
+				
 				.right-align-sub-container{
 					margin-left: auto;
 					margin-right: 20px;
 				}
+				
+				.header {
+					font-size: 14px;
+					font-weight: bold;
+				}
+				
+				.description {
+					font-size: 14px;
+					font-weight: normal;
+				}
+				
+				.shrink-img {
+					height: 90px;
+					width: 90px;
+				}
+				
 			</style> 
 
 		</head>
@@ -87,26 +111,23 @@
 	
 		<CENTER>     
 			<H2>Your Alerts</H2>
-			
+			<div> 
+				<img class="shrink-img" src="https://i.imgur.com/872aemL.png" />
+			</div>
 			<div class='container'>
 				<form  method="get">
-	
-					
 					<div class='align-left'>	
 						<H3>Sort By Viewed </H3>    
 							<select name="availability" >  
-								<option value="null"> All </option>       
-								<option value="Viewed"> Viewed </option>     
-								<option value="Not Viewed"> Not Viewed </option>         
+								<option value="null"> All </option>          
 							</select>    
 					</div>
 						
 					<div class='align-right'>	
 						<H3>Sort By Criteria</H3>    
 							<select name="sortBy" >  
-								<option value="null"> Any </option>         
-								<option value="lowest"> Lowest Bid Price </option> 
-								<option value="highest"> Highest Bid Price </option>          
+    							<option value="newest"> Newest Alert </option>        
+								<option value="oldest"> Oldest Alert </option> 
 							</select>    
 						<input type="submit" value="Submit"/> 
 					</div>
@@ -129,19 +150,18 @@
 			
 			if (  request.getParameter("availability") != null ){
 
-				String query = " select * from alert where buyerID =" + String.valueOf(id);
+				String query = " select * from alert where accountID =" + String.valueOf(id);
 				
 				String availabilityType = request.getParameter("availability");
 				
-				if ( availabilityType.equals("All") ) {					// Get requested item
-					// Do Nothing? 
-				} else if ( availabilityType.equals("Not Viewed") ){
-					query = query + " AND acknowledgedAlert = False";
-				} else if ( availabilityType.equals("Viewed") ) {
-					query = query + " AND acknowledgedAlert = True";
-				} 
+				String sortBy = request.getParameter("sortBy");
 				
-
+				if ( sortBy.equals("oldest") ) {
+					query += " ORDER BY date ASC, time ASC";
+				} else if ( sortBy.equals("newest") ){
+					query += " ORDER BY date DESC, time DESC";
+				}
+				
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
@@ -155,40 +175,42 @@
 					String message = rs.getString("message");
 					String date = rs.getString("date");
 					String time = rs.getString("time");
-					boolean acknowledgedAlert = rs.getBoolean("acknowledgedAlert");
 					%>
 						<li  > 
 								<div class='item-container' >	
-									<div class='sub-container'>
+									<div class="outer-container"> 
+										<div class='sub-container'>
+											<div class='description-container'>
+												<div class="header"> Alert ID: <a class="description"> <%= alertID %></a></div>
+											</div>
+											<div>
+												<div class="header"> Item ID: <a class="description"> <%= itemID %></a></div>
+											</div>
+										</div>			
+									 </div>
+									
+									
+									<div class="outer-container">
+										<div class='sub-container-date-time'>
+											<div class='description-container'>
+												<div class="header"> Date: <a class="description"> <%= date %></a></div>
+											</div>
+											<div>
+												<div class="header"> Time: <a class="description"> <%= time %></a></div>
+											</div>
+										</div>		
+									</div>
+									<div class='sub-container-message'>
 										<div class='description-container'>
-											Alert ID: <%= alertID %>
-										</div>
-										<div>
-											Item ID: <%= itemID %>
-										</div>
-										
-									</div>			
-
-									<div class='sub-container-date-time'>
-										<div class='description-container'>
-											Date: <%= date %>
-										</div>
-										<div>
-											Time:  <%= time %>
-										</div>
-									</div>		
-
-									<div class='sub-container'>
-										<div class='description-container'>
-											Message:  <%= message %> 
+											<div class="header"> Message: <a class="description"> <%= message %></a></div>
 										</div>
 									</div>		
 											
 									<div class='right-align-sub-container'> 
-										
 										<a href="Auction.jsp?itemID=<%=itemID%>"> <button>View Item</button></a> 
 									</div>
 									
+								</div>
 								</div>
 						</li>
 					<% 

@@ -3,7 +3,6 @@
     
  <%@ page import="java.io.*,java.util.*,java.sql.*,javax.servlet.ServletException.*,javax.servlet.annotation.WebServlet.*,javax.servlet.http.HttpServlet.*,javax.servlet.http.HttpServletRequest.*,javax.servlet.http.HttpServletResponse.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
@@ -23,20 +22,14 @@
 			
 			<style type="text/css">	 
 				.container { 
-					width:100% ; 
-					margin-bottom: 200px;
-					background-color: lightblue;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
 				}
-					
-				.align-left { 	
-					float: left ; 
-					width:50% ; 
+				.filter-items {
+					flex: 1;
 				}
-					
-				.align-right { 
-					float: right ;
-					width:50% ; 
-				 }
 				.item-container {
 					display: flex;
 					flex-direction: row;
@@ -47,76 +40,100 @@
 				  	padding: 8;
 				  	height: 100px;
 				}
+				
 				.sub-container {
 					display: 'flex';
 					flex-direction: 'column';
 					padding-left: 20px;
-					}
+				}
+				
+				.outer-sub-container {
+					flex: 1;
+				}
+				
 				.description-container {
 					marginTop: 8px;
 					marginBottom: 8px;
 					
-					}
+				}
+					
 				.fit-picture {
 				    width: 100px;
 				}
+				
 				.right-align-sub-container{
-					margin-left: auto;
-					margin-right: 20px;
+					margin-left: 50px ;
+				
 				}
+				
+				.button {
+					margin-top: 10px;
+				}
+				
+				.header {
+					font-size: 14px;
+					font-weight: bold;
+				}
+				
+				.description {
+					font-size: 14px;
+					font-weight: normal;
+				}
+				
+				.shrink-img {
+					height: 90px;
+					width: 90px;
+				}
+				
 			</style> 
-
 		</head>
 
 	<body BGCOLOR="#e6e6e6">
 	<%
 		String userName = (String) session.getAttribute("userName");
 		String pass = (String) session.getAttribute("pass");
-	
 	%>
 	<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
-	
 		<CENTER>     
-			<H2>Browse Items</H2>
-			
-			<div class='container'>
+			<H1>Browse Items</H1>
+			<div > 
+				<img class="shrink-img" src="https://i.imgur.com/ybxg3v2.png" />
+			</div>
 				<form  method="get">
-					<div  class='align-left' >		
+					<div class='container'>
+						<div class='filter-items'>	
+							<H3>Sort By Item Type </H3>    
+								<select name="itemType" >  
+									<option value="null"> All </option>       
+									<option value="bike"> Bike </option>     
+									<option value="truck"> Truck </option>         
+									<option value="car"> Car </option>  
+								</select>    
+						</div>
 						
-						  <H3>Browse Items</H3>
-						<input type="radio" id="all" name="itemType" value="All" checked >
-						  	<label for="male">All</label><br>
-						<input type="radio" id="bike" name="itemType" value="Bike">
-						  	<label for="bike">Bike</label><br>
-						<input type="radio" id="truck" name="itemType" value="Truck">
-						  	<label for="truck">Truck</label>
-					  	<input type="radio" id="car" name="itemType" value="Car">
-						  	<label for="car">Car</label>				
+						<div class='filter-items'>	
+							<H3>Sort Availability </H3>    
+								<select name="availability" >  
+									<option value="null"> All </option>       
+									<option value="true"> In Auction </option>     
+									<option value="false"> Not In Auction </option>         
+								</select>    
+						</div>
+						
+						<div class='filter-items'>	
+							<H3>Sort By Criteria</H3>    
+								<select name="sortBy" >  
+									<option value="null"> Any </option>         
+									<option value="lowest"> Lowest Bid Price </option> 
+									<option value="highest"> Highest Bid Price </option>          
+								</select>    
+						</div>
 					</div>
-		
-					<div class='align-right'>	
-						<H3>Sort Availability </H3>    
-							<select name="availability" >  
-								<option value="null"> All </option>       
-								<option value="true"> In Auction </option>     
-								<option value="false"> Not In Auction </option>         
-							</select>    
-					</div>
-					
-					<div class='align-right'>	
-						<H3>Sort By Criteria</H3>    
-							<select name="sortBy" >  
-								<option value="null"> Any </option>         
-								<option value="lowest"> Lowest Bid Price </option> 
-								<option value="highest"> Highest Bid Price </option>          
-							</select>    
+					<div class="button">
 						<input type="submit" value="Submit"/> 
 					</div>
 				</form> 
-			</div>
-
-
-
+			
 		</CENTER>
 	  
 	<% 
@@ -127,16 +144,16 @@
 
 			// Get All Items From Database
 			if ( request.getParameter("itemType") != null ){
-				String query = " select i.item_type, i.model_number, i.item_id, i.in_auction, i.item_year, i.color, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
+				String query = " select i.item_type, i.model, i.item_id, i.item_year, i.color, i.img, i.location, i.transmission, i.mpg, i.miles, a.isOpen, a.currentBidPrice from items i inner join auction a on i.item_id = a.itemID ";
 				String itemType = request.getParameter("itemType");
-												
+				
 				if ( itemType.equals("All") ) {					// Get requested item
 					// Do Nothing? 
-				} else if ( itemType.equals("Bike") ){
+				} else if ( itemType.equals("bike") ){
 					query = query + " WHERE i.item_type = 'bike' ";
-				} else if ( itemType.equals("Truck") ) {
+				} else if ( itemType.equals("truck") ) {
 					query = query + " WHERE i.item_type = 'truck' ";
-				} else if ( itemType.equals("Car") ){
+				} else if ( itemType.equals("car") ){
 					query = query + " WHERE i.item_type = 'car' ";
 				} 
 					
@@ -149,9 +166,9 @@
 					}
 					
 					if ( auctionCriteria.equals("true") ){
-						query = query + "i.in_auction = true";
+						query = query + "a.isOpen = true";
 					} 	else if ( auctionCriteria.equals("false") ){
-						query = query + "i.in_auction = false";
+						query = query + "a.isOpen = false";
 					}
 					
 				}
@@ -180,72 +197,89 @@
 				<%
 				while (rs.next()) {
 					String item_type = rs.getString("item_type");
-					String model_number = String.valueOf(rs.getInt("model_number"));
+					String model = rs.getString("model"); 
 					String color = rs.getString("color");
 					String currBid = "$" + String.valueOf(rs.getInt("currentBidPrice"));
 					int item_id = rs.getInt("item_id");
 					int itemID = rs.getInt("item_id");
 					int item_year = rs.getInt("item_year");
-					boolean inAuction = rs.getBoolean("in_auction");
-					String img = null;
-					if (item_type.equals("car")){
-						img = "https://i.imgur.com/DOVgfjE.png";
-					}	else if (item_type.equals("bike")){
-						img = "https://i.imgur.com/f0gjT3e.gif";
-					}	else if (item_type.equals("truck")){
-						img = "https://i.imgur.com/PPtmo88.jpg";
-					}
+					String location = rs.getString("location"); 
+					String transmission = rs.getString("transmission");
+					String mpg = rs.getString("mpg"); 
+					String miles = rs.getString("miles");
+
+					boolean inAuction = rs.getBoolean("isOpen");
+					String img = rs.getString("img");
+					if ( img.equals("null") ){
+						if (item_type.equals("car")){
+							img = "https://i.imgur.com/DOVgfjE.png";
+						}	else if (item_type.equals("bike")){
+							img = "https://i.imgur.com/f0gjT3e.gif";
+						}	else if (item_type.equals("truck")){
+							img = "https://i.imgur.com/PPtmo88.jpg";
+						}
+					} 
+					
 					
 					%>
 						<li  > 
 								<div class='item-container' >
-	     							<div class='sub-container'>
-											<img class="fit-picture"
-											     src=<%= img %>
-											     alt="">
-									</div>		
-									<div class='sub-container'>
-										<div class='description-container'>
-											Item ID: <%= String.valueOf(item_id) %>
-										</div>
-										<div class='description-container'>
-					
-										</div>
-									</div>			
-									<div class='sub-container'>
-										<div class='description-container'>
-											Model: <%= model_number %>
-										</div>
-										<div class='description-container'>
-											Color: <%= color %>
-											
+									<div class="outer-sub-container">
+		     							<div class='sub-container'>
+												<img class="fit-picture"
+												     src=<%= img %>
+												     alt="">
 										</div>
 									</div>
-
-									<div class='sub-container'>
-										<div class='description-container'>
-											Year: <%= String.valueOf(item_year) %>
-										</div>
-										<div class='description-container'>
-											In Auction: <%= inAuction %>
-										</div>
-									</div>
-									
-									<div class='right-align-sub-container'> 
-									
+									<div class="outer-sub-container">			
 										<div class='sub-container'>
 											<div class='description-container'>
-												Bid:  <%= currBid %> 
+												<div class="header"> Model: <a class="description"> <%= model %></a></div>
+											</div>
+											<div class='description-container'>
+												<div class="header"> Color: <a class="description"> <%= color %></a></div>
+											</div>
+											<div class='description-container'>
+												<div class="header"> Year: <a class="description"> <%= String.valueOf(item_year) %></a></div>
 											</div>
 										</div>
-										
-										
-										<div>										
-											<a href="Auction.jsp?itemID=<%=itemID%>"> <button type="submit">View</button></a> 
+									</div>	
+
+									<div class="outer-sub-container">
+										<div class='sub-container'>
+											<div class='description-container'>
+												<div class="header"> Transmission: <a class="description"> <%= transmission %></a></div>
+											</div>
+											<div class='description-container'>
+												<div class="header"> MPG: <a class="description"> <%= mpg %></a></div>
+											</div>
+											<div class='description-container'>
+												<div class="header"> Miles: <a class="description"> <%= miles %></a></div> 
+											</div>
 										</div>
-										
 									</div>
 									
+									<div class="outer-sub-container">
+										<div class='sub-container'>
+											<div class='description-container'>
+												<div class="header"> Item ID: <a class="description"> <%= String.valueOf(item_id) %></a></div> 
+											</div>
+											<div class='description-container'>
+												<div class="header"> Bid: <a class="description"> <%= currBid %></a></div>
+											</div>
+											<div class='description-container'>
+												<div class="header"> In Auction: <a class="description"> <%= inAuction %></a></div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="outer-sub-container">
+									 
+											<div class='right-align-sub-container'>										
+												<a href="Auction.jsp?itemID=<%=itemID%>"> <button type="submit">View Auction</button></a> 
+											</div>
+										 
+									</div>
 								</div>
 						</li>
 					<% 

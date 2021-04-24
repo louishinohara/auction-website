@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*,com.AuctionSite.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -51,8 +50,8 @@
 				
 				%>Created new customer account<%
 				
-				String insert = "INSERT INTO account(accountID, username, pass, type, logged_in)"
-						+ "VALUES (?, ?, ?, ?, ?)";
+				String insert = "INSERT INTO account(accountID, username, pass, type)"
+						+ "VALUES (?, ?, ?, ?)";
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 				PreparedStatement ps = con.prepareStatement(insert);
 
@@ -62,7 +61,6 @@
 				ps.setString(2, username);
 				ps.setString(3, pass);
 				ps.setString(4, "customer");
-				ps.setBoolean(5, false);
 				//Run the query against the DB
 				ps.executeUpdate();
 				%>

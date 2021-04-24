@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="com.dbproj.pkg.*,com.AuctionSite.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,7 +12,7 @@
 </head>
 
 
-<body>
+<body BGCOLOR="#e6e6e6">
 
 	<% ItemList itemList = new ItemList();
 		itemList = (ItemList) session.getAttribute("itemList"); 
@@ -26,19 +25,31 @@
 		<form method="get">
 			<table>
 				<tr>    
-					<td>Item Type</td><td><input type="text" name="type"></td>
+					<td>Item Type: (car/truck/bike) </td><td><input type="text" name="type"></td>
 				</tr>
 				<tr>
-					<td>Model Number</td><td><input type="text" name="model"></td>
+					<td>Model: </td><td><input type="text" name="model"></td>
 				</tr>
 				<tr>
-					<td>Miles (car or truck only)</td><td><input type="text" name="miles"></td>
+					<td>Miles: </td><td><input type="text" name="miles"></td>
 				</tr>
 				<tr>
-					<td>Year</td><td><input type="text" name="year"></td>
+					<td>Year: </td><td><input type="text" name="year"></td>
 				</tr>
 				<tr>
-					<td>Color</td><td><input type="text" name="color"></td>
+					<td>Color: </td><td><input type="text" name="color"></td>
+				</tr>
+				<tr>
+					<td>Image (Optional): </td><td><input type="text" name="img" value="null"></td>
+				</tr>
+				<tr>
+					<td>Location: </td><td><input type="text" name="location" ></td>
+				</tr>
+				<tr>
+					<td>Transmission</td><td><input type="text" name="transmission" ></td>
+				</tr>
+				<tr>
+					<td>MPG: </td><td><input type="text" name="mpg" ></td>
 				</tr>
 			</table>
 			<input type="submit" value="Enter">
@@ -50,38 +61,42 @@
 		if( (request.getParameter("type") != null) && (request.getParameter("model") != null) && (request.getParameter("year") != null) && (request.getParameter("color") != null)){
 				
 				String itemType = request.getParameter("type");
-				String model = request.getParameter("model");
-				
-				String year = request.getParameter("year");
-				String color = request.getParameter("color");
+
+
 				Item itemName = null;
 				 
 				if(!(request.getParameter("miles").equals("")) || (itemType.equals("bike") || itemType.equals("bicycle"))){
 				
 				itemType = itemType.toLowerCase();
-				
+				String miles = request.getParameter("miles");
+				String model = request.getParameter("model");
+				String year = request.getParameter("year");
+				String color = request.getParameter("color");
+				String img = request.getParameter("img");
+				String location = request.getParameter("location");
+				String transmission = request.getParameter("transmission");
+				String mpg = request.getParameter("mpg");
 					if(itemType.equals("bike") || itemType.equals("bicycle")){
-						
 						int id = Item.generateItemID();
-						Bike newBike = new Bike(id, model, false, Integer.parseInt(year), color);
+						Bike newBike = new Bike(id, model, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
 						%> Bike created with id: "<%=id %>" <br><%
 					   itemList.addItemToTheList(newBike);
 						
 					   //newBike.addToSQL();
 					  itemName = newBike;
 					}else if(itemType.equals("car")){ 
-						String miles = request.getParameter("miles");
+						
 						int id = Item.generateItemID();
 						
-						Car newCar = new Car(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
+						Car newCar = new Car(id, model, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
 						%> Car created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newCar);
 						//newCar.addToSQL();
 						itemName = newCar;
 					}else if(itemType.equals("truck")){
-						String miles = request.getParameter("miles");
+						
 						int id = Item.generateItemID();
-						Truck newTruck = new Truck(id, model, false, Integer.parseInt(year), color, Integer.parseInt(miles));
+						Truck newTruck = new Truck(id, model, Integer.parseInt(year), color, img, location, transmission, mpg, miles);
 						%> Truck created with id: "<%=id %>" <br><%
 						itemList.addItemToTheList(newTruck);
 						//newTruck.addToSQL();
@@ -96,16 +111,19 @@
 						Connection conn = db.getConnection();
 
 						try {
-							String insert = "INSERT INTO items(item_type, model_number, item_id, in_auction, item_year, color)"
-									+ "VALUES (?, ?, ?, ?,?,?)";
+							String insert = "INSERT INTO items(item_type, model, item_id, item_year, color, img,location, transmission, mpg, miles)"
+									+ "VALUES (?, ?, ?, ?,?,?,?,?,?,?)";
 							PreparedStatement pss = conn.prepareStatement(insert);
 							pss.setString(1, itemName.getItemType());
-							pss.setInt(2, Integer.parseInt(itemName.getModelNumber()));
+							pss.setString(2, itemName.getModelNumber());
 							pss.setInt(3, itemName.getItemID());
-							pss.setBoolean(4, false);
-							pss.setInt(5, itemName.getYear());
-							pss.setString(6, itemName.getColor());
-							
+							pss.setInt(4, itemName.getYear());
+							pss.setString(5, itemName.getColor());
+							pss.setString(6, itemName.getImg());
+							pss.setString(7, itemName.getLocation());
+							pss.setString(8, itemName.getTransmission());
+							pss.setString(9, itemName.getMPG());
+							pss.setString(10, itemName.getMiles());
 							//Run the query against the DB
 							pss.executeUpdate();
 						} catch (Exception e){
