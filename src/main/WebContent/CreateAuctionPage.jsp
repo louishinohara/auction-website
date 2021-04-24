@@ -12,7 +12,7 @@
 </head>
 
 
-<body>
+<body BGCOLOR="#e6e6e6">
 
 	<% ItemList itemList = new ItemList();
 		itemList = (ItemList) session.getAttribute("itemList"); 
