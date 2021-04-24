@@ -50,14 +50,21 @@
 				}
 				
 				.sub-container {
-					display: 'flex';
-					flex-direction: 'column';
+					display: flex;
+					flex-direction: column;
 					padding-left: 20px;
+				}
+				.outer-container {
+					flex: 1;
 				}
 				
 				.sub-container-date-time {
-					display: 'flex';
-					flex-direction: 'column';
+					flex: 1;
+					
+				}
+				
+				.sub-container-message {
+					flex: 2;
 					margin-right: 12px;
 					margin-left: 12px;
 				}
@@ -66,10 +73,12 @@
 					marginTop: 8px;
 					marginBottom: 8px;
 					
-					}
+				}
+				
 				.fit-picture {
 				    width: 100px;
 				}
+				
 				.right-align-sub-container{
 					margin-left: auto;
 					margin-right: 20px;
@@ -100,8 +109,6 @@
 			
 			<div class='container'>
 				<form  method="get">
-	
-					
 					<div class='align-left'>	
 						<H3>Sort By Viewed </H3>    
 							<select name="availability" >  
@@ -165,36 +172,39 @@
 					%>
 						<li  > 
 								<div class='item-container' >	
-									<div class='sub-container'>
+									<div class="outer-container"> 
+										<div class='sub-container'>
+											<div class='description-container'>
+												<div class="header"> Alert ID: <a class="description"> <%= alertID %></a></div>
+											</div>
+											<div>
+												<div class="header"> Item ID: <a class="description"> <%= itemID %></a></div>
+											</div>
+										</div>			
+									 </div>
+									
+									
+									<div class="outer-container">
+										<div class='sub-container-date-time'>
+											<div class='description-container'>
+												<div class="header"> Date: <a class="description"> <%= date %></a></div>
+											</div>
+											<div>
+												<div class="header"> Time: <a class="description"> <%= time %></a></div>
+											</div>
+										</div>		
+									</div>
+									<div class='sub-container-message'>
 										<div class='description-container'>
-											Alert ID: <%= alertID %>
-										</div>
-										<div>
-											Item ID: <%= itemID %>
-										</div>
-										
-									</div>			
-
-									<div class='sub-container-date-time'>
-										<div class='description-container'>
-											Date: <%= date %>
-										</div>
-										<div>
-											Time:  <%= time %>
-										</div>
-									</div>		
-
-									<div class='sub-container'>
-										<div class='description-container'>
-											Message:  <%= message %> 
+											<div class="header"> Message: <a class="description"> <%= message %></a></div>
 										</div>
 									</div>		
 											
 									<div class='right-align-sub-container'> 
-										
 										<a href="Auction.jsp?itemID=<%=itemID%>"> <button>View Item</button></a> 
 									</div>
 									
+								</div>
 								</div>
 						</li>
 					<% 

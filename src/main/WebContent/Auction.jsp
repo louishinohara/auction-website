@@ -57,37 +57,34 @@
 				}
 				
 				.bid-container {
-					display: 'flex';
-					flex-direction: 'row';
-					align-items: center;
+					display: flex;
+					flex-direction: row;
 				}
 				.bid-form-container {
 					background-color: #d3d3d3;
-					width: 50%;
+					align-items: center;
+					justify: center;
 					padding-left: 4px;
 					padding-right: 4px;
 					padding-bottom: 4px;
 					border-radius: 8px;
 				}
 				.bid-container-left {
-					float: left;
-					width: 40%;
+					flex: 1;
 					margin-left: 24px;
+					height: 500px; 
 				}
 				
 				.bid-container-right {
-					float: right;
+					flex: 1;
 					height: 500px; 
-					width: 50%;
 					overflow: hidden; 
 					overflow-y:scroll; 
 				}
 				
 				.bid-history-item {
-					display: 'flex';
-					flex-direction: 'row';
-					align-items: center;
-					height: 100px;
+					display: flex;
+					flex-direction: row;
 					background-color: #ffe5e5;
 					padding: 8px;
 					margin-bottom: 8px;
@@ -110,6 +107,10 @@
 				.description {
 					font-size: 14px;
 					font-weight: normal;
+				}
+				
+				.warning {
+				color: red !important;
 				}
 				
 			</style> 
@@ -216,30 +217,28 @@
 				<div class="sub-container-out">
 					<div class='sub-container'>
 						<div class='description-container'>
-							Item ID: <%= String.valueOf(item_id) %>
-						</div>
-						<div class='description-container'>
-							Seller ID:  <%= String.valueOf(sellerID) %>
+							<div class="header"> Seller ID: <a class="description"> <%= String.valueOf(sellerID) %></a></div>
 						</div>	
 						<div class='description-container'>
-							Current Bid:  $<%= String.valueOf(currentBidPrice) %>
+							<div class="header"> Current Bid: <a class="description"> $<%= String.valueOf(currentBidPrice) %></a></div>
 						</div>
 						<div class='description-container'>
-							Current Bidder:  <%= String.valueOf(buyerInLeadID) %>
+							<div class="header"> Current Bidder: <a class="description"> <%= String.valueOf(buyerInLeadID) %></a></div>
 						</div>
-						<div class='description-container'>
-							Close Date:  <%= closeDate %>
-						</div>
+
 					</div>		
 				</div>
 					
 				<div class="sub-container-out">
 					<div class='sub-container'>
 						<div class='description-container'>
-							Model: <%= model %>
+							<div class="header"> Model: <a class="description"> <%= model %></a></div>
 						</div>
 						<div class='description-container'>
-							Color: <%= color %>
+							<div class="header"> Color: <a class="description"> <%= color %></a></div>
+						</div>
+						<div class='description-container'>
+							<div class="header"> Year: <a class="description"> <%=  String.valueOf(item_year) %></a></div>
 						</div>
 					</div>
 				</div>
@@ -247,31 +246,32 @@
 				<div class="sub-container-out">
 					<div class='sub-container'>
 						<div class='description-container'>
-							Year: <%= String.valueOf(item_year) %>
+							<div class="header"> Location: <a class="description"> <%= location %></a></div>
 						</div>
 						<div class='description-container'>
-							In Auction: <%= inAuction %>
+							<div class="header"> Transmission: <a class="description"> <%= transmission %></a></div>
+						</div>
+						<div class='description-container'>
+							<div class="header"> MPG: <a class="description"> <%= mpg %></a></div>
+						</div>
+						<div class='description-container'>
+							<div class="header"> Miles: <a class="description"> <%= miles %></a></div>
 						</div>
 					</div>
 				</div>
 
 				<div class="sub-container-out">
-					<div class='sub-container'>
+					<div class='sub-container'>						
 						<div class='description-container'>
-							Location: <%= location %>
+							<div class="header"> In Auction: <a class="description"> <%= inAuction %></a></div>
 						</div>
+							
 						<div class='description-container'>
-							Transmission: <%= transmission %>
-						</div>
-						<div class='description-container'>
-							MPG: <%= mpg %>
-						</div>
-						<div class='description-container'>
-							Miles: <%= miles %>
+							<div class="header"> Close Date: <a class="description"> <%= closeDate %></a></div>
 						</div>
 					</div>
 				</div>
-			
+				
 			</div>
 			
 		<div class="bid-container">
@@ -285,17 +285,19 @@
 			%>
 				<h2> Create A Bid </h2>
 				<div class="bid-form-container">
-				<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
-					<form method="get">
-						<label for="itemID">Item ID:</label><br>
-					  	<input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
-					  	<label for="bidPrice">Bid Price:</label><br>
-					  	<input type="text" id="bidPrice" name="bidPrice" value=""><br>
-					  	<input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
-					  	<label for="bidUpperLimit">Bid Upper Limit:</label><br>
-					  	<input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
-					  	<input type="submit" value="Place Bid">
-					</form>
+					<div>
+					<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
+						<form method="get">
+							<label for="itemID">Item ID:</label><br>
+						  	<input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
+						  	<label for="bidPrice">Bid Price:</label><br>
+						  	<input type="text" id="bidPrice" name="bidPrice" value=""><br>
+						  	<input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
+						  	<label for="bidUpperLimit">Bid Upper Limit:</label><br>
+						  	<input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
+						  	<input type="submit" value="Place Bid">
+						</form>
+					</div>
 				</div> 
 			<% 
 			}
@@ -304,9 +306,9 @@
 		
 		%>
 		</div>
-			<h2> Bid History List </h2>
+			
 			<div class="bid-container-right">
-		       
+		       <h2> Bid History List </h2>
 		<%
 	        try {
 	        	// Get Bid History Information
@@ -328,10 +330,10 @@
 								<div class="bid-history-item-container">
 									<div class="bid-history-item-sub-container">
 										<div>
-											<div class="header"> Bid ID: <a class="description"> <%= bidID %></a></div>
+											<div class="header"> Buyer ID: <a class="description"> <%= buyerID %></a></div>
 										</div>
 										<div>
-											<div class="header"> Buyer ID: <a class="description"> <%= buyerID %></a></div>
+											<div class="header"> Bid Price: <a class="description"> $<%= bidPrice %></a></div>
 										</div>
 									</div>
 								</div>
@@ -339,7 +341,7 @@
 								<div class="bid-history-item-container">
 									<div class="bid-history-item-sub-container">
 										<div>
-											<div class="header"> Bid Price: <a class="description"> <%= bidPrice %></a></div>
+											<div class="header"> Bid ID: <a class="description"> <%= bidID %></a></div>
 										</div>
 										<div>
 											<div class="header"> Date: <a class="description"> <%= date %></a></div>
@@ -371,6 +373,7 @@
 	}
 	%>
 
+<br/>
 	<%
 	// Form For The Bidder To Place Bid 
 		try {
@@ -415,7 +418,7 @@
 					if ( bidPrice < (currentBidPriceGlobal + currentIncrementPriceGlobal )){
 						%>
 						<div>
-							<h3>
+							<h3 class="warning">
 							Bid Is Less Than Current Ask Price. Try Again!
 							</h3>
 						</div>
@@ -429,7 +432,7 @@
 						if (automaticBidBool & upperBidLimit == 0 ) {
 							%>
 								<div>
-									<h3>
+									<h3 class="warning">
 									Add Upper Limit For Automatic Bid
 									</h3>
 								</div>
