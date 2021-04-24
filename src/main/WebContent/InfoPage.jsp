@@ -72,7 +72,7 @@
 			// ============================ UN COMMENT HERE TO END AUCTIONS TO SELECTED DATE =====================
 			// ===================================================================================================
 			// INSERT DATE HERE TO SIMULATE CLOSING AUCTIONS UP TO THIS DATE
-			// String todayDate = "2021-04-22";
+			//String todayDate = "2021-04-24";
 			//AutoAuction autoAuction= new AutoAuction(todayDate);
 			//autoAuction.findAuctionsToClose();
 		%>
@@ -218,7 +218,7 @@
 					     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
 						String time = String.valueOf(sdf.format(day));
 						String insert = "INSERT INTO alert(alertID, itemID, accountID, date, time, message)"
-								+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+								+ "VALUES (?, ?, ?, ?, ?, ?)";
 						//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 						PreparedStatement ps = con.prepareStatement(insert);
 						//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself

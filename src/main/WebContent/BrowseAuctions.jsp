@@ -65,6 +65,7 @@
 					
 				.outer-sub-container {
 					flex: 1;
+					float: left;
 				}
 				
 				.view-button {
