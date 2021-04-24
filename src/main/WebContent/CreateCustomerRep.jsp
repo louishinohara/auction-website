@@ -29,5 +29,7 @@
 					<input type="submit" value="Register">
 		</form>
 	<br>
+	<br>
+	<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
 	</body>
 </html>
