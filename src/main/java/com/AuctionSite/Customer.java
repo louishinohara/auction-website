@@ -44,15 +44,6 @@ public class Customer extends Person {
         }
         return null;
     }
-
-    /**
-    public int getBuyerID(){
-        return this.buyerID;
-    }
-
-    public int getSellerID(){
-        return this.sellerID;
-    }**/
     
     public static int generateCustomerID() {
     	ApplicationDB db = new ApplicationDB();	

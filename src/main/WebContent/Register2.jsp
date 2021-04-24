@@ -34,16 +34,14 @@
 		ResultSet result = stmt.executeQuery(select);
 %>
 		
-		<h3><%
+		<%
 			result.next();
 			if(result.getString("count(*)").equals("1")){
 				%>Username or password already taken
 				<br>
-				
-				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Back" onclick=location.href="InfoPage.jsp">
-				
-				</form>
+				<br>
+	
+				<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
 				
 				
 				<%
@@ -61,27 +59,21 @@
 				ps.setInt(1, customerID);
 				ps.setString(2, username);
 				ps.setString(3, pass);
-				ps.setString(4, "customer");
+				ps.setString(4, "customerRep");
 				ps.setBoolean(5, false);
 				//Run the query against the DB
 				ps.executeUpdate();
 				%>
 				
 				<br>
+				<br>
 				
-				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Back" onclick=location.href="InfoPage.jsp">
-				
-				</form>
+				<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
 				
 				<%
 			}else{
 				%>Registration Failed
-				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Back" onclick=location.href="InfoPage.jsp">
-				
-				</form>
-		
+				<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
 			<%
 			}
 	} catch (Exception ex) {

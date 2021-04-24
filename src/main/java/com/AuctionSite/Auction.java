@@ -63,10 +63,10 @@ public class Auction {
         this.isOpen = false;
         getCurrentLead();
         if (this.reservePrice < this.currentBidPrice){
-            sendAlertToCustomer();
+            //sendAlertToCustomer();
             // Reserve met so item was sold
         } else {
-            sendAlertToCustomer();
+            //sendAlertToCustomer();
             // Reserve not met so item was not sold
         }
     }

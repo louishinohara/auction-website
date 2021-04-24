@@ -74,7 +74,7 @@
 				<form method="get" action="Dashboard.jsp">
 			<table>
 				<tr>    
-					<td>User name</td><td><input type="text" name="username"></td>
+					<td>Username</td><td><input type="text" name="username"></td>
 				</tr>
 				<tr>
 					<td>Password</td><td><input type="text" name="pass"></td>

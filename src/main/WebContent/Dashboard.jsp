@@ -4,10 +4,6 @@
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 
-
-
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -99,7 +95,7 @@
 		String username = request.getParameter("username");
 		String pass = request.getParameter("pass");
 		
-		session.setAttribute("userName", username);
+		session.setAttribute("username", username);
 		session.setAttribute("pass", pass);
 		//craft query
 		String select = "SELECT count(*) FROM account WHERE username=\"" + username + "\" and pass=\"" + pass + "\";";
@@ -121,6 +117,13 @@
 				result.next();
 				
 				String accountType = result.getString("type");
+				
+				if(accountType.equals("admin")) {
+					response.sendRedirect("AdminPage.jsp?username="+username +"&pass="+pass);
+				}
+				if(accountType.equals("customerRep")) {
+					response.sendRedirect("CustomerRep.jsp?username="+username +"&pass="+pass);
+				}
 				%> 
 				
 				<div class="welcome-header">
@@ -194,7 +197,7 @@
 				</div>
 				
 				<div class="welcome-header">
-					<div class="option">
+					<div class="option" method ="get" action="InfoPage.jsp" style="cursor: pointer;"onclick=location.href="ForumPage.jsp?username=<%=username%>&pass=<%=pass%>">
 						<h2>
 							Need To Contact Customer Service?
 						</h2>
@@ -203,7 +206,7 @@
 				
 				
 					<div class="action-container">
-						<div>
+						<div class="option" method ="get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="ForumPage.jsp?username=<%=username%>&pass=<%=pass%>">
 							<h3 class="heading-text"> Contact Customer Service </h3>
 						</div>
 						<div class="img-container"> 

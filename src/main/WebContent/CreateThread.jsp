@@ -8,27 +8,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-
-
-<body>
+<title>Create Forum</title>
+<head>
+		<style type="text/css">
+		.body {
+			background-color: #ffe5e5;
+		}
+		</style>
+		<title>Post Thread</title>
+	</head>
+	<body class ="body">
 	<%
 	try {
 		
 		//Get the database connection
 		ApplicationDB db = new ApplicationDB();	
 		Connection con = db.getConnection();
+		
+		String username = request.getParameter("username");
+		String pass = request.getParameter("pass");
+	
+		session.setAttribute("username", username);
+		session.setAttribute("pass", pass);
 
 		//Create a SQL statement
 		Statement stmt = con.createStatement();
 
 		//Get parameters from the HTML form at the InfoPage.jsp
-		String username = request.getParameter("username");
-		String pass = request.getParameter("pass");
+		String ThreadTitle = request.getParameter("ThreadTitle");
 		
 		//craft query
-		String select = "SELECT count(*) FROM account WHERE username=\"" + username + "\" or pass=\"" + pass + "\";";
+		String select = "SELECT count(*) FROM threads WHERE threadTitle="+"'"+ThreadTitle+"'";
 
 		//Run the query against the database.
 		ResultSet result = stmt.executeQuery(select);
@@ -37,32 +47,31 @@
 		<h3><%
 			result.next();
 			if(result.getString("count(*)").equals("1")){
-				%>Username or password already taken
+				%>Title already taken
 				<br>
 				
 				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Back" onclick=location.href="InfoPage.jsp">
-				
-				</form>
+					<input type="button" value="Back" onclick=location.href="AddThread.jsp?username=<%=username%>&pass=<%=pass%>">				
+					</form>
 				
 				
 				<%
-			}else if(username.length() < 30 && pass.length() < 30){
+			}else if(ThreadTitle.length() < 300){
 				
-				%>Created new customer account<%
+				%>Created new Thread<br><% 
 				
-				String insert = "INSERT INTO account(accountID, username, pass, type, logged_in)"
-						+ "VALUES (?, ?, ?, ?, ?)";
+				String insert = "INSERT INTO threads(threadID, threadTitle,threadMadeBy, isOpen)"
+						+ "VALUES (?, ?,?,?)";
 				//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 				PreparedStatement ps = con.prepareStatement(insert);
 
 				//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
-				int customerID = Customer.generateCustomerID();
-				ps.setInt(1, customerID);
-				ps.setString(2, username);
-				ps.setString(3, pass);
-				ps.setString(4, "customer");
-				ps.setBoolean(5, false);
+				int ThreadID = ThreadForum.generateThreadID();
+				ps.setInt(1, ThreadID);
+				ps.setString(2, ThreadTitle);
+				ps.setString(3,username);
+				ps.setBoolean(4, true);
+				
 				//Run the query against the DB
 				ps.executeUpdate();
 				%>
@@ -70,15 +79,14 @@
 				<br>
 				
 				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Back" onclick=location.href="InfoPage.jsp">
-				
+					<input type="button" value="Back" onclick=location.href="ForumPage.jsp?username=<%=username%>&pass=<%=pass%>">
 				</form>
 				
 				<%
 			}else{
-				%>Registration Failed
+				%>Creation Failed
 				<form method = "get" action="InfoPage.jsp">
-					<input type="button" value="Back" onclick=location.href="InfoPage.jsp">
+					<input type="button" value="Back" onclick=location.href="Forum.jsp?username=<%=username%>&pass=<%=pass%>">
 				
 				</form>
 		
@@ -93,7 +101,4 @@
 	
 %>
 </body>
-
-
-
 </html>
