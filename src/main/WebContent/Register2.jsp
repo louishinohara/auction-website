@@ -26,24 +26,22 @@
 		//Get parameters from the HTML form at the InfoPage.jsp
 		String username = request.getParameter("username");
 		String pass = request.getParameter("pass");
-		String type = request.getParameter("type");
 		
 		//craft query
 		String select = "SELECT count(*) FROM account WHERE username=\"" + username + "\" or pass=\"" + pass + "\";";
 
 		//Run the query against the database.
 		ResultSet result = stmt.executeQuery(select);
-		
 %>
 		
-		<h3><%
+		<%
 			result.next();
 			if(result.getString("count(*)").equals("1")){
 				%>Username or password already taken
 				<br>
 				<br>
 	
-					<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
+				<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
 				
 				
 				<%
@@ -61,7 +59,7 @@
 				ps.setInt(1, customerID);
 				ps.setString(2, username);
 				ps.setString(3, pass);
-				ps.setString(4, type);
+				ps.setString(4, "customerRep");
 				ps.setBoolean(5, false);
 				//Run the query against the DB
 				ps.executeUpdate();
@@ -87,7 +85,4 @@
 	
 %>
 </body>
-
-
-
 </html>
