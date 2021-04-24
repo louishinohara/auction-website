@@ -2,8 +2,12 @@ package com.AuctionSite;
 
 public class Car extends Item {
     
-    public Car( int itemID, String modelNumber, int year, String color, String img, String location, String transmission, String mpg, String miles){
-        super(itemID, "car",modelNumber, year, color,  img, location, transmission, mpg, miles);
+    private int miles;
+
+
+    public Car( int itemID, String modelNumber, boolean inAuction, int year, String color, int miles){
+        super(itemID, "car",modelNumber, inAuction, year, color);
+        this.miles = miles;
     }
 
     @Override

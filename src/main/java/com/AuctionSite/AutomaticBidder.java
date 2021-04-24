@@ -380,17 +380,18 @@ public class AutomaticBidder {
 		     String strDateFormat = "HH:mm:ss a";
 		     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(strDateFormat);
 			String time = String.valueOf(sdf.format(day));
-			String insert = "INSERT INTO alert(alertID, itemID, accountID, date, time, message)"
-					+ "VALUES (?, ?, ?, ?, ?, ?)";
+			String insert = "INSERT INTO alert(alertID, itemID, buyerID, acknowledgedAlert, date, time, message)"
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 			PreparedStatement ps = con.prepareStatement(insert);
 			//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
 			ps.setInt(1, getAlertID());
 			ps.setInt(2, this.itemID);
 			ps.setInt(3, ID);
-			ps.setString(4, date);
-			ps.setString(5, time);
-			ps.setString(6,  msg );
+			ps.setBoolean(4, false);
+			ps.setString(5, date);
+			ps.setString(6, time);
+			ps.setString(7,  msg );
 			ps.executeUpdate();
 			
 		} catch (Exception e){
