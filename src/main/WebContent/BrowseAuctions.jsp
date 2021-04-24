@@ -68,7 +68,7 @@
 				}
 				
 				.view-button {
-					margin-left: 16px;
+					margin-left: 10px;
 				}
 				
 				.fit-picture {

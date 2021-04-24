@@ -74,6 +74,17 @@
 					margin-left: auto;
 					margin-right: 20px;
 				}
+				
+				.header {
+					font-size: 14px;
+					font-weight: bold;
+				}
+				
+				.description {
+					font-size: 14px;
+					font-weight: normal;
+				}
+				
 			</style> 
 
 		</head>

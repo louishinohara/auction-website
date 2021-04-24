@@ -11,7 +11,7 @@
 	<html>
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-			<title>View Items Page</title>
+			<title>View Auction Page</title>
 			<style>
 				ol {
 				  background: #9b9b9b;
@@ -37,9 +37,11 @@
 				
 				.container { 
 					width:100% ; 
-					background-color: lightblue;
 				}
 				
+				.sub-container-out {
+					flex: 1;
+				}
 				.sub-container {
 					display: 'flex';
 					flex-direction: 'column';
@@ -59,10 +61,18 @@
 					flex-direction: 'row';
 					align-items: center;
 				}
-				
+				.bid-form-container {
+					background-color: #d3d3d3;
+					width: 50%;
+					padding-left: 4px;
+					padding-right: 4px;
+					padding-bottom: 4px;
+					border-radius: 8px;
+				}
 				.bid-container-left {
 					float: left;
-					width: 50%;
+					width: 40%;
+					margin-left: 24px;
 				}
 				
 				.bid-container-right {
@@ -76,25 +86,32 @@
 				.bid-history-item {
 					display: 'flex';
 					flex-direction: 'row';
-					height: 55px;
+					align-items: center;
+					height: 100px;
 					background-color: #ffe5e5;
 					padding: 8px;
 					margin-bottom: 8px;
 				}
-				
-				.bid-history-item-sub-container-left {
-					float: left;
-					display: 'flex';
-					flex-direction: 'column';
-					width: 50;
+				.bid-history-item-container {
+					flex: 1;
 				}
 				
-				.bid-history-item-sub-container-right {
-					float: right;
+				.bid-history-item-sub-container {
 					display: 'flex';
 					flex-direction: 'column';
-					width: 50;
+					padding-left: 20px;
 				}
+				
+				.header {
+					font-size: 16px;
+					font-weight: bold;
+				}
+				
+				.description {
+					font-size: 14px;
+					font-weight: normal;
+				}
+				
 			</style> 
 		</head>
 
@@ -114,7 +131,7 @@
 	%>
 		<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
 		<CENTER>     
-			<H2>Item <%=itemID%></H2>			
+			<H2>Auction For Item # <%=itemID%></H2>			
 		</CENTER>
 	<% 
 		try {
@@ -190,65 +207,75 @@
 			}	// Create the Pane On Top Which Displays The Items And It's Details
 	%>	
 			<div class='item-container'>
-					
-				<div class='sub-container'>
-					<div class='description-container'>
-						Item ID: <%= String.valueOf(item_id) %>
-					</div>
-					<div class='description-container'>
-						Seller ID:  <%= String.valueOf(sellerID) %>
+				
+				<div class="sub-container-out">
+					<div class='right-align-sub-container'>
+						<img class="fit-picture" src= <%= img %> alt="" >
 					</div>	
-					<div class='description-container'>
-						Current Bid:  $<%= String.valueOf(currentBidPrice) %>
-					</div>
-					<div class='description-container'>
-						Current Bidder:  <%= String.valueOf(buyerInLeadID) %>
-					</div>
-					<div class='description-container'>
-						Close Date:  <%= closeDate %>
-					</div>
-				</div>		
+				</div>
+				<div class="sub-container-out">
+					<div class='sub-container'>
+						<div class='description-container'>
+							Item ID: <%= String.valueOf(item_id) %>
+						</div>
+						<div class='description-container'>
+							Seller ID:  <%= String.valueOf(sellerID) %>
+						</div>	
+						<div class='description-container'>
+							Current Bid:  $<%= String.valueOf(currentBidPrice) %>
+						</div>
+						<div class='description-container'>
+							Current Bidder:  <%= String.valueOf(buyerInLeadID) %>
+						</div>
+						<div class='description-container'>
+							Close Date:  <%= closeDate %>
+						</div>
+					</div>		
+				</div>
 					
-				<div class='sub-container'>
-					<div class='description-container'>
-						Model: <%= model %>
-					</div>
-					<div class='description-container'>
-						Color: <%= color %>
-					</div>
-				</div>
-
-				<div class='sub-container'>
-					<div class='description-container'>
-						Year: <%= String.valueOf(item_year) %>
-					</div>
-					<div class='description-container'>
-						In Auction: <%= inAuction %>
+				<div class="sub-container-out">
+					<div class='sub-container'>
+						<div class='description-container'>
+							Model: <%= model %>
+						</div>
+						<div class='description-container'>
+							Color: <%= color %>
+						</div>
 					</div>
 				</div>
 
-				<div class='sub-container'>
-					<div class='description-container'>
-						Location: <%= location %>
-					</div>
-					<div class='description-container'>
-						Transmission: <%= transmission %>
-					</div>
-					<div class='description-container'>
-						MPG: <%= mpg %>
-					</div>
-					<div class='description-container'>
-						Miles: <%= miles %>
+				<div class="sub-container-out">
+					<div class='sub-container'>
+						<div class='description-container'>
+							Year: <%= String.valueOf(item_year) %>
+						</div>
+						<div class='description-container'>
+							In Auction: <%= inAuction %>
+						</div>
 					</div>
 				</div>
 
-				<div class='right-align-sub-container'>
-					<img class="fit-picture" src= <%= img %> alt="" >
-				</div>				
+				<div class="sub-container-out">
+					<div class='sub-container'>
+						<div class='description-container'>
+							Location: <%= location %>
+						</div>
+						<div class='description-container'>
+							Transmission: <%= transmission %>
+						</div>
+						<div class='description-container'>
+							MPG: <%= mpg %>
+						</div>
+						<div class='description-container'>
+							Miles: <%= miles %>
+						</div>
+					</div>
+				</div>
+			
 			</div>
 			
-			<div class="bid-container">
-				<div class="bid-container-left">
+		<div class="bid-container">
+			<div class="bid-container-left">
 		<%
 		if ( !notSeller ){
 		
@@ -257,17 +284,19 @@
 				currentBidPriceGlobal = currentBidPrice;
 			%>
 				<h2> Create A Bid </h2>
+				<div class="bid-form-container">
 				<h3> Current Price To Beat $<%= String.valueOf(currentBidPrice + incrementVal) %> </h3>
-				<form method="get">
-					<label for="itemID">Item ID:</label><br>
-				  	<input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
-				  	<label for="bidPrice">Bid Price:</label><br>
-				  	<input type="text" id="bidPrice" name="bidPrice" value=""><br>
-				  	<input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
-				  	<label for="bidUpperLimit">Bid Upper Limit:</label><br>
-				  	<input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
-				  	<input type="submit" value="Place Bid">
-				</form> 
+					<form method="get">
+						<label for="itemID">Item ID:</label><br>
+					  	<input type="text" id="itemID" name="itemID" value=<%= itemID%> ><br>
+					  	<label for="bidPrice">Bid Price:</label><br>
+					  	<input type="text" id="bidPrice" name="bidPrice" value=""><br>
+					  	<input type="checkbox" id="automaticBid" name="automaticBid" value="true"> Automatic Bid </input> <br>
+					  	<label for="bidUpperLimit">Bid Upper Limit:</label><br>
+					  	<input type="text" id="bidUpperLimit" name="bidUpperLimit" value="0"><br>
+					  	<input type="submit" value="Place Bid">
+					</form>
+				</div> 
 			<% 
 			}
 			
@@ -275,7 +304,7 @@
 		
 		%>
 		</div>
-			<h2> Bid History </h2>
+			<h2> Bid History List </h2>
 			<div class="bid-container-right">
 		       
 		<%
@@ -295,23 +324,29 @@
 			%>
 						<li>
 							<div class="bid-history-item">
-								<div class="bid-history-item-sub-container-left">
-									<div>
-										Bid ID: <%= bidID %>
-									</div>
-									<div>
-										Buyer ID: <%= buyerID %>
-									</div>
-									<div>
-										Bid Price: $<%= bidPrice %>
+							
+								<div class="bid-history-item-container">
+									<div class="bid-history-item-sub-container">
+										<div>
+											<div class="header"> Bid ID: <a class="description"> <%= bidID %></a></div>
+										</div>
+										<div>
+											<div class="header"> Buyer ID: <a class="description"> <%= buyerID %></a></div>
+										</div>
 									</div>
 								</div>
-								<div class="bid-history-item-sub-container-right">
-									<div>
-										Date: <%= date %>
-									</div>
-									<div>
-										Time: <%= time %>
+								
+								<div class="bid-history-item-container">
+									<div class="bid-history-item-sub-container">
+										<div>
+											<div class="header"> Bid Price: <a class="description"> <%= bidPrice %></a></div>
+										</div>
+										<div>
+											<div class="header"> Date: <a class="description"> <%= date %></a></div>
+										</div>
+										<div>
+											<div class="header"> Time: <a class="description"> <%= time %></a></div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -410,15 +445,10 @@
 							automaticBidder.addBid(bid, item_id, date, time);
 							// Find who won this round and contact loser
 							automaticBidder.findBidWinner();
-						}
-						
-					}
-
-					
+						}				
+					}		
 		%>
 		<% 
-
-
 			}
 			
 		} catch (Exception e){
@@ -429,7 +459,7 @@
 	%>
 
 	<%!
-		// Code For The Automatic Bid System
+		// Class For The Automatic Bid System
 		public class AutomaticBidder {
 	    private List<Bid> BidList; 
 	    private Bid currBid;
@@ -569,8 +599,6 @@
 	 			} catch (Exception e){
 	 				System.out.print(e);
 	 			}
-	 			
-
 	    }
 	    
 	    // Update the auction in SQL
@@ -595,7 +623,7 @@
 		}
 	    
 	    
-	    // Automatic Bidding 
+	    // Automatic and Manual Bidding 
 	    public void findBidWinner(){
 	    	// If this is the first bid, then there won't be a curr bid so set this as winner
 			if ( this.currBid == null) {
@@ -743,7 +771,7 @@
 			
 	    }
 
-	    
+	 // Method to change states when winner is determined
 	 public void setWinState( double newBidPrice, int newBidBuyerID, int bidToSetInactive, int buyerToAlert, String msg){
 			// New Bid Wins
 			// Update Auction With Bid Price and ID
@@ -754,9 +782,7 @@
 			sendAlert( buyerToAlert, msg );
 	 }
 	    
-	    
-
-		   
+	  // Get ID to Create Alert
 	  private int getAlertID(){
 		  	ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
@@ -777,6 +803,7 @@
 			return alertID;
 	  }
 	  
+	  // Method to send alert
 	  public void sendAlert(int ID, String msg){
 		  ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
@@ -805,13 +832,8 @@
 				System.err.println(e.getMessage());
 				
 			}
-	  }
-		
-
-	    
+	  } 
 	}
-	
-
 	%>
 	</body>
 </html>
