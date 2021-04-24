@@ -25,11 +25,11 @@
 					<input type="text" id="username" name="username"><br>
 					<label for="pass">Password:</label><br>
 					<input type="text" id="pass" name="pass"><br>
-					<label for="type">Type:</label><br>
-					<input type="text" id="type" name="type"><br>
 					<br>
 					<input type="submit" value="Register">
 		</form>
 	<br>
+	<br>
+	<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
 	</body>
 </html>
