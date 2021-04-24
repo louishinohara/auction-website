@@ -94,6 +94,11 @@
 					font-weight: normal;
 				}
 				
+				.shrink-img {
+					height: 90px;
+					width: 90px;
+				}
+				
 			</style> 
 
 		</head>
@@ -106,7 +111,9 @@
 	
 		<CENTER>     
 			<H2>Your Alerts</H2>
-			
+			<div> 
+				<img class="shrink-img" src="https://i.imgur.com/872aemL.png" />
+			</div>
 			<div class='container'>
 				<form  method="get">
 					<div class='align-left'>	

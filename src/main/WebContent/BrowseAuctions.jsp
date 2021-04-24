@@ -94,6 +94,10 @@
 					font-weight: normal;
 				}
 				
+				.shrink-img {
+					height: 90px;
+					width: 90px;
+				}
 			</style> 
 
 		</head>
@@ -108,6 +112,9 @@
 		<a href="Dashboard.jsp?username=<%=userName%>&pass=<%=pass%>"> <button>Back To Dash Board</button></a> 
 			<CENTER>     
 				<H2>Browse Auctions</H2>
+				<div class="img-container"> 
+					<img class="shrink-img" src="https://i.imgur.com/mww1BlG.png" />
+				</div>	
 					<form  method="get">
 						<div class='container'>
 							<div class='filter-items'>	
