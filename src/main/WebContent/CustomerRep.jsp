@@ -15,6 +15,13 @@
 		</style>
 	</head>
 	<body class ="body">
+		<% 
+   				String username = request.getParameter("username");
+				String pass = request.getParameter("pass");
+			
+				session.setAttribute("username", username);
+				session.setAttribute("pass", pass);
+		%>
 	<br>
 	REMOVE AUCTION:
 	<br>
@@ -57,11 +64,10 @@
 	
 	<br>
 	
-	<input type="button" value="Forum" onclick=location.href="Forum.jsp">
-	
+	<form method="get" action="InfoPage" onclick=location.href="ForumPage.jsp?username=<%=username%>&pass=<%=pass%>">
+		<input type="button" value="Forum" onclick=location.href="ForumPage.jsp?username=<%=username%>&pass=<%=pass%>">
+	</form>
 	<br>
-	<br>
-	
 	<input type="button" value="Log Out" onclick=location.href="InfoPage.jsp">
 	
 	</body>

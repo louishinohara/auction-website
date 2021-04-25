@@ -16,6 +16,13 @@
 		<title>Register Costumer Rep</title>
 	</head>
 	<body class ="body">
+	 <% 
+   				String username = request.getParameter("username");
+				String pass = request.getParameter("pass");
+			
+				session.setAttribute("username", username);
+				session.setAttribute("pass", pass);
+	%>
 	<br>
 	REGISTER NEW CUSTOMER REP:
 	<br>
@@ -29,7 +36,10 @@
 					<input type="submit" value="Register">
 		</form>
 	<br>
+	<form method = "get" action="InfoPage.jsp">
+				<input type="button" value="Return" onclick=location.href="AdminPage.jsp?username=<%=username%>&pass=<%=pass%>">
+		</form>
 	<br>
-	<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
+	
 	</body>
 </html>

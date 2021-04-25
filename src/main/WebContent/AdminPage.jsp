@@ -49,6 +49,14 @@
 	
 	<body class="body">
 		
+		 <% 
+   				String username = request.getParameter("username");
+				String pass = request.getParameter("pass");
+			
+				session.setAttribute("username", username);
+				session.setAttribute("pass", pass);
+		%>
+		
 		<div class="welcome_header">
 			<div class ="header">
 				<h2>
@@ -103,7 +111,11 @@
 			
 		</div>
 		<br>
-				
+		<div class="button" style="cursor: pointer;" onclick=location.href="ForumPage.jsp?username=<%=username%>&pass=<%=pass%>">
+					<div >
+						<h3 class="heading-text">Go to Forum</h3>
+					</div>
+		</div>
 			<div class="button" style="cursor: pointer;" onclick=location.href="InfoPage.jsp">
 					<div >
 						<h3 class="heading-text">Log Out</h3>
