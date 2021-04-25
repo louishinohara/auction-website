@@ -1,0 +1,1 @@
+We have included two schemas. The first one is the schema prior to the demo. The second is the schema after the demo. We have provided both so that the user can test our project by following the video

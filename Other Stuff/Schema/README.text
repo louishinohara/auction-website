@@ -1,0 +1,41 @@
+READ ME
+
+This project was created for 198: 336 Principles of Information and Data Management for Spring 2021 
+
+We are group 46 and our group members are Ushio Louis Shinohara, Joshua Hymowitz and Isaac Perez. 
+
+BACKGROUND
+Our project allows a user to post a vehicle on auction for other members of the site to bid and purchase. The seller can include a reserve price which means that the item will only be sold if the highest bid is greater than that price. The user can search for a specific item using many of the filters that are provided in the auction and item search. We have also implemented an automatic bidding system which allows the bidder to set an upper limit that we are comfortable bidding up until which the system will bid for the user. In addition, we have an alert system that notifies the user when they have been outbid or won the auction as well as some other notifications. We have also implemented an Admin and Customer Rep who have special functions and features which allows the customer to speak to them about any questions or injuries they might have. 
+
+
+
+
+Project Set Up
+- Apache Tomcat v10.0 on Eclipse for Java and Web Developers (JRE 11)
+
+Application Entry Point
+- InfoPage.js
+	- Right click and choose "Run on Server"
+
+IMPORTANT
+- Placing A Bid
+	- Don't edit the itemID input field when placing a bid 
+	- Make sure to refresh the page after placing a bid to see the page update. The page does not refresh automatically (It will still update in mySQL). 
+		- When you refresh, make sure to go back a page so the HTTP url says (Auction.jsp?itemID=XXX).
+			- Otherwise it will try to add the bid again because of the URL
+
+- CLOSING AUCTIONS
+	- To simulate the end of the auction, we placed a command in the InfoPage.jsp file (Lines 74 - 77) to close auctions at the end of a certain date (Shown in demo video)
+	- We made it this way so that when testing, the user could manually pick a date to close the auctions. We could have easily used Date.now() to always close auctions at the end of the day however for the purpose of the assignment, we thought it would be easier to simulate rather than waiting for the actual date to occur.
+	- It is also left uncommented because we don't want it to constantly be running because of the console logs. However leaving it uncommented should not affect the program because it checks for open one's on that date and closes only those auctions.
+
+
+Work Distribution
+Part 1: Josh
+Part 2: Ushio and Josh
+Part 3: Ushio and Josh
+Part 4: Ushio
+Part 5: Isaac 
+
+We decided that this would be the best way to split up the work and each member contributed equally towards the project. If there are any questions, please feel to reach out to us.
+
