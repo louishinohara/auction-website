@@ -21,6 +21,13 @@
 		Best-Buyers
 		<br>
 		<br>
+			<%
+			String username = request.getParameter("username");
+			String pass = request.getParameter("pass");
+		
+			session.setAttribute("username", username);
+			session.setAttribute("pass", pass);
+			%>
       		<%
         	try {
           
@@ -57,7 +64,7 @@
 		%>
 		<br>
 			
-		<input type="button" value="Return" onclick=location.href="AdminPage.jsp">	
+		<input type="button" value="Return" onclick=location.href="AdminPage.jsp?username=<%=username%>&pass=<%=pass%>">	
 							
 	</body>
-</html>    
+</html>   
