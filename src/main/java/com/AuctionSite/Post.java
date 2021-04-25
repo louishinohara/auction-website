@@ -9,8 +9,8 @@ import com.dbproj.pkg.ApplicationDB;
 public class Post {
 
 	private int PostID;
-    private int ThreadID;
-    private String PostMadeBy;
+        private int ThreadID;
+        private String PostMadeBy;
 	private String Message;
 
     public Post(int PostID,int ThreadID, String Message, String PostMadeBy){
@@ -25,7 +25,7 @@ public class Post {
 		Connection con = db.getConnection();
 		try {
 			Statement stmt = con.createStatement();
-			String query = "SELECT MAX(ThreadID) as latest FROM threads;";
+			String query = "SELECT MAX(postID) as latest FROM posts;";
 			
 			ResultSet result = stmt.executeQuery(query);
 			
