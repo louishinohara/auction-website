@@ -19,7 +19,7 @@
     	</head>
 	<body class ="body">
 		<br>
-		Earnings Per User
+		Earnings Per Item
 		<br>
 		<br>
 		<%
