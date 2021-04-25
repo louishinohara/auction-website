@@ -8,11 +8,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Register</title>
 </head>
 
 
 <body>
+	<%
+			String username = request.getParameter("username");
+			String pass = request.getParameter("pass");
+			String newusername = request.getParameter("newusername");
+			String newpass = request.getParameter("newpass");
+		
+			session.setAttribute("username", username);
+			session.setAttribute("pass", pass);
+			session.setAttribute("newusername", newusername);
+			session.setAttribute("newpass", newpass);
+	%>
 	<%
 	try {
 		
@@ -23,12 +34,9 @@
 		//Create a SQL statement
 		Statement stmt = con.createStatement();
 
-		//Get parameters from the HTML form at the InfoPage.jsp
-		String username = request.getParameter("username");
-		String pass = request.getParameter("pass");
-		
+		//Get parameters from the HTML form at the InfoPage.jsp	
 		//craft query
-		String select = "SELECT count(*) FROM account WHERE username=\"" + username + "\" or pass=\"" + pass + "\";";
+		String select = "SELECT count(*) FROM account WHERE username=\"" + newusername + "\" or pass=\"" + newpass + "\";";
 
 		//Run the query against the database.
 		ResultSet result = stmt.executeQuery(select);
@@ -41,7 +49,7 @@
 				<br>
 				<br>
 	
-				<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
+				<input type="button" value="Back" onclick=location.href="AdminPage.jsp?username=<%=username%>&pass=<%=pass%>">
 				
 				
 				<%
@@ -57,8 +65,8 @@
 				//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
 				int customerID = Customer.generateCustomerID();
 				ps.setInt(1, customerID);
-				ps.setString(2, username);
-				ps.setString(3, pass);
+				ps.setString(2, newusername);
+				ps.setString(3, newpass);
 				ps.setString(4, "customerRep");
 				ps.setBoolean(5, false);
 				//Run the query against the DB
@@ -68,12 +76,12 @@
 				<br>
 				<br>
 				
-				<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
+				<input type="button" value="Back" onclick=location.href="AdminPage.jsp?username=<%=username%>&pass=<%=pass%>">
 				
 				<%
 			}else{
 				%>Registration Failed
-				<input type="button" value="Back" onclick=location.href="AdminPage.jsp">
+				<input type="button" value="Back" onclick=location.href="AdminPage.jsp?username=<%=username%>&pass=<%=pass%>">
 			<%
 			}
 	} catch (Exception ex) {
