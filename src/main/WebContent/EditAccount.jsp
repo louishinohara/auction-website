@@ -21,7 +21,9 @@
        <%
             String accountID=request.getParameter("accountID");
        		String newusername=request.getParameter("newusername");
-       		String newpass=request.getParameter("pass");
+       		String newpass=request.getParameter("newpass");
+       		String username=request.getParameter("username");
+       		String pass=request.getParameter("pass");
        		String type=request.getParameter("type");
             
             try 
@@ -79,7 +81,7 @@
         <br>
         <br>
 	
-		<input type="button" value="Back" onclick=location.href="CustomerRep.jsp">
+		<input type="button" value="Back" onclick=location.href="CustomerRep.jsp?username=<%=username%>&pass=<%=pass%>">
 	
 		<br>
        </body>
