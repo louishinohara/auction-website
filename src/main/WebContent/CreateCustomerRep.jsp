@@ -27,7 +27,7 @@
 	REGISTER NEW CUSTOMER REP:
 	<br>
 	<br>
-		<form method="get" action="Register.jsp">
+		<form method="get" action="Register2.jsp">
 					<label for="username">Username:</label><br>
 					<input type="text" id="username" name="username"><br>
 					<label for="pass">Password:</label><br>
