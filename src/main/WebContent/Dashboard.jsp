@@ -208,14 +208,14 @@
 			</div>
 			
 			
-				<div class="action-container">
-					<div>
-						<h3 class="heading-text"> Contact Customer Service </h3>
+					<div class="action-container">
+						<div class="option" method ="get" action="InfoPage.jsp" style="cursor: pointer;" onclick=location.href="ForumPage.jsp?username=<%=username%>&pass=<%=pass%>">
+							<h3 class="heading-text"> Contact Customer Service </h3>
+						</div>
+						<div class="img-container"> 
+							<img class="shrink-img" src="https://i.imgur.com/4epk93E.png" />
+						</div>
 					</div>
-					<div class="img-container"> 
-						<img class="shrink-img" src="https://i.imgur.com/4epk93E.png" />
-					</div>
-				</div>
 
 				<div class="log-out-button-container">
 					<a href="InfoPage.jsp"> <button>Log Out</button></a> 
