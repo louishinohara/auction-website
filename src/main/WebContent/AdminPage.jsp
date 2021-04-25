@@ -67,43 +67,43 @@
 		
 		<div class="action-row-container">
 					
-			<div class="action-container" style="cursor: pointer;" onclick=location.href="CreateCustomerRep.jsp">
+			<div class="action-container" style="cursor: pointer;" onclick=location.href="CreateCustomerRep.jsp?username=<%=username%>&pass=<%=pass%>">
 					<div>
 						<h3 class="heading-text">Create Customer Rep</h3>
 					</div>
 			</div>
 			
-			<div class="action-container" style="cursor: pointer;" onclick=location.href="TotalEarnings.jsp">
+			<div class="action-container" style="cursor: pointer;" onclick=location.href="TotalEarnings.jsp?username=<%=username%>&pass=<%=pass%>">
 					<div>
 						<h3 class="heading-text">Total Earnings</h3>
 					</div>
 			</div>
 			
-			<div class="action-container" style="cursor: pointer;" onclick=location.href="EarningsPerItem.jsp">
+			<div class="action-container" style="cursor: pointer;" onclick=location.href="EarningsPerItem.jsp?username=<%=username%>&pass=<%=pass%>">
 					<div >
 						<h3 class="heading-text">Earnings Per Item</h3>
 					</div>
 			</div>
 			
-			<div class="action-container" style="cursor: pointer;" onclick=location.href="EarningsPerType.jsp">
+			<div class="action-container" style="cursor: pointer;" onclick=location.href="EarningsPerType.jsp?username=<%=username%>&pass=<%=pass%>">
 					<div >
 						<h3 class="heading-text">Earnings Per Type</h3>
 					</div>
 			</div>
 			
-			<div class="action-container" style="cursor: pointer;" onclick=location.href="EarningsPerUser.jsp">
+			<div class="action-container" style="cursor: pointer;" onclick=location.href="EarningsPerUser.jsp?username=<%=username%>&pass=<%=pass%>">
 					<div >
 						<h3 class="heading-text">Earnings Per User</h3>
 					</div>
 			</div>
 			
-			<div class="action-container" style="cursor: pointer;" onclick=location.href="BestSelling.jsp">
+			<div class="action-container" style="cursor: pointer;" onclick=location.href="BestSelling.jsp?username=<%=username%>&pass=<%=pass%>">
 					<div >
 						<h3 class="heading-text">Best Selling Items</h3>
 					</div>
 			</div>
 			
-			<div class="action-container" style="cursor: pointer;" onclick=location.href="BestBuyers.jsp">
+			<div class="action-container" style="cursor: pointer;" onclick=location.href="BestBuyers.jsp?username=<%=username%>&pass=<%=pass%>">
 					<div >
 						<h3 class="heading-text">Best Buyers</h3>
 					</div>
