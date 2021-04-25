@@ -19,6 +19,13 @@
        </head>
        <body class="body">
        <%
+			String username = request.getParameter("username");
+			String pass = request.getParameter("pass");
+		
+			session.setAttribute("username", username);
+			session.setAttribute("pass", pass);
+		%>
+       <%
             String accountID=request.getParameter("accountID");
             
             try 
@@ -48,7 +55,7 @@
         <br>
         <br>
 	
-		<input type="button" value="Back" onclick=location.href="CustomerRep.jsp">
+		<input type="button" value="Back" onclick=location.href="CustomerRep.jsp?username=<%=username%>&pass=<%=pass%>">
 	
 		<br>
        </body>
