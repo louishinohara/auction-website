@@ -28,10 +28,12 @@
 	<br>
 	<br>
 		<form method="get" action="Register2.jsp">
-					<label for="username">Username:</label><br>
-					<input type="text" id="username" name="username"><br>
-					<label for="pass">Password:</label><br>
-					<input type="text" id="pass" name="pass"><br>
+					<label for="newusername">Username:</label><br>
+					<input type="text" id="newusername" name="newusername"><br>
+					<label for="newpass">Password:</label><br>
+					<input type="text" id="newpass" name="newpass"><br>
+					<input type="hidden" id="username" value=<%=username%> name="username">
+        			<input type="hidden" id="pass" value=<%=pass%> name="pass">
 					<br>
 					<input type="submit" value="Register">
 		</form>
