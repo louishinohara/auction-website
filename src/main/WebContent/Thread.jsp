@@ -43,7 +43,7 @@
                     	%> <br>  <%
                     	String user= result.getString("PostMadeBy");
                     	String post=result.getString("Message");
-                    	out.println(username);
+                    	out.println(user);
                     	%> <br>  <%
                     	out.println(post);
                     }
@@ -60,7 +60,7 @@
         			<input type="hidden" id="ThreadID" value=<%=threadID %> name="ThreadID">
         			<input type="hidden" id="username" value=<%=username%> name="username">
         			<input type="hidden" id="pass" value=<%=pass%> name="pass">
-					<input type="submit" value="Reply" onclick=location.href="Reply.jsp">
+				<input type="submit" value="Reply" onclick=location.href="Reply.jsp">
 		</form>
 		<br>
         
