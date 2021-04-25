@@ -18,6 +18,13 @@
 		<title>Remove Bid</title>
     </head>
     <body class="body">
+    	<%
+			String username = request.getParameter("username");
+			String pass = request.getParameter("pass");
+		
+			session.setAttribute("username", username);
+			session.setAttribute("pass", pass);
+		%>
         
        <%
             String bidID=request.getParameter("BidID");
@@ -47,7 +54,7 @@
         <br>
         <br>
 	
-		<input type="button" value="Back" onclick=location.href="CustomerRep.jsp">
+		<input type="button" value="Back" onclick=location.href="CustomerRep.jsp?username=<%=username%>&pass=<%=pass%>">
 	
 		<br>
        </body>
