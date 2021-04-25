@@ -22,7 +22,7 @@
 			display: flex;
 			flex-direction: row;
 			position: center;
-			transform: translateX(15%);
+			transform: translateX(25%);
 		}
 		.action-container {
 			background: #c9c9c9;
